@@ -1,4 +1,3 @@
-import './App.css'
 import NavigationProvider from './providers/NavigationProvider';
 import TimerProvider from './providers/TimerProvider';
 import Navigation from './components/navigation/Navigation';

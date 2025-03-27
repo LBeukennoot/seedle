@@ -7,18 +7,10 @@ export default function FocusScreen() {
     const { setCurrentScreen } = useContext(NavigationContext)
     const { currentMode, getDisplayTime, start, pause } = useContext(TimerContext)
 
-    const [state, setState] = useState("focus")
+    const [state, setState] = useState(false)
 
     return (
-        <div className="bg-green-800 w-screen h-screen">
-            <div>
-                focus
-            </div>
-
-
-            <div>
-                {currentMode}
-            </div>
+        <div className="w-screen h-screen bg-green">
 
             <div>
                 <button onClick={() => start()}>
@@ -32,20 +24,28 @@ export default function FocusScreen() {
                 </button>
             </div>
 
-            <div className="bg-white mx-auto max-w-xl">
-                <div className="text-center py-6">
+            <div className="bg-white mx-auto py-6 max-w-xl rounded-3xl">
+                <div className="flex justify-center pb-6">
+
+                    <button className={"bg-blue w-40 h-10 items-center transition-all relative flex cursor-pointer rounded-lg"} onClick={() => setState(state => !state)}>
+                        <div className={"bg-white opacity-25 rounded-md w-20 absolute transition-all top-0 h-full " + (state ? "left-0" : "left-20")}></div>
+                        <div className="w-20 z-10 text-center select-none text-white">focus</div>
+                        <div className="w-20 z-10 text-center select-none text-white">break</div>
+                    </button>
+
+                </div>
+
+                <div className="text-center pb-6">
                     {getDisplayTime()}
                 </div>
-                <div className="flex [&>*]:m-2 justify-center">
-                    <button 
-                    className={(state === "focus" ? "bg-gray-500" : "bg-gray-950") + " text-white"}
-                    onClick={() => setState("rest")}>Focus</button>
-                    <button 
-                    className={(state === "rest" ? "bg-gray-500" : "bg-gray-950") + " text-white"}
-                    onClick={() => setState("focus")}>Rest</button>
-                </div>
-            </div>
 
+                <div className="flex justify-center">
+                    <button className="bg-blue text-white px-4 py-2 rounded-lg cursor-pointer" onClick={() => start()}>
+                        start
+                    </button>
+                </div>
+
+            </div>
 
 
             <div>

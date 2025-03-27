@@ -63,7 +63,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
                     return time - 1
 
 
-                case (Mode.Rest):
+                case (Mode.Break):
                     return time - 1
 
 
@@ -109,7 +109,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
 enum Mode {
     Focus = "Focus",
-    Rest = "Rest",
+    Break = "Break",
     None = "None"
 }
 
