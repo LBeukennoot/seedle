@@ -5,14 +5,14 @@ module.exports = {
     ],
   
     safelist: [
-      'text-xl',
-      'text-2xl',
-      'text-3xl',
-      'text-4xl',
-      'text-5xl',
-      'text-blue',
-      'text-red',
-      'text-green',
+      // 'text-xl',
+      // 'text-2xl',
+      // 'text-3xl',
+      // 'text-4xl',
+      // 'text-5xl',
+      // 'text-blue',
+      // 'text-red',
+      // 'text-green',
     ],
   
     theme: {

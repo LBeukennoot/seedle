@@ -12,28 +12,45 @@ export const TimerContext = createContext<ITimerOptions>();
 export default function TimerProvider({ children }: ITimerOptionsProviderProps) {
 
     const [startTime, setStartTime] = useState(0.1);
+    // const [focusTime, setFocusTime] = useState(0.1);
+    // const [restTime, setRestTime] = useState(0.1);
+    // const [longRestTime, setLongRestTime] = useState(0.1);
     const [time, setTime] = useState(3);
 
     const [currentMode, setCurrentMode] = useState<Mode>(Mode.None)
 
 
-    const [times, setTimes] = useState({
-        focus: 25,
-        rest: 5
-    })
-
     useEffect(() => {
-        setTime(startTime * 60)
+        const date = new Date(0)
+        console.log(date.toLocaleString('nl-NL', {timeZone: "CET"}))
+        console.log(date.toJSON())
+        date.setTime(date.getTime() + (30 * 60000))
+        console.log(date.toLocaleString('nl-NL'))
+
+        // const interval = setInterval(() => {
+        //     console.log(new Date().getSeconds())
+        // }, 1000)
+        // return () => clearInterval(interval)
     }, [])
 
+    // const [times, setTimes] = useState({
+    //     focus: 25,
+    //     rest: 5
+    // })
+
+    // useEffect(() => {
+    //     // setTime(startTime * 60)
+    // }, [])
+
     useEffect(() => {
-        const interval = setInterval(() => {
+        // updateTime()
+        // const interval = setInterval(() => {
 
-            updateTime()
+        //     updateTime()
 
-        }, 1000)
+        // }, 1000)
 
-        return () => clearInterval(interval)
+        // return () => clearInterval(interval)
     }, [currentMode])
 
     const getDisplayTime = (): string => {
@@ -51,32 +68,36 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     }
 
     const updateTime = () => {
-        setTime(inputTime => {
+        // setTime(inputTime => {
 
-            const time = Math.floor(inputTime)
-            switch (currentMode) {
+        //     const time = Math.floor(inputTime)
+        //     switch (currentMode) {
 
-                case (Mode.Focus):
-                    if (time < 1) {
-                        alarm()
-                    }
-                    return time - 1
-
-
-                case (Mode.Break):
-                    return time - 1
+        //         case (Mode.Focus):
+        //             if (time < 1) {
+        //                 alarm()
+        //             }
+        //             if (time >= 0) {
+        //                 return time - 1
+        //             } else return time
 
 
-                case (Mode.None):
-                    return time
+        //         case (Mode.Break):
+        //             if (time >= 0) {
+        //                 return time - 1
+        //             } else return time
 
 
-                default:
-                    return time
+        //         case (Mode.None):
+        //             return time
 
 
-            }
-        })
+        //         default:
+        //             return time
+
+
+        //     }
+        // })
     }
 
     const start = () => {
