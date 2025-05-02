@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Mode } from "../../Modes";
 
 /**
  * Clickable object (button) that switches between multiple options
@@ -46,7 +47,7 @@ const ButtonsElement = ({
     setSessionKey,
     onChange,
 }: any) => {
-    return buttons.map((b: SwitchButtonButtonType, key: number) => {
+    return buttons.map((b: Mode, key: number) => {
         return (
             <div className="flex items-center" key={key}>
                 <div
@@ -66,7 +67,7 @@ const ButtonsElement = ({
                             (sessionKey === key ? "opacity-0" : "opacity-100")
                         }
                     >
-                        {b.name}
+                        {b}
                     </div>
                     {/* blue text (when button selected) */}
                     <div
@@ -75,7 +76,7 @@ const ButtonsElement = ({
                             (sessionKey === key ? "opacity-100" : "opacity-0")
                         }
                     >
-                        {b.name}
+                        {b}
                     </div>
                 </div>
                 {key !== length - 1 ? (
@@ -90,7 +91,7 @@ const ButtonsElement = ({
 };
 
 export type SwitchButtonType = {
-    buttons: SwitchButtonButtonType[];
+    buttons: Mode[];
     width?: number;
     onChange: Function;
 };
