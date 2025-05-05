@@ -30,8 +30,8 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
             },
             long_rest: {
                 mode: Mode.LONG_REST,
-                time: 25,
-                min: 14,
+                time: 15,
+                min: 9,
                 max: 61
             }
         }
