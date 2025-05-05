@@ -1,4 +1,6 @@
-import { createContext, useState, useEffect, JSX } from "react";
+import { createContext, useState, useEffect, JSX, useContext, useRef } from "react";
+import { ModeContext } from "./ModeProvider";
+import { ModeDurations } from "../components/Mode";
 
 // @ts-ignore
 export const TimerContext = createContext<ITimerOptions>();
@@ -11,47 +13,21 @@ export const TimerContext = createContext<ITimerOptions>();
  */
 export default function TimerProvider({ children }: ITimerOptionsProviderProps) {
 
-    const [startTime, setStartTime] = useState(0.1);
-    // const [focusTime, setFocusTime] = useState(0.1);
-    // const [restTime, setRestTime] = useState(0.1);
-    // const [longRestTime, setLongRestTime] = useState(0.1);
-    const [time, setTime] = useState(3);
+    const { mode } = useContext(ModeContext)
 
-    const [currentMode, setCurrentMode] = useState<Mode>(Mode.None)
-
-
-    useEffect(() => {
-        const date = new Date(0)
-        console.log(date.toLocaleString('nl-NL', {timeZone: "CET"}))
-        console.log(date.toJSON())
-        date.setTime(date.getTime() + (30 * 60000))
-        console.log(date.toLocaleString('nl-NL'))
-
-        // const interval = setInterval(() => {
-        //     console.log(new Date().getSeconds())
-        // }, 1000)
-        // return () => clearInterval(interval)
-    }, [])
-
-    // const [times, setTimes] = useState({
-    //     focus: 25,
-    //     rest: 5
-    // })
-
-    // useEffect(() => {
-    //     // setTime(startTime * 60)
-    // }, [])
+    const [time, setTime] = useState(ModeDurations[mode] * 60);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
+    const endTimeRef = useRef<number | null>(null)
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const pausedAtRef = useRef<number | null>(null);
 
     useEffect(() => {
-        // updateTime()
-        // const interval = setInterval(() => {
+        setTime(ModeDurations[mode] * 60)
+    }, [mode])
 
-        //     updateTime()
-
-        // }, 1000)
-
-        // return () => clearInterval(interval)
-    }, [currentMode])
+    const duration = () => {
+        return ModeDurations[mode] * 60
+    }
 
     const getDisplayTime = (): string => {
         // @ts-ignore
@@ -67,71 +43,67 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         return minutes + ":" + seconds
     }
 
-    const updateTime = () => {
-        // setTime(inputTime => {
+    useEffect(() => {
+        if (!isTimerRunning) return;
 
-        //     const time = Math.floor(inputTime)
-        //     switch (currentMode) {
+        intervalRef.current = setInterval(() => {
+            if (!endTimeRef.current) return;
 
-        //         case (Mode.Focus):
-        //             if (time < 1) {
-        //                 alarm()
-        //             }
-        //             if (time >= 0) {
-        //                 return time - 1
-        //             } else return time
+            const diff = Math.max(0, Math.ceil((endTimeRef.current - Date.now()) / 1000));
+            setTime(diff);
 
+            if (diff <= 0) {
+                setIsTimerRunning(false);
+                endTimeRef.current = null;
+                // onComplete?.();
+                console.log('timer complete')
+                clearInterval(intervalRef.current!);
+            }
+        }, 1000);
 
-        //         case (Mode.Break):
-        //             if (time >= 0) {
-        //                 return time - 1
-        //             } else return time
-
-
-        //         case (Mode.None):
-        //             return time
-
-
-        //         default:
-        //             return time
-
-
-        //     }
-        // })
-    }
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
+    }, [isTimerRunning]);
 
     const start = () => {
-        setCurrentMode(Mode.Focus)
-    }
+        console.log('start timer')
+        endTimeRef.current = Date.now() + time * 1000;
+        setIsTimerRunning(true);
+
+        // Immediate update to prevent "double tick"
+        const diff = Math.max(0, Math.floor((endTimeRef.current - Date.now()) / 1000));
+        setTime(diff);
+    };
 
     const pause = () => {
-        setCurrentMode(Mode.None)
-    }
+        if (isTimerRunning && endTimeRef.current) {
+            pausedAtRef.current = Date.now();
+            setIsTimerRunning(false);
+        }
+    };
 
-    const stop = () => {
-        setCurrentMode(Mode.None)
-    }
+    const resume = () => {
+        if (!isTimerRunning && pausedAtRef.current && endTimeRef.current) {
+            const pauseDuration = Date.now() - pausedAtRef.current;
+            endTimeRef.current += pauseDuration;
+            setIsTimerRunning(true);
+        }
+    };
 
-    const alarm = () => {
-        setCurrentMode(Mode.None)
-        setTime(startTime * 60)
-        // const alarmSound = new Audio('../../../ta-da.mp3')
-        // alarmSound.play()
-        // alert("time is up!")
-    }
+    const reset = () => {
+        setIsTimerRunning(false);
+        setTime(duration());
+        endTimeRef.current = null;
+        pausedAtRef.current = null;
+    };
 
     return (
-        <TimerContext.Provider value={{ time, setTime, currentMode, startTime, setStartTime, getDisplayTime, start, pause }}>
+        <TimerContext.Provider value={{ time, getDisplayTime, start, pause, isTimerRunning }}>
             <title>{getDisplayTime() + " left on your timer!"}</title>
             {children}
         </TimerContext.Provider>
     )
-}
-
-enum Mode {
-    Focus = "Focus",
-    Break = "Break",
-    None = "None"
 }
 
 interface ITimerOptionsProviderProps {
@@ -140,11 +112,8 @@ interface ITimerOptionsProviderProps {
 
 export interface ITimerOptions {
     time: number
-    setTime: Function
-    currentMode: Mode
-    startTime: number
-    setStartTime: Function
     getDisplayTime: Function
     start: Function
     pause: Function
+    isTimerRunning: boolean
 }

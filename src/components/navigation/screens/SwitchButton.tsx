@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mode } from "../../Modes";
+import { Mode } from "../../Mode";
 
 /**
  * Clickable object (button) that switches between multiple options
