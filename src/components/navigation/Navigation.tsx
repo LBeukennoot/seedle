@@ -28,7 +28,7 @@ export default function Navigation() {
     }
 
     return (
-        <div className="w-screen h-screen flex bg-light-green font-lexend items-center justify-center">
+        <div className="w-screen h-screen flex bg-light-green text-blue font-lexend items-center justify-center">
 
             <div className="flex justify-center items-center h-full">
 
@@ -37,7 +37,7 @@ export default function Navigation() {
                         <Tablist />
                     </div>
 
-                    <div className="bg-white mx-auto py-10 max-w-xl rounded-3xl min-w-[30rem] min-h-[15rem] max-h-[30] transition-all">
+                    <div className="bg-white mx-auto max-w-xl rounded-3xl min-w-[30rem] min-h-[15rem] max-h-[30] transition-all">
                         <Screen />
                     </div>
                 </div>

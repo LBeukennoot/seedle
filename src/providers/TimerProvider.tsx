@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect, JSX, useContext, useRef } from "react";
 import { ModeContext } from "./ModeProvider";
 import { ModeDurations } from "../components/Mode";
+import { SettingsContext } from "./SettingsProvider";
+import { NavigationContext } from "./NavigationProvider";
 
 // @ts-ignore
 export const TimerContext = createContext<ITimerOptions>();
@@ -14,19 +16,21 @@ export const TimerContext = createContext<ITimerOptions>();
 export default function TimerProvider({ children }: ITimerOptionsProviderProps) {
 
     const { mode } = useContext(ModeContext)
+    const { sessionTime } = useContext(SettingsContext)
+    const { currentScreen } = useContext(NavigationContext)
 
-    const [time, setTime] = useState(ModeDurations[mode] * 60);
+    const [time, setTime] = useState(sessionTime[mode].time * 60);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     const endTimeRef = useRef<number | null>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const pausedAtRef = useRef<number | null>(null);
 
     useEffect(() => {
-        setTime(ModeDurations[mode] * 60)
-    }, [mode])
+        setTime(sessionTime[mode].time * 60)
+    }, [mode, currentScreen])
 
     const duration = () => {
-        return ModeDurations[mode] * 60
+        return sessionTime[mode].time * 60
     }
 
     const getDisplayTime = (): string => {

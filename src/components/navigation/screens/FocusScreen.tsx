@@ -18,7 +18,7 @@ export default function FocusScreen() {
     }
 
     return (
-        <div>
+        <div className="py-10">
             <SwitchButton
                 buttons={[Mode.FOCUS, Mode.REST, Mode.LONG_REST]}
                 onChange={setMode}

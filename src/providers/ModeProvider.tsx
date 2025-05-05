@@ -13,8 +13,6 @@ export const ModeContext = createContext<IModeOptions>();
  */
 export default function ModeProvider({ children }: IModeOptionsProviderProps) {
 
-    // const { currentMode, getDisplayTime, start, pause } = useContext(TimerContext)
-
     const [mode, setMode] = useState<Mode>(Mode.FOCUS)
 
     return (
