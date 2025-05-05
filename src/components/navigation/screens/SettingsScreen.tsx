@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { NavigationContext } from "../../../providers/NavigationProvider"
 import { TimerContext } from "../../../providers/TimerProvider"
+import Sliderr from "../../Slider"
 
 export default function SettingsScreen() {
 
@@ -9,14 +10,11 @@ export default function SettingsScreen() {
 
 
     return (
-        <div>
+        <div className="m-8">
             <div>
-                settings
+                SETTINGS
+                <Sliderr />
             </div>
-
-            {/* <div>
-                <input type="number" value={startTime} onChange={(e) => setStartTime(e.target.value)} max={60} />
-            </div> */}
         </div>
     )
 }

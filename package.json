@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^7.0.2",
     "@tailwindcss/vite": "^4.0.14",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.11",

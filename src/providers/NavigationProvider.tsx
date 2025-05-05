@@ -11,7 +11,7 @@ export const NavigationContext = createContext<INavigationOptions>( );
  */
 export default function NavigationProvider({ children }: INavigationOptionsProviderProps) {
 
-    const [currentScreen, setCurrentScreen] = useState<string>("focus")
+    const [currentScreen, setCurrentScreen] = useState<string>("settings")
 
     return (
         <NavigationContext.Provider value={{ currentScreen, setCurrentScreen }}>

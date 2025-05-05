@@ -13,7 +13,8 @@
     --color-green: oklch(60.12% 0.0882 137.17);
     --color-light-green: oklch(78.34% 0.0855 130.39);
     --color-champagne: oklch(93.27% 0.0403 83.13);
-    --color-red: oklch(74.14% 0.0882 33.4);
+    --color-light-red: oklch(0.89 0.0406 41.03);
+    --color-red: oklch(0.8 0.0865 41.33);
 
     --font-lexend: "Lexend", sans-serif;
 }

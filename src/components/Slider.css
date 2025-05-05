@@ -1,0 +1,58 @@
+/* .MuiSlider-root {
+    height: 1.5rem!important;
+}
+
+.MuiSlider-rail {
+    opacity: 1!important;
+    color: var(--color-light-blue)!important;
+}
+
+.MuiSlider-track {
+    color: var(--color-light-green)!important;
+}
+
+.MuiSlider-thumb {
+    height: 2rem!important;
+    width: 2rem!important;
+    background-color: white!important;
+    border-radius: 100px;
+    border: 0.25rem solid var(--color-light-green)!important;
+    box-sizing: border-box;
+}
+
+.MuiSlider-thumb:hover, .MuiSlider-thumb:focus, .Mui-active, .Mui-focusVisible {
+    box-shadow: inherit!important;
+}
+
+.MuiSlider-thumbSizeSmall {
+    color:#c42c36!important;
+}
+
+.MuiSlider-thumb::before {
+    box-shadow: none!important;
+}
+
+.MuiSlider-valueLabel {
+    line-height: 1.2!important;
+    font-size: 1.2rem!important;
+    background: unset!important;
+    padding: 0!important;
+    width: 3rem!important;
+    height: 3rem!important;
+    border-radius: 50% 50% 50% 0!important;
+    background-color: #26243a!important;
+    transform-origin: bottom left!important;
+    transform: translate(50%, -100%) rotate(-45deg) scale(0)!important;
+}
+
+.MuiSlider-valueLabel:before {
+    display: none!important;
+}
+
+.MuiSlider-valueLabelOpen {
+    transform: translate(50%, -100%) rotate(-45deg) scale(1)!important;
+}
+
+.MuiSlider-valueLabel > * {
+    transform: rotate(45deg)!important;
+} */
