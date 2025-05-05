@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react"
 import { NavigationContext } from "../../../providers/NavigationProvider"
 import { TimerContext } from "../../../providers/TimerProvider"
-import SwitchButton, { SwitchButtonButtonType } from "./SwitchButton"
+import SwitchButton, { SwitchButtonButtonType } from "./../../SwitchButton"
 import Button from "../../Button"
 import Timer from "../../Timer"
 import { Mode } from "../../Mode"
@@ -18,34 +18,24 @@ export default function FocusScreen() {
     }
 
     return (
-        <div className="w-screen h-screen bg-light-green font-lexend">
-
-            <div className="bg-white mx-auto py-10 max-w-xl rounded-3xl">
-
-                <SwitchButton
-                    buttons={[Mode.FOCUS, Mode.REST, Mode.LONG_REST]}
-                    onChange={setMode}
-                />
+        <div>
+            <SwitchButton
+                buttons={[Mode.FOCUS, Mode.REST, Mode.LONG_REST]}
+                onChange={setMode}
+            />
 
 
-                <div className="flex justify-center pb-6">
-                    <Timer time={getDisplayTime()} />
-
-                </div>
-
-                <div className="flex justify-center">
-                    {isTimerRunning ? (
-                        <Button text={"pause"} onClick={() => pause()} />
-                    ) : (
-                        <Button text={"start"} onClick={() => start()} />
-                    )}
-                </div>
+            <div className="flex justify-center pb-6">
+                <Timer time={getDisplayTime()} />
 
             </div>
 
-
-            <div>
-                <button onClick={() => setCurrentScreen("settings")}>go to settings</button>
+            <div className="flex justify-center">
+                {isTimerRunning ? (
+                    <Button text={"pause"} onClick={() => pause()} />
+                ) : (
+                    <Button text={"start"} onClick={() => start()} />
+                )}
             </div>
         </div>
     )

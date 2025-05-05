@@ -11,7 +11,7 @@ export default function Timer({ time }: TimerType) {
                 {time}
 
             </div> */}
-            <div className="w-96 flex justify-center text-light-blue text-9xl [&>*]:w-18">
+            <div className="w-96 flex justify-center text-blue text-9xl [&>*]:w-18">
                 {minutes.hundreds ? (
                     <div>{minutes.hundreds}</div>
                 ) : null}

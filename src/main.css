@@ -7,8 +7,9 @@
 }
 
 @theme {
-    --color-blue: oklch(69.59% 0.0597 247.91);
-    --color-light-blue: oklch(0.82 0.0438 252.68);
+    --color-dark-blue: oklch(69.59% 0.0597 247.91);
+    --color-blue: oklch(0.82 0.0438 252.68);
+    --color-light-blue: oklch(0.92 0.0299 251.29);
     --color-green: oklch(60.12% 0.0882 137.17);
     --color-light-green: oklch(78.34% 0.0855 130.39);
     --color-champagne: oklch(93.27% 0.0403 83.13);

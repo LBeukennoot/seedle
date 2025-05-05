@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mode } from "../../Mode";
+import { Mode } from "./Mode";
 
 /**
  * Clickable object (button) that switches between multiple options
@@ -19,7 +19,7 @@ export default function SwitchButton({
     return (
         <div className="flex justify-center pb-6 text-lg">
             <button>
-                <div className="h-12 flex items-center bg-light-blue rounded-xl relative">
+                <div className="h-12 flex items-center bg-blue rounded-xl relative">
                     <ButtonsElement
                         buttons={buttons}
                         width={width}
@@ -30,7 +30,7 @@ export default function SwitchButton({
                     />
 
                     <div
-                        className="border-light-blue bg-white rounded-xl border-6 absolute h-full top-0 transition-all duration-150"
+                        className="border-blue bg-white rounded-xl border-6 absolute h-full top-0 transition-all duration-150"
                         style={{ left: sessionKey * width + "rem", width: width + "rem" }}
                     ></div>
                 </div>
@@ -72,7 +72,7 @@ const ButtonsElement = ({
                     {/* blue text (when button selected) */}
                     <div
                         className={
-                            "text-light-blue z-50 absolute top-0 w-full transition-all duration-150 " +
+                            "text-blue z-50 absolute top-0 w-full transition-all duration-150 " +
                             (sessionKey === key ? "opacity-100" : "opacity-0")
                         }
                     >
