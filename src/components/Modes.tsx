@@ -37,9 +37,3 @@ export type sessionTimeType = {
         max: number
     }
 } 
-
-// export const ModeDurations: Record<Mode, number> = {
-//     [Mode.FOCUS]: 25,
-//     [Mode.REST]: 5,
-//     [Mode.LONG_REST]: 120
-// }

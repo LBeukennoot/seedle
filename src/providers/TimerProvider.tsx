@@ -1,8 +1,10 @@
 import { createContext, useState, useEffect, JSX, useContext, useRef } from "react";
 import { ModeContext } from "./ModeProvider";
-// import { ModeDurations } from "../components/Mode";
 import { SettingsContext } from "./SettingsProvider";
 import { NavigationContext } from "./NavigationProvider";
+
+const sound = new Audio('../../public/assets/sounds/timer_end_extended_v3.wav')
+
 
 // @ts-ignore
 export const TimerContext = createContext<ITimerOptions>();
@@ -24,6 +26,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     const endTimeRef = useRef<number | null>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const pausedAtRef = useRef<number | null>(null);
+
 
     // console.log(mode)
 
@@ -49,6 +52,10 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         return minutes + ":" + seconds
     }
 
+    const onComplete = () => {
+        sound.play()
+    }
+
     useEffect(() => {
         if (!isTimerRunning) return;
 
@@ -61,9 +68,13 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
             if (diff <= 0) {
                 setIsTimerRunning(false);
                 endTimeRef.current = null;
-                // onComplete?.();
+                setTime(sessionTime[mode]?.time * 60)
                 console.log('timer complete')
                 clearInterval(intervalRef.current!);
+            }
+
+            if (diff <= 4) {
+                onComplete();
             }
         }, 1000);
 
@@ -73,7 +84,6 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     }, [isTimerRunning]);
 
     const start = () => {
-        console.log('start timer')
         endTimeRef.current = Date.now() + time * 1000;
         setIsTimerRunning(true);
 

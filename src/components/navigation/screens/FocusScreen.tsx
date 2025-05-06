@@ -5,6 +5,7 @@ import Button from "../../Button"
 import Timer from "../../Timer"
 import { Modes, sessionTimeType } from "../../Modes"
 import { ModeContext } from "../../../providers/ModeProvider"
+const sound = new Audio('../../public/assets/sounds/begin_sound.wav')
 
 export default function FocusScreen() {
 
@@ -17,8 +18,6 @@ export default function FocusScreen() {
     const handleChangeMode = (m: any) => {
         setMode(m.id)
     }
-
-    // console.log(mode)
 
     return (
         <div className="py-10">
@@ -38,7 +37,10 @@ export default function FocusScreen() {
                 {isTimerRunning ? (
                     <Button text={"pause"} onClick={() => pause()} />
                 ) : (
-                    <Button text={"start"} onClick={() => start()} />
+                    <Button text={"start"} onClick={() => {
+                        start()
+                        sound.play()
+                    }} />
                 )}
             </div>
         </div>
