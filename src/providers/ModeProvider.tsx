@@ -1,6 +1,4 @@
-import { createContext, JSX, useContext, useEffect, useState } from "react";
-import { Modes, sessionTimeType } from "../components/Modes";
-import { TimerContext } from "./TimerProvider";
+import { createContext, JSX, useState } from "react";
 
 // @ts-ignore
 export const ModeContext = createContext<IModeOptions>();

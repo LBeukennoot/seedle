@@ -2,7 +2,6 @@ import { useContext } from "react"
 import { NavigationContext } from "../providers/NavigationProvider"
 import TimerIcon from "./TimerIcon"
 import SettingsIcon from "./SettingsIcon"
-import { Screens } from "./navigation/screens/ScreensIndex"
 
 const Tab = ({ screens, currentScreen, setCurrentScreen }: any) => {
 

@@ -1,7 +1,6 @@
 import { useContext } from "react"
 import Slider from "../../Slider"
 import { SettingsContext } from "../../../providers/SettingsProvider"
-import { Mode } from "../../Modes"
 
 export default function SettingsScreen() {
 

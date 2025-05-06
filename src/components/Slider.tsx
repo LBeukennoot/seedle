@@ -1,7 +1,6 @@
 import SliderMUI, { SliderThumb, SliderTrack } from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { useEffect, useState } from "react";
-import { sessionTimeType } from "../providers/SettingsProvider";
 
 const SliderStyled = styled(SliderMUI)(() => ({
     color: 'var(--color-light-green)',
