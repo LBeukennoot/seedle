@@ -5,7 +5,7 @@ import Button from "../../Button"
 import Timer from "../../Timer"
 import { Modes, sessionTimeType } from "../../Modes"
 import { ModeContext } from "../../../providers/ModeProvider"
-const sound = new Audio('../../public/assets/sounds/begin_sound.wav')
+const sound = new Audio('../../assets/sounds/begin_sound.wav')
 
 export default function FocusScreen() {
 

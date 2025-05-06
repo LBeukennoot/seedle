@@ -3,7 +3,7 @@ import { ModeContext } from "./ModeProvider";
 import { SettingsContext } from "./SettingsProvider";
 import { NavigationContext } from "./NavigationProvider";
 
-const sound = new Audio('../../public/assets/sounds/timer_end_extended_v3.wav')
+const sound = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
 
 
 // @ts-ignore
