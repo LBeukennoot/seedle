@@ -37,7 +37,7 @@ export default function Navigation() {
                         <Tablist />
                     </div>
 
-                    <div className="bg-white mx-auto max-w-xl rounded-3xl min-w-[30rem] min-h-[15rem] max-h-[30] transition-all">
+                    <div className="bg-white mx-auto max-w-xl rounded-3xl min-w-[30rem] min-h-[15rem] max-h-[30rem] transition-all">
                         <Screen />
                     </div>
                 </div>
