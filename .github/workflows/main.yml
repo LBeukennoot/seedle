@@ -1,6 +1,6 @@
 name: Jack
 
-on: push
+on: workflow_run
 
 jobs:
   build:
