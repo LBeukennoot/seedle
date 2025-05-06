@@ -66,6 +66,7 @@ export default function Slider({ min, max, safeZone, invert, value, setValue }: 
         )
     }
 
+    //TODO put thumb and track outside of slider() to prevent rerenders and maybe fix transition-all
     const ThumbComponent = ({ ...other }: any) => {
         return (
             <SliderThumb {...other} className={"!bg-white !h-[2rem] !w-[2rem] border-5 before:!shadow-none hover:!shadow-none transition-all " + (sliderSafe ? "border-light-green" : " !border-red")}>

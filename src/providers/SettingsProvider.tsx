@@ -1,5 +1,5 @@
 import { createContext, JSX, useState } from "react";
-import { Mode } from "../components/Mode";
+import { Modes } from "../components/Modes";
 
 // @ts-ignore
 export const SettingsContext = createContext<IModeOptions>();
@@ -14,28 +14,7 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
 
     // const { currentMode, getDisplayTime, start, pause } = useContext(TimerContext)
 
-    const [sessionTime, setSessionTime] = useState<sessionTimeType>(
-        {
-            focus: {
-                mode: Mode.FOCUS,
-                time: 25,
-                min: 19,
-                max: 91
-            },
-            rest: {
-                mode: Mode.REST,
-                time: 5,
-                min: -1,
-                max: 20
-            },
-            long_rest: {
-                mode: Mode.LONG_REST,
-                time: 15,
-                min: 9,
-                max: 61
-            }
-        }
-    )
+    const [sessionTime, setSessionTime] = useState<any>(Modes)
 
     return (
         <SettingsContext.Provider value={{ sessionTime, setSessionTime }}>
@@ -55,7 +34,7 @@ export interface IModeOptions {
 
 export type sessionTimeType = {
     [key: string]: {
-        mode: Mode,
+        mode: string,
         time: number,
         min: number,
         max: number

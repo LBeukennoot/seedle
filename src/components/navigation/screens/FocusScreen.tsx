@@ -1,27 +1,31 @@
-import { useContext, useState, useEffect } from "react"
-import { NavigationContext } from "../../../providers/NavigationProvider"
+import { useContext } from "react"
 import { TimerContext } from "../../../providers/TimerProvider"
-import SwitchButton, { SwitchButtonButtonType } from "./../../SwitchButton"
+import SwitchButton from "../../SwitchButton/SwitchButton"
 import Button from "../../Button"
 import Timer from "../../Timer"
-import { Mode } from "../../Mode"
+import { Modes, sessionTimeType } from "../../Modes"
 import { ModeContext } from "../../../providers/ModeProvider"
 
 export default function FocusScreen() {
 
-    const { setCurrentScreen } = useContext(NavigationContext)
     const { mode, setMode } = useContext(ModeContext)
-    const { time, getDisplayTime, start, pause, isTimerRunning } = useContext(TimerContext)
+    const { getDisplayTime, start, pause, isTimerRunning } = useContext(TimerContext)
 
-    const changeMode = (mode: SwitchButtonButtonType) => {
-        console.log('change mode to ' + mode)
+    //@ts-ignore
+    const buttons: sessionTimeType[] = Object.keys(Modes).map((key: string) => Modes[key])
+
+    const handleChangeMode = (m: any) => {
+        setMode(m.name)
     }
+
+    // console.log(mode)
 
     return (
         <div className="py-10">
             <SwitchButton
-                buttons={[Mode.FOCUS, Mode.REST, Mode.LONG_REST]}
-                onChange={setMode}
+                buttons={buttons}
+                selected={mode}
+                onChange={handleChangeMode}
             />
 
 

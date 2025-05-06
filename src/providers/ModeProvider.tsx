@@ -1,5 +1,5 @@
 import { createContext, JSX, useContext, useEffect, useState } from "react";
-import { Mode, ModeDurations } from "../components/Mode";
+import { Modes, sessionTimeType } from "../components/Modes";
 import { TimerContext } from "./TimerProvider";
 
 // @ts-ignore
@@ -13,7 +13,7 @@ export const ModeContext = createContext<IModeOptions>();
  */
 export default function ModeProvider({ children }: IModeOptionsProviderProps) {
 
-    const [mode, setMode] = useState<Mode>(Mode.FOCUS)
+    const [mode, setMode] = useState("focus")
 
     return (
         <ModeContext.Provider value={{ mode, setMode }}>
@@ -27,6 +27,6 @@ interface IModeOptionsProviderProps {
 }
 
 export interface IModeOptions {
-    mode: Mode
+    mode: string
     setMode: Function
 }

@@ -1,13 +1,14 @@
 import { useContext } from "react"
 import Slider from "../../Slider"
 import { SettingsContext } from "../../../providers/SettingsProvider"
-import { Mode } from "../../Mode"
+import { Mode } from "../../Modes"
 
 export default function SettingsScreen() {
 
     const { sessionTime, setSessionTime } = useContext(SettingsContext)
 
     const handleValueChange = ({ newValue, mode }: { newValue: number, mode: any }) => {
+        //TODO only setState when its different (preventing unessesary rerenders)
         setSessionTime({
             ...sessionTime,
             [mode]: {
