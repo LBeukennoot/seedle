@@ -10,7 +10,7 @@ jobs:
       GENERATE_SOURCEMAP: false
     steps:
       - name: 🚚 Get latest code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.2.2
 
       - name: 📦 Install dependencies
         uses: Borales/actions-yarn@v5.0.0
@@ -20,7 +20,7 @@ jobs:
       - name: 🔨 Build Project
         uses: borales/actions-yarn@v5.0.0
         with:
-          cmd: build --production
+          cmd: build
 
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
@@ -29,6 +29,6 @@ jobs:
           port: 21
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./build/
-          server-dir: public_html/WebClient/
+          local-dir: ./dist/
+          server-dir: www/seedle/
           state-name: ../.ftp-deploy-sync-state.json
