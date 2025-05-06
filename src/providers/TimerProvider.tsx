@@ -25,6 +25,8 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const pausedAtRef = useRef<number | null>(null);
 
+    // console.log(mode)
+
     useEffect(() => {
         setTime(sessionTime[mode]?.time * 60)
     }, [mode, currentScreen])
@@ -87,20 +89,20 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         }
     };
 
-    const resume = () => {
-        if (!isTimerRunning && pausedAtRef.current && endTimeRef.current) {
-            const pauseDuration = Date.now() - pausedAtRef.current;
-            endTimeRef.current += pauseDuration;
-            setIsTimerRunning(true);
-        }
-    };
+    // const resume = () => {
+    //     if (!isTimerRunning && pausedAtRef.current && endTimeRef.current) {
+    //         const pauseDuration = Date.now() - pausedAtRef.current;
+    //         endTimeRef.current += pauseDuration;
+    //         setIsTimerRunning(true);
+    //     }
+    // };
 
-    const reset = () => {
-        setIsTimerRunning(false);
-        setTime(duration());
-        endTimeRef.current = null;
-        pausedAtRef.current = null;
-    };
+    // const reset = () => {
+    //     setIsTimerRunning(false);
+    //     setTime(duration());
+    //     endTimeRef.current = null;
+    //     pausedAtRef.current = null;
+    // };
 
     return (
         <TimerContext.Provider value={{ time, getDisplayTime, start, pause, isTimerRunning }}>

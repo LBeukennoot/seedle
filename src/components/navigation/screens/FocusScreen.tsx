@@ -15,7 +15,7 @@ export default function FocusScreen() {
     const buttons: sessionTimeType[] = Object.keys(Modes).map((key: string) => Modes[key])
 
     const handleChangeMode = (m: any) => {
-        setMode(m.name)
+        setMode(m.id)
     }
 
     // console.log(mode)

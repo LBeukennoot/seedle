@@ -1,23 +1,26 @@
-// export enum Mode {
-//     FOCUS = 'focus',
-//     REST = 'rest',
-//     LONG_REST = 'long_rest'
-// }
+export enum Mode {
+    FOCUS = 'focus',
+    REST = 'rest',
+    LONG_REST = 'long_rest'
+}
 
 export const Modes: sessionTimeType = {
     focus: {
+        id: Mode.FOCUS,
         name: 'focus',
         time: 25,
         min: 19,
         max: 91
     },
     rest: {
+        id: Mode.REST,
         name: "rest",
         time: 5,
         min: -1,
         max: 20
     },
     long_rest: {
+        id: Mode.LONG_REST,
         name: "long rest",
         time: 15,
         min: 9,
@@ -27,9 +30,10 @@ export const Modes: sessionTimeType = {
 
 export type sessionTimeType = {
     [key: string]: {
-        name: string,
-        time: number,
-        min: number,
+        id: Mode
+        name: string
+        time: number
+        min: number
         max: number
     }
 } 

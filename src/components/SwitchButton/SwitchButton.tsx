@@ -14,7 +14,8 @@ export default function SwitchButton({
     selected = "",
     onChange = () => { },
 }: SwitchButtonType) {
-    const [selectedButton, setSelectedButton] = useState<number>(buttons.indexOf(buttons.find((b) => b.name === selected)));
+    //searches for selected id in buttons[]
+    const [selectedButton, setSelectedButton] = useState<number>(buttons.indexOf(buttons.find((b) => b.id === selected)));
 
     const length = buttons.length;
 

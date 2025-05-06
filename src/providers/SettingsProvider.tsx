@@ -1,5 +1,5 @@
 import { createContext, JSX, useState } from "react";
-import { Modes } from "../components/Modes";
+import { Modes, sessionTimeType } from "../components/Modes";
 
 // @ts-ignore
 export const SettingsContext = createContext<IModeOptions>();
@@ -31,12 +31,3 @@ export interface IModeOptions {
     sessionTime: sessionTimeType
     setSessionTime: Function
 }
-
-export type sessionTimeType = {
-    [key: string]: {
-        mode: string,
-        time: number,
-        min: number,
-        max: number
-    }
-} 
