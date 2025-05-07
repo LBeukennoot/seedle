@@ -1,7 +1,7 @@
 import { useContext } from "react"
-import * as ScreensIndex from './screens/ScreensIndex'
 import { NavigationContext, INavigationOptions } from "../../providers/NavigationProvider"
 import Tablist from "../Tablist"
+import { DefaultScreen, Screens } from "./screens/ScreensIndex"
 
 export default function Navigation() {
 
@@ -9,22 +9,15 @@ export default function Navigation() {
 
 
     const Screen = () => {
-        switch (currentScreen) {
-            case "focus":
-                return (
-                    <ScreensIndex.Focus />
-                )
+        const defaultScreen = Screens[DefaultScreen]?.screen
 
-            case "settings":
-                return (
-                    <ScreensIndex.Settings />
-                )
+        if(!currentScreen) return defaultScreen
 
-            default:
-                return (
-                    <ScreensIndex.Focus />
-                )
-        }
+        const screen = Screens[currentScreen]?.screen
+
+        if (!screen) return defaultScreen
+
+        return screen
     }
 
     return (
