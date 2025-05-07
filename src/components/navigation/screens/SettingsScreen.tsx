@@ -18,7 +18,7 @@ export default function SettingsScreen() {
     }
 
     return (
-        <div className="m-10">
+        <div className="">
             <h1 className="text-3xl mb-3">settings</h1>
             <h2 className="text-lg mb-3 font-bold">session time</h2>
             <hr className="border-1 mb-3 rounded-full text-light-blue"></hr>

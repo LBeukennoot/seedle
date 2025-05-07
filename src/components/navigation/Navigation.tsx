@@ -2,6 +2,7 @@ import { useContext } from "react"
 import { NavigationContext, INavigationOptions } from "../../providers/NavigationProvider"
 import Tablist from "../Tablist"
 import { DefaultScreen, Screens } from "./screens/ScreensIndex"
+import ScreenCard from "./screens/ScreenCard"
 
 export default function Navigation() {
 
@@ -11,7 +12,7 @@ export default function Navigation() {
     const Screen = () => {
         const defaultScreen = Screens[DefaultScreen]?.screen
 
-        if(!currentScreen) return defaultScreen
+        if (!currentScreen) return defaultScreen
 
         const screen = Screens[currentScreen]?.screen
 
@@ -30,8 +31,11 @@ export default function Navigation() {
                         <Tablist />
                     </div>
 
-                    <div className="bg-white mx-auto max-w-xl rounded-3xl min-w-[30rem] min-h-[15rem] max-h-[30rem] transition-all">
+                    <ScreenCard>
                         <Screen />
+                    </ScreenCard>
+                    <div className="">
+
                     </div>
                 </div>
 
