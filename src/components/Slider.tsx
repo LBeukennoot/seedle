@@ -48,7 +48,7 @@ export default function Slider({ min, max, safeZone, invert, value, setValue }: 
 
     const RailComponent = ({ ...other }: any) => {
         return (
-            <div {...other} className="w-full h-full rounded-full flex overflow-hidden">
+            <div className="w-full h-full rounded-full flex overflow-hidden">
                 <div
                     className={"h-full " + (invert ? "bg-light-red" : "bg-light-blue")}
                     style={{ width: minSafe + "%" }}

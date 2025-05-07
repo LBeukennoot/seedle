@@ -12,6 +12,7 @@ const Tab = ({ screens, currentScreen, setCurrentScreen }: any) => {
             <div
                 className={"py-4 px-3 rounded-l-xl transition-all " + (currentScreen === s.name ? "bg-white" : "bg-light-blue cursor-pointer")}
                 onClick={() => setCurrentScreen(s.name)}
+                key={s.name}
             >
                 {s.icon}
             </div>
