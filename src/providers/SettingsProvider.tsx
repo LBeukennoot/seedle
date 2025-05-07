@@ -27,11 +27,10 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
     useEffect(() => {
         const newSessionTime = localStorage.getValue("sessionTimes") as sessionTimeType
 
-        if(!isSessionTimeType(newSessionTime)) 
-            {
-                console.error('Local storage value of "sessionTimes" is corrupted.'); 
-                return
-            }
+        if (isSessionTimeType(newSessionTime) === false) {
+            console.error('Local storage value of "sessionTimes" is corrupted.');
+            return
+        }
 
         if (newSessionTime) setSessionTime(newSessionTime)
     }, [])

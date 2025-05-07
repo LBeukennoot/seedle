@@ -20,7 +20,7 @@ export default function FocusScreen() {
     }
 
     return (
-        <div className="py-10">
+        <div className="">
             <SwitchButton
                 buttons={buttons}
                 selected={mode}

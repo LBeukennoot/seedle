@@ -1,4 +1,5 @@
 import { createContext, JSX, useState } from "react";
+import { DefaultScreen, Screen } from "../components/navigation/screens/ScreensIndex";
 
 // @ts-ignore
 export const NavigationContext = createContext<INavigationOptions>( );
@@ -11,7 +12,7 @@ export const NavigationContext = createContext<INavigationOptions>( );
  */
 export default function NavigationProvider({ children }: INavigationOptionsProviderProps) {
 
-    const [currentScreen, setCurrentScreen] = useState<string>("focus")
+    const [currentScreen, setCurrentScreen] = useState<Screen>(DefaultScreen)
 
     return (
         <NavigationContext.Provider value={{ currentScreen, setCurrentScreen }}>
@@ -25,6 +26,6 @@ interface INavigationOptionsProviderProps {
 }
 
 export interface INavigationOptions {
-    currentScreen: string
+    currentScreen: Screen
     setCurrentScreen: Function
 }

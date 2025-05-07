@@ -1,20 +1,18 @@
 import { useContext } from "react"
 import { NavigationContext } from "../providers/NavigationProvider"
-import TimerIcon from "./TimerIcon"
-import SettingsIcon from "./SettingsIcon"
+import { Screens } from "./navigation/screens/ScreensIndex"
 
 const Tab = ({ screens, currentScreen, setCurrentScreen }: any) => {
-
-
-    return screens.map((s: any) => {
+    return Object.keys(screens).map((key: string) => {
+        const screen = screens[key]
 
         return (
             <div
-                className={"py-4 px-3 rounded-l-xl transition-all " + (currentScreen === s.name ? "bg-white" : "bg-light-blue cursor-pointer")}
-                onClick={() => setCurrentScreen(s.name)}
-                key={s.name}
+                className={"py-4 px-3 rounded-l-xl transition-all " + (currentScreen === screen.name ? "bg-white" : "bg-light-blue cursor-pointer")}
+                onClick={() => setCurrentScreen(screen.name)}
+                key={screen.id}
             >
-                {s.icon}
+                {screen.icon}
             </div>
         )
     })
@@ -23,20 +21,9 @@ const Tab = ({ screens, currentScreen, setCurrentScreen }: any) => {
 export default function Tablist() {
     const { currentScreen, setCurrentScreen } = useContext(NavigationContext)
 
-    const screens = [
-        {
-            name: 'focus',
-            icon: <TimerIcon />
-        },
-        {
-            name: 'settings',
-            icon: <SettingsIcon />
-        }
-    ]
-
     return (
         <div className="">
-            <Tab screens={screens} currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
+            <Tab screens={Screens} currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
         </div>
     )
 }
