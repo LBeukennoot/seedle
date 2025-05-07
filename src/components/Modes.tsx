@@ -39,6 +39,9 @@ export type sessionTimeType = {
 }
 
 export default function isSessionTimeType(obj: any): boolean {
+
+    if (!obj) return false
+
     let output = true
     Object.keys(obj).map((key: any) => {
         if (
