@@ -6,7 +6,7 @@ export default function SettingsScreen() {
 
     const { sessionTime, setSessionTime } = useContext(SettingsContext)
 
-    const handleValueChange = ({ newValue, mode }: { newValue: number, mode: any }) => {
+    const handleValueChange = ({ newValue, mode }: { newValue: number, mode: string }) => {
         //TODO only setState when its different (preventing unessesary rerenders)
         setSessionTime({
             ...sessionTime,

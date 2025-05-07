@@ -36,4 +36,20 @@ export type sessionTimeType = {
         min: number
         max: number
     }
-} 
+}
+
+export default function isSessionTimeType(obj: any): boolean {
+    let output = true
+    Object.keys(obj).map((key: any) => {
+        if (
+            typeof obj[key].id === "string" &&
+            typeof obj[key].name === "string" &&
+            typeof obj[key].time === "number" &&
+            typeof obj[key].min === "number" &&
+            typeof obj[key].max === "number"
+        ) return true
+
+        return false
+    }).map(bool => bool === false ? output = false : null )
+    return output
+}

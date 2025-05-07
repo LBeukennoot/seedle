@@ -1,5 +1,8 @@
-import { createContext, JSX, useState } from "react";
-import { Modes, sessionTimeType } from "../components/Modes";
+import { createContext, JSX, useEffect, useState } from "react";
+import isSessionTimeType, { Modes, sessionTimeType } from "../components/Modes";
+import LocalStorage from "../utils/LocalStorage";
+
+const localStorage = new LocalStorage()
 
 // @ts-ignore
 export const SettingsContext = createContext<IModeOptions>();
@@ -14,10 +17,27 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
 
     // const { currentMode, getDisplayTime, start, pause } = useContext(TimerContext)
 
-    const [sessionTime, setSessionTime] = useState<any>(Modes)
+    const [sessionTime, setSessionTime] = useState<sessionTimeType>(Modes)
+
+    const handleSetSessionTime = (value: sessionTimeType) => {
+        localStorage.setValue("sessionTimes", value)
+        setSessionTime(value)
+    }
+
+    useEffect(() => {
+        const newSessionTime = localStorage.getValue("sessionTimes") as sessionTimeType
+
+        if(!isSessionTimeType(newSessionTime)) 
+            {
+                console.error('Local storage value of "sessionTimes" is corrupted.'); 
+                return
+            }
+
+        if (newSessionTime) setSessionTime(newSessionTime)
+    }, [])
 
     return (
-        <SettingsContext.Provider value={{ sessionTime, setSessionTime }}>
+        <SettingsContext.Provider value={{ sessionTime, setSessionTime: handleSetSessionTime }}>
             {children}
         </SettingsContext.Provider>
     )

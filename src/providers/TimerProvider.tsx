@@ -32,7 +32,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
     useEffect(() => {
         setTime(sessionTime[mode]?.time * 60)
-    }, [mode, currentScreen])
+    }, [mode, currentScreen, sessionTime])
 
     const duration = () => {
         return sessionTime[mode]?.time * 60
