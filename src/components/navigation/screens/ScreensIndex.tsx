@@ -15,7 +15,7 @@ export enum Screen {
     CHANGELOG = 'changelog'
 }
 
-export const DefaultScreen: Screen = Screen.CHANGELOG
+export const DefaultScreen: Screen = Screen.FOCUS
 export const Screens: ScreensType = {
     focus: {
         id: Screen.FOCUS,

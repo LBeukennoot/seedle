@@ -1,34 +1,34 @@
-name: Jack
+# name: Jack
 
-on: workflow_run
+# on: workflow_run
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    env: 
-      PUBLIC_URL: https://iamlars.nl/seedle
-      GENERATE_SOURCEMAP: false
-    steps:
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v4.2.2
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     env: 
+#       PUBLIC_URL: https://iamlars.nl/seedle
+#       GENERATE_SOURCEMAP: false
+#     steps:
+#       - name: 🚚 Get latest code
+#         uses: actions/checkout@v4.2.2
 
-      - name: 📦 Install dependencies
-        uses: Borales/actions-yarn@v5.0.0
-        with:
-          cmd: install --production
+#       - name: 📦 Install dependencies
+#         uses: Borales/actions-yarn@v5.0.0
+#         with:
+#           cmd: install --production
 
-      - name: 🔨 Build Project
-        uses: borales/actions-yarn@v5.0.0
-        with:
-          cmd: build
+#       - name: 🔨 Build Project
+#         uses: borales/actions-yarn@v5.0.0
+#         with:
+#           cmd: build
 
-      - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          port: 21
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: www/seedle/
-          state-name: ../.ftp-deploy-sync-state.json
+#       - name: 📂 Sync files
+#         uses: SamKirkland/FTP-Deploy-Action@4.3.3
+#         with:
+#           server: ${{ secrets.FTP_SERVER }}
+#           port: 21
+#           username: ${{ secrets.FTP_USERNAME }}
+#           password: ${{ secrets.FTP_PASSWORD }}
+#           local-dir: ./dist/
+#           server-dir: www/seedle/
+#           state-name: ../.ftp-deploy-sync-state.json
