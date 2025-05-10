@@ -83,7 +83,7 @@ export default function Slider({ min, max, safeZone, invert, value, setValue, na
             <input
                 id={name}
                 name={name}
-                className="w-10 overflow-hidden hover:bg-light-blue cursor-pointer text-lg rounded-lg px-1 transition-all"
+                className="w-11 overflow-hidden cursor-text text-lg rounded-lg px-1 transition-all border-2 border-transparent hover:border-light-blue focus:outline-blue"
                 type="number"
                 min={min}
                 max={max}
