@@ -34,6 +34,7 @@ export default function SettingsScreen() {
                 invert={true}
                 value={sessionTime.focus.time}
                 setValue={(newValue: number) => handleValueChange({ newValue, mode: "focus" })}
+                name={sessionTime.focus.id}
             />
 
             <h3 className="text-lg">rest</h3>
@@ -47,6 +48,7 @@ export default function SettingsScreen() {
                 invert={true}
                 value={sessionTime.rest.time}
                 setValue={(newValue: number) => handleValueChange({ newValue, mode: "rest" })}
+                name={sessionTime.rest.id}
             />
 
             <h3 className="text-lg">long rest</h3>
@@ -60,6 +62,7 @@ export default function SettingsScreen() {
                 invert={true}
                 value={sessionTime.long_rest.time}
                 setValue={(newValue: number) => handleValueChange({ newValue, mode: "long_rest" })}
+                name={sessionTime.long_rest.id}
             />
         </div>
     )

@@ -1,3 +1,4 @@
+import './sliderStyle.css'
 import SliderMUI, { SliderThumb, SliderTrack } from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { useEffect, useState } from "react";
@@ -16,14 +17,7 @@ const SliderStyled = styled(SliderMUI)(() => ({
     }
 }));
 
-export default function Slider({ min, max, safeZone, invert, value, setValue }: SliderOptionsType) {
-    // const marks = {
-    //     min: 5,
-    //     max: 120,
-    //     minSafe: 19,
-    //     maxSafe: 121,
-    //     invert: true
-    // }
+export default function Slider({ min, max, safeZone, invert, value, setValue, name }: SliderOptionsType) {
 
     const maxValue = max - min
     const minSafe = Math.round(((safeZone.min - min) / maxValue) * 100)
@@ -34,7 +28,10 @@ export default function Slider({ min, max, safeZone, invert, value, setValue }: 
     // console.log(options)
     const [sliderSafe, setSliderSafe] = useState(true)
 
+    // ChangeEventHandler
     const handleSliderChange = async (_: any, newValue: any) => {
+        if (typeof newValue === "string") newValue = parseInt(newValue)
+        if (newValue > max) { newValue = max }
         setValue(newValue);
     };
 
@@ -82,14 +79,24 @@ export default function Slider({ min, max, safeZone, invert, value, setValue }: 
 
     return (
         <div className='flex items-center w-full'>
-            <div className='w-8 text-blue text-lg overflow-hidden'>{value}</div>
+            {/* <div className='w-8 text-blue text-lg overflow-hidden'>{value}</div> */}
+            <input
+                id={name}
+                name={name}
+                className="w-10 overflow-hidden hover:bg-light-blue cursor-pointer text-lg rounded-lg px-1 transition-all"
+                type="number"
+                min={min}
+                max={max}
+                value={value}
+                onChange={(e: any) => handleSliderChange(undefined, e.target.value)}
+            />
 
-            <div className='px-4 flex items-center relative w-full'>
+            <div className='pl-5 pr-8 flex items-center relative w-full'>
                 <SliderStyled
                     slots={{ rail: RailComponent, thumb: ThumbComponent, track: TrackComponent }}
                     value={value}
                     onChange={handleSliderChange}
-                    aria-label="slider-name"
+                    aria-label={name}
                     min={min}
                     max={max}
                 />
@@ -108,4 +115,5 @@ type SliderOptionsType = {
     invert: boolean
     value: number
     setValue: Function
+    name: string
 }
