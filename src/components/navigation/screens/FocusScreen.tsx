@@ -19,6 +19,14 @@ export default function FocusScreen() {
         setMode(m.id)
     }
 
+    // const handleMouseDown = (e: any) => {
+    //     // e.preventDefault(); console.log(e)
+    // }
+
+    // const handleMouseUp = (e: any) => {
+    //     // e.preventDefault(); console.log(e)
+    // }
+
     return (
         <div className="">
             <SwitchButton
@@ -26,7 +34,6 @@ export default function FocusScreen() {
                 selected={mode}
                 onChange={handleChangeMode}
             />
-
 
             <div className="flex justify-center pb-6">
                 <Timer time={getDisplayTime()} />
@@ -43,6 +50,8 @@ export default function FocusScreen() {
                     }} />
                 )}
             </div>
+
+            {/* <div draggable onMouseDown={handleMouseDown} onDragStart={() => console.log('drag')} onClick={() => console.log('click')} onMouseUpCapture={handleMouseUp}>button</div> */}
         </div>
     )
 }
