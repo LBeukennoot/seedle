@@ -1,13 +1,6 @@
 import { SwitchButtonElementButtonType, SwitchButtonElementType } from "./SwitchButtonType";
 
-export default function ButtonsElement({
-    buttons,
-    width,
-    length,
-    selectedButton,
-    setSelectedButton,
-    onChange,
-}: SwitchButtonElementType) {
+export default function ButtonsElement({ buttons, width, length, selectedButton, setSelectedButton, onChange }: SwitchButtonElementType) {
     return buttons.map((b: SwitchButtonElementButtonType, key: number) => {
         return (
             <div className="flex items-center" key={key}>

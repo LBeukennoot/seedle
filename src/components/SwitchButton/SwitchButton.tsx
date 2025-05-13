@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonsElement from "./SwitchButtonElement";
 import { SwitchButtonType } from "./SwitchButtonType";
 
@@ -8,14 +8,13 @@ import { SwitchButtonType } from "./SwitchButtonType";
  * @author      LBeukennoot for Seelde
  * @created     28-04-2025
  */
-export default function SwitchButton({
-    buttons = [],
-    width = 7,
-    selected = "",
-    onChange = () => { },
-}: SwitchButtonType) {
-    //searches for selected id in buttons[]
-    const [selectedButton, setSelectedButton] = useState<number>(buttons.indexOf(buttons.find((b) => b.id === selected)));
+export default function SwitchButton({ buttons = [], width = 7, selected = "", onChange = () => { } }: SwitchButtonType) {
+    const [selectedButton, setSelectedButton] = useState<number>(0);
+
+    useEffect(() => {
+        //searches for selected id in buttons[]
+        setSelectedButton(buttons.indexOf(buttons.find((b) => b.id === selected)))
+    }, [selected])
 
     const length = buttons.length;
 
