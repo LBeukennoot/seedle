@@ -21,7 +21,7 @@ export default function SwitchButton({ buttons = [], width = 7, selected = "", o
     return (
         <div className="flex justify-center pb-6 text-lg">
             <button>
-                <div className="h-12 flex items-center bg-blue rounded-xl relative">
+                <div className="grid grid-cols-3 bg-blue text-white text-xl rounded-full relative">
                     <ButtonsElement
                         buttons={buttons}
                         width={width}
@@ -32,8 +32,8 @@ export default function SwitchButton({ buttons = [], width = 7, selected = "", o
                     />
 
                     <div
-                        className="border-blue bg-white rounded-xl border-6 absolute h-full top-0 transition-all duration-150"
-                        style={{ left: selectedButton * width + "rem", width: width + "rem" }}
+                        className="border-blue bg-white rounded-full border-6 absolute h-full top-0 transition-all duration-150 w-1/3"
+                        style={{ left: (100/length) * selectedButton + "%" }}
                     ></div>
                 </div>
             </button>
