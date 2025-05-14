@@ -8,7 +8,7 @@ import { SwitchButtonType } from "./SwitchButtonType";
  * @author      LBeukennoot for Seelde
  * @created     28-04-2025
  */
-export default function SwitchButton({ buttons = [], width = 7, selected = "", onChange = () => { } }: SwitchButtonType) {
+export default function SwitchButton({ buttons = [], selected = "", onChange = () => { } }: SwitchButtonType) {
     const [selectedButton, setSelectedButton] = useState<number>(0);
 
     useEffect(() => {
@@ -21,10 +21,9 @@ export default function SwitchButton({ buttons = [], width = 7, selected = "", o
     return (
         <div className="flex justify-center pb-6 text-lg">
             <button>
-                <div className="grid grid-cols-3 bg-blue text-white text-xl rounded-full relative">
+                <div className="grid grid-cols-3 bg-blue text-white text-xl rounded-full relative group">
                     <ButtonsElement
                         buttons={buttons}
-                        width={width}
                         length={length}
                         selectedButton={selectedButton}
                         setSelectedButton={setSelectedButton}
