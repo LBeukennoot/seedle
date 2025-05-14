@@ -5,6 +5,7 @@ import FocusScreen from './FocusScreen'
 import SettingsScreen from './SettingsScreen'
 import ChangelogIcon from '../icons/ChangelogIcon'
 import ChangelogScreen from './ChangelogScreen'
+import { IconType } from '../icons/IconType'
 
 export { default as Focus } from './FocusScreen'
 export { default as Settings } from './SettingsScreen'
@@ -21,28 +22,28 @@ export const Screens: ScreensType = {
         id: Screen.FOCUS,
         name: 'focus',
         screen: <FocusScreen />,
-        icon: <TimerIcon />
+        icon: TimerIcon
     },
     settings: {
         id: Screen.SETTINGS,
         name: 'settings',
         screen: <SettingsScreen />,
-        icon: <SettingsIcon />
+        icon: SettingsIcon
     },
     changelog: {
         id: Screen.CHANGELOG,
         name: 'changelog',
         screen: <ChangelogScreen></ChangelogScreen>,
-        icon: <ChangelogIcon />
+        icon: ChangelogIcon
     }
 }
 
-type ScreensType = {
+export type ScreensType = {
     [key: string]: {
         id: Screen
         name: string
         screen: JSX.Element
-        icon: JSX.Element
+        icon: ({className}: IconType) => JSX.Element
     }
 }
 

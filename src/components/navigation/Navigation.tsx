@@ -13,16 +13,13 @@ export default function Navigation() {
             <div className="flex justify-center items-center h-full">
 
                 <div className="flex items-start h-[30rem]">
-                    <div className="mt-10 absolute -ml-12 z-10">
+                    <div className="absolute -ml-15 z-10">
                         <Tablist />
                     </div>
 
                     <ScreenCard>
                         <ScreenElement />
                     </ScreenCard>
-                    <div className="">
-
-                    </div>
                 </div>
 
             </div>
