@@ -8,7 +8,7 @@ const Tab = ({ screens, currentScreen, setCurrentScreen }: TabType) => {
 
         return (
             <div
-                className={"py-3 px-4 rounded-l-full border-6 transition-all duration-150 " + (currentScreen === screen.name ? "bg-white border-white" : "bg-blue cursor-pointer border-blue hover:bg-light-blue")}
+                className={"py-4 px-3 md:py-3 md:px-4 rounded-t-full md:rounded-r-none md:rounded-l-full border-6 transition-all duration-150 border-b-0 md:border-b-6 " + (currentScreen === screen.name ? "bg-white border-white " : "bg-blue cursor-pointer border-blue hover:bg-light-blue ")}
                 onClick={() => setCurrentScreen(screen.name)}
                 key={screen.id}
             >
@@ -18,11 +18,11 @@ const Tab = ({ screens, currentScreen, setCurrentScreen }: TabType) => {
     })
 }
 
-export default function Tablist() {
+export default function Tablist({ expanded }: any) {
     const { currentScreen, setCurrentScreen } = useContext(NavigationContext)
 
     return (
-        <div className="">
+        <div className={"" + (expanded ? "" : "flex md:inline-block")}>
             <Tab screens={Screens} currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
         </div>
     )

@@ -1,16 +1,19 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { TimerContext } from "../../../providers/TimerProvider"
 import SwitchButton from "../../SwitchButton/SwitchButton"
 import Button from "../../Button"
 import Timer from "../../Timer"
 import { Modes, sessionTimeType } from "../../Modes"
 import { ModeContext } from "../../../providers/ModeProvider"
+import Dropdown from "../../dropdown/Dropdown"
+import { NavigationContext } from "../../../providers/NavigationProvider"
 const sound = new Audio('../../assets/sounds/begin_sound.wav')
 
 export default function FocusScreen() {
 
     const { mode, setMode } = useContext(ModeContext)
     const { getDisplayTime, start, pause, isTimerRunning } = useContext(TimerContext)
+    const { expanded, setExpanded } = useContext(NavigationContext)
 
     //@ts-ignore
     const buttons: sessionTimeType[] = Object.keys(Modes).map((key: string) => Modes[key])
@@ -28,26 +31,31 @@ export default function FocusScreen() {
     // }
 
     return (
-        <div className="">
-            <SwitchButton
-                buttons={buttons}
-                selected={mode}
-                onChange={handleChangeMode}
-            />
+        <div className={expanded ? "inline-block" : "grid grid-cols-3 md:inline-block"}>
+            <div className="hidden md:block">
+                <SwitchButton
+                    buttons={buttons}
+                    selected={mode}
+                    onChange={handleChangeMode}
+                />
+            </div>
+
+            <div className="block md:hidden">
+                <Dropdown />
+            </div>
 
             <div className="flex justify-center pb-6">
-                <Timer time={getDisplayTime()} />
-
+                <Timer time={getDisplayTime()} expanded={expanded} />
             </div>
 
             <div className="flex justify-center">
                 {isTimerRunning ? (
-                    <Button text={"pause"} onClick={() => pause()} />
+                    <Button text={"pause"} onClick={() => pause()} expanded={expanded} />
                 ) : (
                     <Button text={"start"} onClick={() => {
                         start()
                         sound.play()
-                    }} />
+                    }} expanded={expanded} />
                 )}
             </div>
 

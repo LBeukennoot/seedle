@@ -14,6 +14,7 @@ export const NavigationContext = createContext<INavigationOptions>();
 export default function NavigationProvider({ children }: INavigationOptionsProviderProps) {
 
     const [currentScreen, setCurrentScreen] = useState<Screen>(DefaultScreen)
+    const [expanded, setExpanded] = useState<boolean>(false)
 
     const { devSettings } = useContext(DevContext)
 
@@ -44,7 +45,7 @@ export default function NavigationProvider({ children }: INavigationOptionsProvi
 
 
     return (
-        <NavigationContext.Provider value={{ currentScreen, setCurrentScreen, ScreenElement }}>
+        <NavigationContext.Provider value={{ currentScreen, setCurrentScreen, expanded, setExpanded, ScreenElement }}>
             {children}
         </NavigationContext.Provider>
     )
@@ -57,5 +58,7 @@ interface INavigationOptionsProviderProps {
 export interface INavigationOptions {
     currentScreen: Screen
     setCurrentScreen: Function
+    expanded: boolean
+    setExpanded: Function
     ScreenElement: () => JSX.Element
 }

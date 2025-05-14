@@ -1,4 +1,4 @@
-export default function Timer({ time }: TimerType) {
+export default function Timer({ time, expanded }: TimerType) {
 
     const splitTime = time.split('')
     const seconds = { tens: splitTime[splitTime.length - 2], ones: splitTime[splitTime.length - 1] }
@@ -7,11 +7,7 @@ export default function Timer({ time }: TimerType) {
 
     return (
         <div>
-            {/* <div className={"text-light-blue text-9xl flex justify-center"}>
-                {time}
-
-            </div> */}
-            <div className="w-96 flex justify-center text-blue text-9xl [&>*]:w-18">
+            <div className={"flex justify-center text-blue [&>*]:w-18 transition-all " + (expanded ? "text-2xl w-16 font-semibold" : "text-2xl w-16 font-semibold md:font-normal md:w-96 md:text-9xl")}>
                 {minutes.hundreds ? (
                     <div>{minutes.hundreds}</div>
                 ) : null}
@@ -27,4 +23,5 @@ export default function Timer({ time }: TimerType) {
 
 type TimerType = {
     time: string
+    expanded: boolean
 }
