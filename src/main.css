@@ -17,4 +17,6 @@
     --color-red: oklch(0.8 0.0865 41.33);
 
     --font-lexend: "Lexend", sans-serif;
+
+    --breakpoint-xs: 25rem;
 }

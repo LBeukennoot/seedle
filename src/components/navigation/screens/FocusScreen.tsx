@@ -41,7 +41,7 @@ export default function FocusScreen() {
             </div>
 
             <div className="block md:hidden">
-                <Dropdown />
+                <Dropdown selected={mode} options={buttons} onSelect={handleChangeMode} />
             </div>
 
             <div className="flex justify-center pb-6">
