@@ -22,6 +22,8 @@ export default function FocusScreen() {
         setMode(m.id)
     }
 
+    const [dragStart, setDragStart] = useState(0)
+
     // const handleMouseDown = (e: any) => {
     //     // e.preventDefault(); console.log(e)
     // }
@@ -29,6 +31,19 @@ export default function FocusScreen() {
     // const handleMouseUp = (e: any) => {
     //     // e.preventDefault(); console.log(e)
     // }
+
+    const handleDragEnd = (e: any) => {
+        setDragStart(e.clientY)
+        console.log(e)
+    }
+
+    const handleDragStart = (e: any) => {
+        console.log(e)
+
+        if (e.clientY - dragStart < 0) {
+            console.log("drag")
+        }
+    }
 
     return (
         <div className={expanded ? "inline-block" : "grid grid-cols-3 md:inline-block"}>
@@ -44,9 +59,11 @@ export default function FocusScreen() {
                 <Dropdown selected={mode} options={buttons} onSelect={handleChangeMode} />
             </div>
 
-            <div className="flex justify-center md:pb-6 items-center">
+            <div className="flex-col md:pb-6 items-center">
                 {/* <div className="flex justify-center md:pb-6 items-center"> */}
                 <Timer time={getDisplayTime()} expanded={expanded} />
+
+
             </div>
 
             <div className="flex justify-center">
@@ -60,6 +77,14 @@ export default function FocusScreen() {
                 )}
             </div>
 
+            <div className="w-full flex md:hidden justify-center relative col-span-3">
+                <div
+                    draggable
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    className="absolute h-1.5 bg-blue w-20 mt-1.5 rounded-full"
+                ></div>
+            </div>
             {/* <div draggable onMouseDown={handleMouseDown} onDragStart={() => console.log('drag')} onClick={() => console.log('click')} onMouseUpCapture={handleMouseUp}>button</div> */}
         </div>
     )
