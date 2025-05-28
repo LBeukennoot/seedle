@@ -17,7 +17,7 @@ export default function Dropdown({ selected, options, onSelect }: any) {
                     return (
                         <div
                             key={key}
-                            className={"flex justify-center items-center gap-2 py-2 border-6 border-blue rounded-full transition-all bg-white text-blue cursor-pointer"}
+                            className={"flex justify-center items-center gap-2 py-2 border-6 border-blue rounded-full transition-all bg-white text-blue cursor-pointer hover:bg-light-blue"}
                             onClick={() => setCollapsed(!collapsed)}
                         >
                             {button.name}
