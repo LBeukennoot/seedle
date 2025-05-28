@@ -40,11 +40,12 @@ export default function FocusScreen() {
                 />
             </div>
 
-            <div className="block md:hidden">
+            <div className="block md:hidden h-full">
                 <Dropdown selected={mode} options={buttons} onSelect={handleChangeMode} />
             </div>
 
-            <div className="flex justify-center pb-6">
+            <div className="flex justify-center md:pb-6 items-center">
+                {/* <div className="flex justify-center md:pb-6 items-center"> */}
                 <Timer time={getDisplayTime()} expanded={expanded} />
             </div>
 
