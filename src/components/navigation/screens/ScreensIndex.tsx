@@ -1,27 +1,27 @@
 import { JSX } from 'react'
 import SettingsIcon from '../icons/SettingsIcon'
 import TimerIcon from '../icons/TimerIcon'
-import FocusScreen from './FocusScreen'
+import TimerScreen from './TimerScreen'
 import SettingsScreen from './SettingsScreen'
 import ChangelogIcon from '../icons/ChangelogIcon'
 import ChangelogScreen from './ChangelogScreen'
 import { IconType } from '../icons/IconType'
 
-export { default as Focus } from './FocusScreen'
+export { default as Timer } from './TimerScreen'
 export { default as Settings } from './SettingsScreen'
 
 export enum Screen {
-    FOCUS = 'focus',
+    TIMER = 'timer',
     SETTINGS = 'settings',
     CHANGELOG = 'changelog'
 }
 
-export const DefaultScreen: Screen = Screen.FOCUS
+export const DefaultScreen: Screen = Screen.TIMER
 export const Screens: ScreensType = {
-    focus: {
-        id: Screen.FOCUS,
-        name: 'focus',
-        screen: <FocusScreen />,
+    timer: {
+        id: Screen.TIMER,
+        name: 'timer',
+        screen: <TimerScreen />,
         icon: TimerIcon
     },
     settings: {

@@ -9,7 +9,7 @@ import Dropdown from "../../dropdown/Dropdown"
 import { NavigationContext } from "../../../providers/NavigationProvider"
 const sound = new Audio('../../assets/sounds/begin_sound.wav')
 
-export default function FocusScreen() {
+export default function TimerScreen() {
 
     const { mode, setMode } = useContext(ModeContext)
     const { getDisplayTime, start, pause, isTimerRunning } = useContext(TimerContext)
