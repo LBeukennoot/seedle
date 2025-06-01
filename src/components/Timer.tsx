@@ -6,7 +6,7 @@ export default function Timer({ time, expanded }: TimerType) {
     const minutes = { hundreds: splitTime[splitTime.length - 6], tens: splitTime[splitTime.length - 5], ones: splitTime[splitTime.length - 4] }
 
     return (
-        <div className={"flex justify-center text-blue  transition-all text-4xl w-full font-semibold md:font-normal md:w-96 md:text-9xl"}>
+        <div className={"flex justify-center h-full items-center text-blue  transition-all text-4xl w-full font-semibold md:font-normal md:w-96 md:text-9xl"}>
             {/* // <div className={"flex justify-center text-blue [&>*]:w-18 transition-all " + (expanded ? "text-2xl w-16 font-semibold" : "text-2xl w-16 font-semibold md:font-normal md:w-96 md:text-9xl")}> */}
             {minutes.hundreds ? (
                 <div>{minutes.hundreds}</div>

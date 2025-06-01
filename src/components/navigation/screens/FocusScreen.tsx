@@ -77,14 +77,14 @@ export default function FocusScreen() {
                 )}
             </div>
 
-            <div className="w-full flex md:hidden justify-center relative col-span-3">
+            {/* <div className="w-full flex md:hidden justify-center relative col-span-3">
                 <div
                     draggable
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                     className="absolute h-1.5 bg-blue w-20 mt-1.5 rounded-full"
                 ></div>
-            </div>
+            </div> */}
             {/* <div draggable onMouseDown={handleMouseDown} onDragStart={() => console.log('drag')} onClick={() => console.log('click')} onMouseUpCapture={handleMouseUp}>button</div> */}
         </div>
     )
