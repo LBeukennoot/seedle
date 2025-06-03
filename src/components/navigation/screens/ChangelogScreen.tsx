@@ -1,9 +1,8 @@
 import * as data from '../../../changelog.json'
 
 export default function ChangelogScreen() {
-    console.log(data.data)
     return (
-        <div className="">
+        <div className="overflow-y-auto max-h-[25rem] rounded-b-[2.3rem]">
             <h1 className="text-3xl mb-5">changelog</h1>
             {Object.keys(data.data).map(key => {
                 return (

@@ -8,7 +8,7 @@ export default class URLParams {
         this.urlParams = new URLSearchParams(this.queryString)
     }
 
-    getParam(param: string): any {
+    getParam(param: string): string | null {
         return this.urlParams.get(param)
     }
 }

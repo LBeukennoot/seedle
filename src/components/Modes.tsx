@@ -4,6 +4,7 @@ export enum Mode {
     LONG_REST = 'long_rest'
 }
 
+export const DefaultMode: Mode = Mode.FOCUS
 export const Modes: sessionTimeType = {
     focus: {
         id: Mode.FOCUS,
