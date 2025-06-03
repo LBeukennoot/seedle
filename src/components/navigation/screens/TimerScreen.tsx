@@ -46,7 +46,7 @@ export default function TimerScreen() {
     }
 
     return (
-        <div className={expanded ? "inline-block" : "grid grid-cols-3 md:inline-block"}>
+        <div className={"grid grid-cols-3 md:inline-block select-none"}>
             <div className="hidden md:block">
                 <SwitchButton
                     buttons={buttons}
