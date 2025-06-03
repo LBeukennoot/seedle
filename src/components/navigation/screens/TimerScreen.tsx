@@ -7,6 +7,9 @@ import { Modes, sessionTimeType } from "../../Modes"
 import { ModeContext } from "../../../providers/ModeProvider"
 import Dropdown from "../../dropdown/Dropdown"
 import { NavigationContext } from "../../../providers/NavigationProvider"
+import SessionIcons from "../../sessionicons/SessionIcons"
+import { DevContext } from "../../../providers/DevProvider"
+import NextIcon from "../icons/NextIcon"
 const sound = new Audio('../../assets/sounds/begin_sound.wav')
 
 export default function TimerScreen() {
@@ -14,6 +17,7 @@ export default function TimerScreen() {
     const { mode, setMode } = useContext(ModeContext)
     const { getDisplayTime, start, pause, isTimerRunning } = useContext(TimerContext)
     const { expanded, setExpanded } = useContext(NavigationContext)
+    const { devSettings } = useContext(DevContext)
 
     //@ts-ignore
     const buttons: sessionTimeType[] = Object.keys(Modes).map((key: string) => Modes[key])
@@ -24,29 +28,11 @@ export default function TimerScreen() {
 
     const [dragStart, setDragStart] = useState(0)
 
-    // const handleMouseDown = (e: any) => {
-    //     // e.preventDefault(); console.log(e)
-    // }
-
-    // const handleMouseUp = (e: any) => {
-    //     // e.preventDefault(); console.log(e)
-    // }
-
-    const handleDragEnd = (e: any) => {
-        setDragStart(e.clientY)
-        console.log(e)
-    }
-
-    const handleDragStart = (e: any) => {
-        console.log(e)
-
-        if (e.clientY - dragStart < 0) {
-            console.log("drag")
-        }
-    }
-
     return (
-        <div className={"grid grid-cols-3 md:inline-block select-none"}>
+        <div className={"grid grid-cols-3 md:inline-block select-none relative"}>
+
+            <SessionIcons />
+
             <div className="hidden md:block">
                 <SwitchButton
                     buttons={buttons}
@@ -74,6 +60,15 @@ export default function TimerScreen() {
                         start()
                         sound.play()
                     }} expanded={expanded} />
+                )}
+
+                {devSettings.current.dev === true && (
+                    <div
+                        className="ml-3 flex justify-center items-center bg-blue rounded-full px-5 py-1 md:px-3 md:py-2 border-6 border-blue cursor-pointer hover:bg-light-blue transition-all"
+                        onClick={() => { }}
+                    >
+                        <NextIcon className="fill-white" />
+                    </div>
                 )}
             </div>
 
