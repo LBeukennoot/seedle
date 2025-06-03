@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 const SliderStyled = styled(SliderMUI)(() => ({
     color: 'var(--color-light-green)',
     height: "1.5rem",
+    padding: 0,
     '& .MuiSlider-thumb': {
         height: '2rem',
         width: '2rem',
@@ -43,7 +44,7 @@ export default function Slider({ min, max, safeZone, invert, value, setValue, na
         }
     }, [value])
 
-    const RailComponent = ({ ...other }: any) => {
+    const RailComponent = () => {
         return (
             <div className="w-full h-full rounded-full flex overflow-hidden">
                 <div
@@ -79,7 +80,6 @@ export default function Slider({ min, max, safeZone, invert, value, setValue, na
 
     return (
         <div className='flex items-center w-full'>
-            {/* <div className='w-8 text-blue text-lg overflow-hidden'>{value}</div> */}
             <input
                 id={name}
                 name={name}

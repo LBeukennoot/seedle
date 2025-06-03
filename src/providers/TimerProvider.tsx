@@ -2,8 +2,11 @@ import { createContext, useState, useEffect, JSX, useContext, useRef } from "rea
 import { ModeContext } from "./ModeProvider";
 import { SettingsContext } from "./SettingsProvider";
 import { NavigationContext } from "./NavigationProvider";
+import { SessionContext } from "./SessionProvider";
+import { Mode } from "../components/Modes";
 
-const sound = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
+const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
+const soundStart = new Audio('../../assets/sounds/begin_sound.wav')
 
 
 // @ts-ignore
@@ -18,8 +21,9 @@ export const TimerContext = createContext<ITimerOptions>();
 export default function TimerProvider({ children }: ITimerOptionsProviderProps) {
 
     const { mode } = useContext(ModeContext)
-    const { sessionTime } = useContext(SettingsContext)
+    const { sessionTime, sessionSettings } = useContext(SettingsContext)
     const { currentScreen } = useContext(NavigationContext)
+    const { toNextSession, nextSession } = useContext(SessionContext)
 
     const [time, setTime] = useState(sessionTime[mode]?.time * 60);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -52,8 +56,28 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         return minutes + ":" + seconds
     }
 
+    const startIfAutoStartFocus = () => {
+
+    }
+
     const onComplete = () => {
-        sound.play()
+        setIsTimerRunning(false);
+        endTimeRef.current = null;
+        setTime(sessionTime[mode]?.time * 60)
+        console.log('timer complete')
+        clearInterval(intervalRef.current!);
+        if (sessionSettings.autoAdvance) toNextSession()
+
+        const timeout = setTimeout(() => {
+            if (sessionSettings.autoStartFocus && nextSession === Mode.FOCUS) start()
+            if (sessionSettings.autoStartRest && (nextSession === Mode.REST || nextSession === Mode.LONG_REST)) start()
+            clearTimeout(timeout)
+        }, 1500)
+
+    }
+
+    const soundTimer = () => {
+        soundEnd.play()
     }
 
     useEffect(() => {
@@ -66,15 +90,11 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
             setTime(diff);
 
             if (diff <= 0) {
-                setIsTimerRunning(false);
-                endTimeRef.current = null;
-                setTime(sessionTime[mode]?.time * 60)
-                console.log('timer complete')
-                clearInterval(intervalRef.current!);
+                onComplete()
             }
 
             if (diff <= 4) {
-                onComplete();
+                soundTimer();
             }
         }, 1000);
 
@@ -86,6 +106,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     const start = () => {
         endTimeRef.current = Date.now() + time * 1000;
         setIsTimerRunning(true);
+        soundStart.play()
 
         // Immediate update to prevent "double tick"
         const diff = Math.max(0, Math.floor((endTimeRef.current - Date.now()) / 1000));
