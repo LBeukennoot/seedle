@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { TimerContext } from "../../../providers/TimerProvider"
 import SwitchButton from "../../SwitchButton/SwitchButton"
 import Button from "../../Button"
@@ -7,13 +7,19 @@ import { Modes, sessionTimeType } from "../../Modes"
 import { ModeContext } from "../../../providers/ModeProvider"
 import Dropdown from "../../dropdown/Dropdown"
 import { NavigationContext } from "../../../providers/NavigationProvider"
-const sound = new Audio('../../assets/sounds/begin_sound.wav')
+import SessionIcons from "../../sessionicons/SessionIcons"
+import { DevContext } from "../../../providers/DevProvider"
+import NextIcon from "../icons/NextIcon"
+import { SessionContext } from "../../../providers/SessionProvider"
+
 
 export default function TimerScreen() {
 
     const { mode, setMode } = useContext(ModeContext)
     const { getDisplayTime, start, pause, isTimerRunning } = useContext(TimerContext)
-    const { expanded, setExpanded } = useContext(NavigationContext)
+    const { expanded } = useContext(NavigationContext)
+    const { devSettings } = useContext(DevContext)
+    const { toNextSession } = useContext(SessionContext)
 
     //@ts-ignore
     const buttons: sessionTimeType[] = Object.keys(Modes).map((key: string) => Modes[key])
@@ -22,31 +28,11 @@ export default function TimerScreen() {
         setMode(m.id)
     }
 
-    const [dragStart, setDragStart] = useState(0)
-
-    // const handleMouseDown = (e: any) => {
-    //     // e.preventDefault(); console.log(e)
-    // }
-
-    // const handleMouseUp = (e: any) => {
-    //     // e.preventDefault(); console.log(e)
-    // }
-
-    const handleDragEnd = (e: any) => {
-        setDragStart(e.clientY)
-        console.log(e)
-    }
-
-    const handleDragStart = (e: any) => {
-        console.log(e)
-
-        if (e.clientY - dragStart < 0) {
-            console.log("drag")
-        }
-    }
-
     return (
-        <div className={"grid grid-cols-3 md:inline-block select-none"}>
+        <div className={"grid grid-cols-3 md:inline-block select-none relative"}>
+
+            <SessionIcons />
+
             <div className="hidden md:block">
                 <SwitchButton
                     buttons={buttons}
@@ -72,20 +58,16 @@ export default function TimerScreen() {
                 ) : (
                     <Button text={"start"} onClick={() => {
                         start()
-                        sound.play()
                     }} expanded={expanded} />
                 )}
-            </div>
 
-            {/* <div className="w-full flex md:hidden justify-center relative col-span-3">
                 <div
-                    draggable
-                    onDragStart={handleDragStart}
-                    onDragEnd={handleDragEnd}
-                    className="absolute h-1.5 bg-blue w-20 mt-1.5 rounded-full"
-                ></div>
-            </div> */}
-            {/* <div draggable onMouseDown={handleMouseDown} onDragStart={() => console.log('drag')} onClick={() => console.log('click')} onMouseUpCapture={handleMouseUp}>button</div> */}
+                    className="ml-3 flex justify-center items-center bg-blue rounded-full px-5 py-1 md:px-3 md:py-2 border-6 border-blue cursor-pointer hover:bg-light-blue transition-all"
+                    onClick={() => toNextSession()}
+                >
+                    <NextIcon className="fill-white" />
+                </div>
+            </div>
         </div>
     )
 }

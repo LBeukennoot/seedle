@@ -15,13 +15,23 @@ export const SettingsContext = createContext<IModeOptions>();
  */
 export default function SettingsProvider({ children }: IModeOptionsProviderProps) {
 
-    // const { currentMode, getDisplayTime, start, pause } = useContext(TimerContext)
-
     const [sessionTime, setSessionTime] = useState<sessionTimeType>(Modes)
+    const [sessionSettings, setSessionSettings] = useState<sessionSettingsType>({
+        focusSessions: 4,
+        autoAdvance: false,
+        autoStartRest: false,
+        autoStartFocus: false
+
+    })
 
     const handleSetSessionTime = (value: sessionTimeType) => {
         localStorage.setValue("sessionTimes", value)
         setSessionTime(value)
+    }
+
+    const handleSetSessionSettings = (value: sessionSettingsType) => {
+        localStorage.setValue("sessionSettings", value)
+        setSessionSettings(value)
     }
 
     useEffect(() => {
@@ -33,10 +43,21 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
         }
 
         if (newSessionTime) setSessionTime(newSessionTime)
+
+
+        const newSessionSettings = localStorage.getValue("sessionSettings") as sessionSettingsType
+
+        // TODO
+        // if (isSessionTimeType(newSessionTime) === false) {
+        //     console.error('Local storage value of "sessionTimes" is corrupted.');
+        //     return
+        // }
+
+        if (newSessionSettings) setSessionSettings(newSessionSettings)
     }, [])
 
     return (
-        <SettingsContext.Provider value={{ sessionTime, setSessionTime: handleSetSessionTime }}>
+        <SettingsContext.Provider value={{ sessionTime, setSessionTime: handleSetSessionTime, sessionSettings, setSessionSettings: handleSetSessionSettings }}>
             {children}
         </SettingsContext.Provider>
     )
@@ -49,4 +70,13 @@ interface IModeOptionsProviderProps {
 export interface IModeOptions {
     sessionTime: sessionTimeType
     setSessionTime: Function
+    sessionSettings: sessionSettingsType
+    setSessionSettings: Function
+}
+
+type sessionSettingsType = {
+    focusSessions: number
+    autoAdvance: boolean
+    autoStartRest: boolean
+    autoStartFocus: boolean
 }
