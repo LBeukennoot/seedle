@@ -20,7 +20,7 @@ export default function NavigationProvider({ children }: INavigationOptionsProvi
 
 
     useEffect(() => {
-        let devScreenString = devSettings?.screen?.toUpperCase()
+        let devScreenString = devSettings?.current.screen?.toUpperCase()
         if (!devScreenString) return
 
 

@@ -1,4 +1,4 @@
-import { createContext, JSX, useEffect, useState } from "react";
+import { createContext, JSX, useEffect, useRef, useState } from "react";
 import URLParams from "../utils/URLParams";
 
 
@@ -14,28 +14,45 @@ const urlParams = new URLParams()
  * @created     10-05-2025
  */
 export default function DevProvider({ children }: IDevOptionsProviderProps) {
-    const [devSettings, setDevSettings] = useState(
+    const devSettings = useRef(
         {
+            dev: false,
             screen: "",
             mode: ""
         }
     )
+    // const [devSettings, setDevSettings] = useState(
+    //     {
+    //         dev: false,
+    //         screen: "",
+    //         mode: ""
+    //     }
+    // )
+
+
 
 
     useEffect(() => {
+        const handleSetDevSettings = ({ paramName, value }: handleSetDevSettings) => {
+            const param = urlParams.getParam(paramName)
+            if (typeof param === "string") devSettings.current = { ...devSettings.current, [paramName]: value ? value(param) : param }
+        }
+        // const handleSetDevSettings = ({ paramName, value }: handleSetDevSettings) => {
+        //     const param = urlParams.getParam(paramName)
+        //     console.log(devSettings)
+        //     if (typeof param === "string") setDevSettings({ ...devSettings, [paramName]: value ? value(param) : param })
+        // }
 
-        const screenParam = urlParams.getParam("screen")
-        if (typeof screenParam === "string") setDevSettings({ ...devSettings, screen: screenParam })
-
-        const modeParam = urlParams.getParam("mode")
-        if (typeof modeParam === "string") setDevSettings({ ...devSettings, mode: modeParam })
+        handleSetDevSettings({ paramName: "dev", value: (v: any) => { return v === "true" } })
+        handleSetDevSettings({ paramName: "mode" })
+        handleSetDevSettings({ paramName: "screen" })
 
 
-    }, [urlParams])
+    }, [urlParams, devSettings])
 
 
     return (
-        <DevContext.Provider value={{ devSettings, setDevSettings, urlParams }}>
+        <DevContext.Provider value={{ devSettings: devSettings, urlParams }}>
             {children}
         </DevContext.Provider>
     )
@@ -47,11 +64,18 @@ interface IDevOptionsProviderProps {
 
 export interface IDevOptions {
     devSettings: DevSettingsType
-    setDevSettings: Function
     urlParams: Object
 }
 
 type DevSettingsType = {
-    screen: string
-    mode: string
+    current: {
+        dev: boolean
+        screen: string
+        mode: string
+    }
+}
+
+type handleSetDevSettings = {
+    paramName: string
+    value?: Function
 }

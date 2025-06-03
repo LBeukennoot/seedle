@@ -18,7 +18,7 @@ export default function ModeProvider({ children }: IModeOptionsProviderProps) {
     const { devSettings } = useContext(DevContext)
 
     useEffect(() => {
-        let devModeString = devSettings?.mode?.toUpperCase()
+        let devModeString = devSettings?.current.mode?.toUpperCase()
         if (!devModeString) return
 
 
