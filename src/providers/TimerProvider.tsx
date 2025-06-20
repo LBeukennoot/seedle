@@ -1,9 +1,10 @@
-import { createContext, useState, useEffect, JSX, useContext, useRef } from "react";
+import { createContext, useState, useEffect, JSX, useContext, useRef, useLayoutEffect } from "react";
 import { ModeContext } from "./ModeProvider";
 import { SettingsContext } from "./SettingsProvider";
 import { NavigationContext } from "./NavigationProvider";
 import { SessionContext } from "./SessionProvider";
 import { Mode } from "../components/Modes";
+import { DevContext } from "./DevProvider";
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav')
@@ -20,10 +21,11 @@ export const TimerContext = createContext<ITimerOptions>();
  */
 export default function TimerProvider({ children }: ITimerOptionsProviderProps) {
 
-    const { mode } = useContext(ModeContext)
+    const { mode, setMode } = useContext(ModeContext)
     const { sessionTime, sessionSettings } = useContext(SettingsContext)
     const { currentScreen } = useContext(NavigationContext)
-    const { toNextSession, nextSession } = useContext(SessionContext)
+    const { toNextSession, sessionsArray, setNextSession, currentSession } = useContext(SessionContext)
+    const { devSettings } = useContext(DevContext)
 
     const [time, setTime] = useState(sessionTime[mode]?.time * 60);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -32,53 +34,72 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     const pausedAtRef = useRef<number | null>(null);
 
 
-    // console.log(mode)
+    useEffect(() => {
+        // if(isTimerRunning) {
+        //     alert("are you sure?")
+        //     setIsTimerRunning(false)
+        // }
+        //TODO add 'switching mode will stop timer' warning
+        setIsTimerRunning(false)
+        setTime(getDuration(mode))
+
+    }, [mode, currentScreen, sessionSettings])
 
     useEffect(() => {
-        setTime(sessionTime[mode]?.time * 60)
-    }, [mode, currentScreen, sessionTime])
+        const newMode = sessionsArray[currentSession];
+        setMode(newMode);
 
-    const duration = () => {
-        return sessionTime[mode]?.time * 60
+        if (sessionSettings.autoAdvance) {
+            const newTime = sessionTime[newMode]?.time * 60;
+            setTime(newTime);
+
+            // Delay start until state updates are done
+            const timeout = setTimeout(() => {
+                if (sessionSettings.autoStartFocus && newMode === Mode.FOCUS) start(newMode);
+                if (sessionSettings.autoStartRest && (newMode === Mode.REST || newMode === Mode.LONG_REST)) start(newMode);
+            }, 100); // small delay to let state settle
+
+            return () => clearTimeout(timeout);
+        } else {
+            setTime(sessionTime[newMode]?.time * 60);
+        }
+
+        setNextSession(sessionsArray[currentSession + 1]);
+    }, [currentSession]);
+
+
+    const getDuration = (mode: Mode) => {
+        const newTime = sessionTime[mode]?.time * 60
+        if (!newTime || isNaN(newTime)) {
+            console.error("Invalid mode or missing time for mode:", mode);
+            return 0;
+        }
+        return newTime
     }
 
     const getDisplayTime = (): string => {
-        // @ts-ignore
-        let minutes = parseInt(time / 60, 10);
-        // @ts-ignore
-        let seconds = parseInt(time % 60, 10);
+        if (typeof time !== 'number' || isNaN(time)) return "00:00";
 
-        // @ts-ignore
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        // @ts-ignore
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+        let minutes = Math.floor(time / 60);
+        let seconds = Math.floor(time % 60);
 
-        return minutes + ":" + seconds
-    }
+        const minStr = minutes < 10 ? "0" + minutes : String(minutes);
+        const secStr = seconds < 10 ? "0" + seconds : String(seconds);
 
-    const startIfAutoStartFocus = () => {
-
+        return `${minStr}:${secStr}`;
     }
 
     const onComplete = () => {
-        setIsTimerRunning(false);
+        console.log('timer complete');
         endTimeRef.current = null;
-        setTime(sessionTime[mode]?.time * 60)
-        console.log('timer complete')
         clearInterval(intervalRef.current!);
-        if (sessionSettings.autoAdvance) toNextSession()
+        setIsTimerRunning(false);
 
-        const timeout = setTimeout(() => {
-            if (sessionSettings.autoStartFocus && nextSession === Mode.FOCUS) start()
-            if (sessionSettings.autoStartRest && (nextSession === Mode.REST || nextSession === Mode.LONG_REST)) start()
-            clearTimeout(timeout)
-        }, 1500)
-
+        if (sessionSettings.autoAdvance) {
+            toNextSession();
+        }
     }
 
-    const soundTimer = () => {
-        soundEnd.play()
-    }
 
     useEffect(() => {
         if (!isTimerRunning) return;
@@ -94,7 +115,9 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
             }
 
             if (diff <= 4) {
-                soundTimer();
+                if (!devSettings.current.disableSound) {
+                    soundEnd.play()
+                }
             }
         }, 1000);
 
@@ -103,15 +126,28 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         };
     }, [isTimerRunning]);
 
-    const start = () => {
-        endTimeRef.current = Date.now() + time * 1000;
-        setIsTimerRunning(true);
-        soundStart.play()
 
-        // Immediate update to prevent "double tick"
+    const start = (mode: Mode) => {
+        if (!devSettings.current.disableSound) {
+            soundStart.play();
+            soundEnd.pause()
+            soundEnd.currentTime = 0
+        }
+        const newTime = sessionTime[mode]?.time;
+        if (!newTime || isNaN(newTime)) {
+            console.error("Invalid mode or missing time for mode:", mode);
+            return;
+        }
+
+        const seconds = newTime * 60;
+        setTime(seconds);
+        endTimeRef.current = Date.now() + seconds * 1000;
+        setIsTimerRunning(true);
+
         const diff = Math.max(0, Math.floor((endTimeRef.current - Date.now()) / 1000));
         setTime(diff);
     };
+
 
     const pause = () => {
         if (isTimerRunning && endTimeRef.current) {

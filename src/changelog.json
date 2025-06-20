@@ -1,5 +1,6 @@
 {
     "data": {
+        "june 20, 2025": "release v1.3.1 \n- fixed wrong time bug when auto adance is turned on \n- stops timer when mode is switched",
         "june 4, 2025": "release v1.3.0 \n- added sessions \n- added option to auto advance to next session \n- added options to auto start timer \n- added skip button",
         "june 3, 2025": "release v1.2.0 \n- added support for phones \n- added typable slider value \n- visual improvements",
         "may 7, 2025": "release v1.1.0 \n- settings will now be saved",

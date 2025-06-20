@@ -18,7 +18,15 @@ export default function DevProvider({ children }: IDevOptionsProviderProps) {
         {
             dev: false,
             screen: "",
-            mode: ""
+            mode: "",
+            disableSound: undefined,
+            focusTime: undefined,
+            restTime: undefined,
+            longRestTime: undefined,
+            autoAdvance: undefined,
+            autoStartFocus: undefined,
+            autoStartRest: undefined,
+            focusSessions: undefined,
         }
     )
     // const [devSettings, setDevSettings] = useState(
@@ -46,6 +54,16 @@ export default function DevProvider({ children }: IDevOptionsProviderProps) {
         handleSetDevSettings({ paramName: "dev", value: (v: any) => { return v === "true" } })
         handleSetDevSettings({ paramName: "mode" })
         handleSetDevSettings({ paramName: "screen" })
+        handleSetDevSettings({ paramName: "disableSound", value: (v: any) => { return v === "true" } })
+        handleSetDevSettings({ paramName: "focusTime", value: (v: any) => { return parseFloat(v) } })
+        handleSetDevSettings({ paramName: "restTime", value: (v: any) => { return parseFloat(v) } })
+        handleSetDevSettings({ paramName: "longRestTime", value: (v: any) => { return parseFloat(v) } })
+        handleSetDevSettings({ paramName: "autoAdvance", value: (v: any) => { return v === "true" } })
+        handleSetDevSettings({ paramName: "autoStartFocus", value: (v: any) => { return v === "true" } })
+        handleSetDevSettings({ paramName: "autoStartRest", value: (v: any) => { return v === "true" } })
+        handleSetDevSettings({ paramName: "focusSessions", value: (v: any) => { return parseInt(v) } })
+
+        console.log(devSettings.current)
 
 
     }, [urlParams, devSettings])
@@ -72,6 +90,14 @@ type DevSettingsType = {
         dev: boolean
         screen: string
         mode: string
+        disableSound: boolean | undefined
+        focusTime: number | undefined
+        restTime: number | undefined
+        longRestTime: number | undefined
+        autoAdvance: boolean | undefined
+        autoStartFocus: boolean | undefined
+        autoStartRest: boolean | undefined
+        focusSessions: number | undefined
     }
 }
 

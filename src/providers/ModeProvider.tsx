@@ -13,7 +13,7 @@ export const ModeContext = createContext<IModeOptions>();
  */
 export default function ModeProvider({ children }: IModeOptionsProviderProps) {
 
-    const [mode, setMode] = useState("focus")
+    const [mode, setMode] = useState<Mode>(Mode.FOCUS)
 
     const { devSettings } = useContext(DevContext)
 
@@ -40,6 +40,6 @@ interface IModeOptionsProviderProps {
 }
 
 export interface IModeOptions {
-    mode: string
+    mode: Mode
     setMode: Function
 }
