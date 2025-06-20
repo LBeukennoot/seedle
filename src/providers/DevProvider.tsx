@@ -63,9 +63,6 @@ export default function DevProvider({ children }: IDevOptionsProviderProps) {
         handleSetDevSettings({ paramName: "autoStartRest", value: (v: any) => { return v === "true" } })
         handleSetDevSettings({ paramName: "focusSessions", value: (v: any) => { return parseInt(v) } })
 
-        console.log(devSettings.current)
-
-
     }, [urlParams, devSettings])
 
 
