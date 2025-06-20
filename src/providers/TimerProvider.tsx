@@ -43,7 +43,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         setIsTimerRunning(false)
         setTime(getDuration(mode))
 
-    }, [mode, currentScreen])
+    }, [mode, currentScreen, sessionSettings])
 
     useEffect(() => {
         const newMode = sessionsArray[currentSession];
