@@ -35,6 +35,12 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
 
     useEffect(() => {
+        if(!isTimerRunning) {
+            setTime(getDuration(mode))
+        }
+    }, [currentScreen, sessionSettings])
+
+    useEffect(() => {
         // if(isTimerRunning) {
         //     alert("are you sure?")
         //     setIsTimerRunning(false)
@@ -43,7 +49,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         setIsTimerRunning(false)
         setTime(getDuration(mode))
 
-    }, [mode, currentScreen, sessionSettings])
+    }, [mode])
 
     useEffect(() => {
         const newMode = sessionsArray[currentSession];

@@ -9,11 +9,13 @@ import { SwitchButtonType } from "./SwitchButtonType";
  * @created     28-04-2025
  */
 export default function SwitchButton({ buttons = [], selected = "", onChange = () => { } }: SwitchButtonType) {
-    const [selectedButton, setSelectedButton] = useState<number>(0);
+    const getSelectedButtonIndex = () => buttons.indexOf(buttons.find((b) => b.id === selected))
+
+    const [selectedButton, setSelectedButton] = useState<number>(getSelectedButtonIndex());
 
     useEffect(() => {
         //searches for selected id in buttons[]
-        setSelectedButton(buttons.indexOf(buttons.find((b) => b.id === selected)))
+        setSelectedButton(getSelectedButtonIndex())
     }, [selected])
 
     const length = buttons.length;
