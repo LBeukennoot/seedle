@@ -38,7 +38,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         if(!isTimerRunning) {
             setTime(getDuration(mode))
         }
-    }, [mode, currentScreen, sessionSettings])
+    }, [currentScreen, sessionSettings])
 
     useEffect(() => {
         // if(isTimerRunning) {
@@ -47,6 +47,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         // }
         //TODO add 'switching mode will stop timer' warning
         setIsTimerRunning(false)
+        setTime(getDuration(mode))
 
     }, [mode])
 
@@ -91,7 +92,6 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         const minStr = minutes < 10 ? "0" + minutes : String(minutes);
         const secStr = seconds < 10 ? "0" + seconds : String(seconds);
 
-        console.log(`${minStr}:${secStr}`)
         return `${minStr}:${secStr}`;
     }
 
