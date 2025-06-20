@@ -18,7 +18,8 @@ export default function DevProvider({ children }: IDevOptionsProviderProps) {
         {
             dev: false,
             screen: "",
-            mode: ""
+            mode: "",
+            disableSound: false,
         }
     )
     // const [devSettings, setDevSettings] = useState(
@@ -46,6 +47,7 @@ export default function DevProvider({ children }: IDevOptionsProviderProps) {
         handleSetDevSettings({ paramName: "dev", value: (v: any) => { return v === "true" } })
         handleSetDevSettings({ paramName: "mode" })
         handleSetDevSettings({ paramName: "screen" })
+        handleSetDevSettings({ paramName: "disableSound", value: (v: any) => { return v === "true" }  })
 
 
     }, [urlParams, devSettings])
@@ -72,6 +74,7 @@ type DevSettingsType = {
         dev: boolean
         screen: string
         mode: string
+        disableSound: boolean
     }
 }
 

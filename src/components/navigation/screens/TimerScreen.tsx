@@ -57,7 +57,7 @@ export default function TimerScreen() {
                     <Button text={"pause"} onClick={() => pause()} expanded={expanded} />
                 ) : (
                     <Button text={"start"} onClick={() => {
-                        start()
+                        start(mode)
                     }} expanded={expanded} />
                 )}
 

@@ -39,7 +39,7 @@ export default function SessionProvider({ children }: ISessionOptionsProviderPro
     }, [currentSession])
 
     return (
-        <SessionContext.Provider value={{ currentSession, setCurrentSession, toNextSession, sessionsArray, nextSession }}>
+        <SessionContext.Provider value={{ currentSession, setCurrentSession, toNextSession, sessionsArray, nextSession, setNextSession }}>
             {children}
         </SessionContext.Provider>
     )
@@ -55,6 +55,7 @@ export interface ISessionOptions {
     toNextSession: Function
     sessionsArray: string[]
     nextSession: Mode
+    setNextSession: Function
 }
 
 type sessionType = {
