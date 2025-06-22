@@ -108,10 +108,10 @@ export default function SettingsScreen() {
                         <h3 className="text-lg pb-2">sessions</h3>
                         <Slider
                             min={1}
-                            max={9}
+                            max={4}
                             safeZone={{
-                                min: 2,
-                                max: 10
+                                min: 0,
+                                max: 4.1
                             }}
                             invert={true}
                             value={sessionSettings.focusSessions}

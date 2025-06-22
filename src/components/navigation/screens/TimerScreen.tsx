@@ -7,10 +7,14 @@ import { Modes, sessionTimeType } from "../../Modes"
 import { ModeContext } from "../../../providers/ModeProvider"
 import Dropdown from "../../dropdown/Dropdown"
 import { NavigationContext } from "../../../providers/NavigationProvider"
-import SessionIcons from "../../sessionicons/SessionIcons"
+import SessionIcons from "../../sessionbar/SessionBar"
 import { DevContext } from "../../../providers/DevProvider"
 import NextIcon from "../icons/NextIcon"
 import { SessionContext } from "../../../providers/SessionProvider"
+import StartIcon from "../icons/StartIcon"
+import PauseIcon from "../icons/PauseIcon"
+import { SettingsContext } from "../../../providers/SettingsProvider"
+import SessionBar from "../../sessionbar/SessionBar"
 
 
 export default function TimerScreen() {
@@ -19,7 +23,9 @@ export default function TimerScreen() {
     const { getDisplayTime, start, pause, isTimerRunning } = useContext(TimerContext)
     const { expanded } = useContext(NavigationContext)
     const { devSettings } = useContext(DevContext)
-    const { toNextSession } = useContext(SessionContext)
+    const { sessionTime, sessionSettings } = useContext(SettingsContext)
+    const { toNextSession, sessionsArray, currentSession, setCurrentSession } = useContext(SessionContext)
+
 
     //@ts-ignore
     const buttons: sessionTimeType[] = Object.keys(Modes).map((key: string) => Modes[key])
@@ -31,7 +37,7 @@ export default function TimerScreen() {
     return (
         <div className={"grid grid-cols-3 md:inline-block select-none relative"}>
 
-            <SessionIcons />
+            {/* <SessionIcons /> */}
 
             <div className="hidden md:block">
                 <SwitchButton
@@ -46,27 +52,31 @@ export default function TimerScreen() {
             </div>
 
             <div className="flex-col md:pb-6 items-center">
-                {/* <div className="flex justify-center md:pb-6 items-center"> */}
                 <Timer time={getDisplayTime()} expanded={expanded} />
-
-
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-2">
+
+                <SessionBar />
+
                 {isTimerRunning ? (
-                    <Button text={"pause"} onClick={() => pause()} expanded={expanded} />
+                    <Button onClick={pause} expanded={expanded} >
+                        <PauseIcon className="fill-white" />
+                    </Button>
                 ) : (
-                    <Button text={"start"} onClick={() => {
+                    <Button onClick={() => {
                         start(mode)
-                    }} expanded={expanded} />
+                    }} expanded={expanded} >
+                        <StartIcon className="fill-white" />
+                    </Button>
                 )}
 
-                <div
+                {/* <div
                     className="ml-3 flex justify-center items-center bg-blue rounded-full px-5 py-1 md:px-3 md:py-2 border-6 border-blue cursor-pointer hover:bg-light-blue transition-all"
                     onClick={() => toNextSession()}
                 >
                     <NextIcon className="fill-white" />
-                </div>
+                </div> */}
             </div>
         </div>
     )
