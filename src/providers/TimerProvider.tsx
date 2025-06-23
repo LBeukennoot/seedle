@@ -41,6 +41,8 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     const endTimeRef = useRef<number | null>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const pausedAtRef = useRef<number | null>(null);
+    const isAutoAdvanceRef = useRef(false);
+
 
 
     useEffect(() => {
@@ -64,7 +66,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         const newMode = sessionsArray[currentSession];
         setMode(newMode);
 
-        if (sessionSettings.autoAdvance) {
+        if (isAutoAdvanceRef.current) {
             const newTime = sessionTime[newMode]?.time * 60;
             setTime(newTime);
 
@@ -73,7 +75,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
                 if (sessionSettings.autoStartFocus && newMode === Mode.FOCUS) start(newMode);
                 if (sessionSettings.autoStartRest && (newMode === Mode.REST || newMode === Mode.LONG_REST)) start(newMode);
             }, 100); // small delay to let state settle
-
+            isAutoAdvanceRef.current = false
             return () => clearTimeout(timeout);
         } else {
             setTime(sessionTime[newMode]?.time * 60);
@@ -104,6 +106,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         setIsTimerRunning(false);
 
         if (sessionSettings.autoAdvance) {
+            isAutoAdvanceRef.current = true;
             toNextSession();
         }
     }
