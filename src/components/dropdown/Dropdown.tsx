@@ -22,8 +22,8 @@ export default function Dropdown({ selected, options, onSelect }: any) {
     }, [])
 
     return (
-        <div className={"w-full h-full relative text-xl text-center text-white rounded-4xl -mb-50 transition-all z-50"}>
-            <div className={"bg-blue absolute -z-10 w-full rounded-4xl transition-all " + (collapsed ? "h-[300%]" : "h-full")}></div>
+        <div className={"w-full max-w-52 h-full relative text-xl text-center text-white rounded-4xl -mb-25 transition-all z-50"}>
+            <div className={"bg-blue absolute -z-10 w-full rounded-4xl transition-all " + (collapsed ? "h-full" : "")}></div>
             {newOptions.map((button: any, key: any) => {
 
                 if (button.id === selected) {
@@ -35,7 +35,7 @@ export default function Dropdown({ selected, options, onSelect }: any) {
                             id={id}
                         >
                             {button.name}
-                            <ArrowDownIcon className={"stroke-blue hidden xs:inline-block " + (collapsed ? "rotate-180" : null)} id={id} />
+                            <ArrowDownIcon className={"stroke-blue  inline-block " + (collapsed ? "rotate-180" : null)} id={id} />
                         </div>
                     )
                 } else {

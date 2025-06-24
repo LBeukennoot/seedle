@@ -43,7 +43,8 @@ export default function SettingsScreen() {
             <h1 className="text-3xl mb-3">settings</h1>
 
             <div>
-                <h2 className="text-lg mb-3 font-bold">time</h2>
+                <hr className="border-1 rounded-full text-light-blue"></hr>
+                <h2 className="text-lg my-3 font-bold">time</h2>
                 <hr className="border-1 rounded-full text-light-blue"></hr>
 
                 <div className="my-4 flex flex-col gap-4 mb-10">
@@ -100,47 +101,74 @@ export default function SettingsScreen() {
 
 
             <div>
-                <h2 className="text-lg mb-3 font-bold">sessions</h2>
+                <hr className="border-1 rounded-full text-light-blue"></hr>
+                <h2 className="text-lg my-3 font-bold">sessions</h2>
                 <hr className="border-1 rounded-full text-light-blue"></hr>
 
                 <div className="my-4 flex flex-col gap-4 mb-10">
                     <div>
-                        <h3 className="text-lg pb-2">sessions</h3>
-                        <Slider
-                            min={1}
-                            max={9}
-                            safeZone={{
-                                min: 2,
-                                max: 10
-                            }}
-                            invert={true}
-                            value={sessionSettings.focusSessions}
-                            setValue={(newValue: number) => handleSessionChange({ newValue, setting: "focusSessions" })}
-                            name={"focusSessions"}
-                        />
-                    </div>
-
-                    <div>
-                        <h3 className="text-lg pb-2">auto advance session</h3>
+                        <h3 className="text-lg pb-2">automatic sessions</h3>
                         <ToggleButton
                             checked={sessionSettings.autoAdvance}
                             setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: "autoAdvance" })}
                         />
                     </div>
 
-                    <div>
-                        <h3 className="text-lg pb-2">auto start focus</h3>
-                        <ToggleButton
-                            checked={sessionSettings.autoStartFocus}
-                            setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: "autoStartFocus" })}
-                        />
-                    </div>
+                    {/* <div className={"h-10 overflow-y-hidden pb-2 transition-all bg-blue w-full duration-300 " + (!sessionSettings.autoAdvance ? "!h-0 !pb-0" : "")}>
+                    </div> */}
 
+                    <div className={"h-[13rem] overflow-y-hidden transition-all duration-500 " + (!sessionSettings.autoAdvance ? "!h-0" : "")}>
+                        <div>
+                            <h3 className="text-lg pb-2">sessions</h3>
+                            <Slider
+                                min={1}
+                                max={4}
+                                safeZone={{
+                                    min: 0,
+                                    max: 4.1
+                                }}
+                                invert={true}
+                                value={sessionSettings.focusSessions}
+                                setValue={(newValue: number) => handleSessionChange({ newValue, setting: "focusSessions" })}
+                                name={"focusSessions"}
+                                disabled={!sessionSettings.autoAdvance}
+                            />
+                        </div>
+
+                        <div>
+                            <h3 className="text-lg pb-2">auto start focus</h3>
+                            <ToggleButton
+                                checked={sessionSettings.autoStartFocus}
+                                setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: "autoStartFocus" })}
+                                disabled={!sessionSettings.autoAdvance}
+                            />
+                        </div>
+
+                        <div>
+                            <h3 className="text-lg pb-2">auto start rest</h3>
+                            <ToggleButton
+                                checked={sessionSettings.autoStartRest}
+                                setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: "autoStartRest" })}
+                                disabled={!sessionSettings.autoAdvance}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div>
+                <hr className="border-1 rounded-full text-light-blue"></hr>
+                <h2 className="text-lg my-3 font-bold">sound</h2>
+                <hr className="border-1 rounded-full text-light-blue"></hr>
+
+                <div className="my-4 flex flex-col gap-4 mb-10">
                     <div>
-                        <h3 className="text-lg pb-2">auto start rest</h3>
+                        <h3 className="text-lg pb-2">start and end sounds</h3>
                         <ToggleButton
-                            checked={sessionSettings.autoStartRest}
-                            setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: "autoStartRest" })}
+                            checked={sessionSettings.startEndSound}
+                            setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: "startEndSound" })}
                         />
                     </div>
                 </div>

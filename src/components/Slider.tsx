@@ -18,35 +18,39 @@ const SliderStyled = styled(SliderMUI)(() => ({
     }
 }));
 
-export default function Slider({ min, max, safeZone, invert, value, setValue, name }: SliderOptionsType) {
+export default function Slider({ min, max, safeZone, invert, value, setValue, name, disabled }: SliderOptionsType) {
 
     const maxValue = max - min
     const minSafe = Math.round(((safeZone.min - min) / maxValue) * 100)
     const maxSafe = Math.round(((max - safeZone.max) / maxValue) * 100)
     const safe = 100 - minSafe - maxSafe
 
-    // const [value, setValue] = useState(50);
-    // console.log(options)
     const [sliderSafe, setSliderSafe] = useState(true)
+    const [tempValue, setTempValue] = useState(value)
 
-    // ChangeEventHandler
-    const handleSliderChange = async (_: any, newValue: any) => {
-        if (typeof newValue === "string") newValue = parseInt(newValue)
-        if (newValue > max) { newValue = max }
-        setValue(newValue);
+    const handleSliderChange = (_: any, newValue: any) => {
+        if (typeof newValue === "string" && newValue !== "") newValue = parseInt(newValue)
+        if (checkValueAllowed(newValue)) setValue(newValue)
+        setTempValue(newValue);
     };
 
     useEffect(() => {
-        if (invert) {
-            setSliderSafe(value > safeZone.min && value < safeZone.max)
-        } else {
-            setSliderSafe((value >= 0 && value < safeZone.min) || (value > safeZone.max && value <= max))
-        }
-    }, [value])
 
-    const RailComponent = () => {
+
+        if (invert) {
+            setSliderSafe(tempValue > safeZone.min && tempValue < safeZone.max)
+        } else {
+            setSliderSafe((tempValue >= 0 && tempValue < safeZone.min) || (tempValue > safeZone.max && tempValue <= max))
+        }
+    }, [tempValue])
+
+    const checkValueAllowed = (value: number) => {
+        return value >= 1 && value <= 999
+    }
+
+    const RailComponent = ({ ownerState: { disabled } }: any) => {
         return (
-            <div className="w-full h-full rounded-full flex overflow-hidden">
+            <div className={"w-full h-full rounded-full flex overflow-hidden " + (disabled ? "grayscale-100" : "")}>
                 <div
                     className={"h-full " + (invert ? "bg-light-red" : "bg-light-blue")}
                     style={{ width: minSafe + "%" }}
@@ -66,7 +70,7 @@ export default function Slider({ min, max, safeZone, invert, value, setValue, na
     //TODO put thumb and track outside of slider() to prevent rerenders and maybe fix transition-all
     const ThumbComponent = ({ ...other }: any) => {
         return (
-            <SliderThumb {...other} className={"!bg-white !h-[2rem] !w-[2rem] border-5 before:!shadow-none hover:!shadow-none transition-all " + (sliderSafe ? "border-light-green" : " !border-red")}>
+            <SliderThumb {...other} className={"!bg-white !h-[2rem] !w-[2rem] border-5 before:!shadow-none hover:!shadow-none transition-all " + (sliderSafe ? "border-light-green" : " !border-red") + " " + (other.ownerState.disabled ? "grayscale-100 cursor-not-allowed" : "")}>
             </SliderThumb>
         )
     }
@@ -83,22 +87,24 @@ export default function Slider({ min, max, safeZone, invert, value, setValue, na
             <input
                 id={name}
                 name={name}
-                className="w-11 overflow-hidden cursor-text text-lg rounded-lg px-1 transition-all border-2 border-transparent hover:border-light-blue focus:outline-blue"
+                className={"w-11 overflow-hidden cursor-text text-lg rounded-lg px-1 transition-all border-2 border-transparent hover:border-light-blue focus:outline-blue disabled:grayscale-100 disabled:cursor-default disabled:hover:border-transparent " + (checkValueAllowed(tempValue) ? "text-blue border-light-blue" : "text-red !border-red")}
                 type="number"
                 min={min}
                 max={max}
-                value={value}
-                onChange={(e: any) => handleSliderChange(undefined, e.target.value)}
+                value={tempValue}
+                onChange={(e) => handleSliderChange(undefined, e.target.value)}
+                disabled={disabled}
             />
 
             <div className='pl-5 pr-8 flex items-center relative w-full'>
                 <SliderStyled
                     slots={{ rail: RailComponent, thumb: ThumbComponent, track: TrackComponent }}
-                    value={value}
+                    value={tempValue}
                     onChange={handleSliderChange}
                     aria-label={name}
                     min={min}
                     max={max}
+                    disabled={disabled}
                 />
             </div>
         </div>
@@ -116,4 +122,5 @@ type SliderOptionsType = {
     value: number
     setValue: Function
     name: string
+    disabled?: boolean
 }

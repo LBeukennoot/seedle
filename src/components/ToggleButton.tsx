@@ -22,22 +22,22 @@ const SwitchStyled = styled(Switch)(({ theme }) => ({
                 border: 0,
             },
             '&.Mui-disabled + .MuiSwitch-track': {
-                opacity: 0.7,
+                filter: "grayscale(100)"
             },
         },
         '&.Mui-disabled': {
-            border: '5px solid var(--color-light-blue)',
-            opacity: 0.7
+            filter: "grayscale(100)"
         },
         '&.Mui-disabled + .MuiSwitch-track': {
-            opacity: 0.7
+            filter: "grayscale(100)"
         },
     },
     '& .MuiSwitch-thumb': {
         boxSizing: 'border-box',
         width: 22,
         height: 22,
-        boxShadow: 'none'
+        boxShadow: 'none',
+        color: 'white'
     },
     '& .MuiSwitch-track': {
         borderRadius: 500,
@@ -49,13 +49,14 @@ const SwitchStyled = styled(Switch)(({ theme }) => ({
     },
 }));
 
-export default function ToggleButton({ setValue, checked }: any) {
+export default function ToggleButton({ setValue, checked, disabled }: any) {
 
     return (
         <SwitchStyled
             disableRipple
+            disabled={disabled}
             checked={checked}
-            onChange={({target: {checked}}) => setValue(checked)}
+            onChange={({ target: { checked } }) => setValue(checked)}
         />
     )
 }

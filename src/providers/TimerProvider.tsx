@@ -27,15 +27,26 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     const { toNextSession, sessionsArray, setNextSession, currentSession } = useContext(SessionContext)
     const { devSettings } = useContext(DevContext)
 
-    const [time, setTime] = useState(sessionTime[mode]?.time * 60);
+    const getDuration = (mode: Mode) => {
+        const newTime = sessionTime[mode]?.time * 60
+        if (!newTime || isNaN(newTime)) {
+            console.error("Invalid mode or missing time for mode:", mode);
+            return 0;
+        }
+        return newTime
+    }
+
+    const [time, setTime] = useState(getDuration(mode));
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     const endTimeRef = useRef<number | null>(null)
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const pausedAtRef = useRef<number | null>(null);
+    const isAutoAdvanceRef = useRef(false);
+
 
 
     useEffect(() => {
-        if(!isTimerRunning) {
+        if (!isTimerRunning) {
             setTime(getDuration(mode))
         }
     }, [currentScreen, sessionSettings])
@@ -55,7 +66,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         const newMode = sessionsArray[currentSession];
         setMode(newMode);
 
-        if (sessionSettings.autoAdvance) {
+        if (isAutoAdvanceRef.current) {
             const newTime = sessionTime[newMode]?.time * 60;
             setTime(newTime);
 
@@ -64,7 +75,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
                 if (sessionSettings.autoStartFocus && newMode === Mode.FOCUS) start(newMode);
                 if (sessionSettings.autoStartRest && (newMode === Mode.REST || newMode === Mode.LONG_REST)) start(newMode);
             }, 100); // small delay to let state settle
-
+            isAutoAdvanceRef.current = false
             return () => clearTimeout(timeout);
         } else {
             setTime(sessionTime[newMode]?.time * 60);
@@ -74,14 +85,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     }, [currentSession]);
 
 
-    const getDuration = (mode: Mode) => {
-        const newTime = sessionTime[mode]?.time * 60
-        if (!newTime || isNaN(newTime)) {
-            console.error("Invalid mode or missing time for mode:", mode);
-            return 0;
-        }
-        return newTime
-    }
+
 
     const getDisplayTime = (): string => {
         if (typeof time !== 'number' || isNaN(time)) return "00:00";
@@ -102,6 +106,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         setIsTimerRunning(false);
 
         if (sessionSettings.autoAdvance) {
+            isAutoAdvanceRef.current = true;
             toNextSession();
         }
     }
@@ -121,7 +126,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
             }
 
             if (diff <= 4) {
-                if (!devSettings.current.disableSound) {
+                if (sessionSettings.startEndSound) {
                     soundEnd.play()
                 }
             }
@@ -134,20 +139,28 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
 
     const start = (mode: Mode) => {
-        if (!devSettings.current.disableSound) {
-            soundStart.play();
+        if (sessionSettings.startEndSound) {
+            soundStart.play()
             soundEnd.pause()
             soundEnd.currentTime = 0
         }
-        const newTime = sessionTime[mode]?.time;
+
+        const newTime = getDuration(mode);
         if (!newTime || isNaN(newTime)) {
             console.error("Invalid mode or missing time for mode:", mode);
             return;
         }
 
-        const seconds = newTime * 60;
-        setTime(seconds);
-        endTimeRef.current = Date.now() + seconds * 1000;
+        if (time == newTime || time <= 0) {
+            // reset time (if time is 0)
+            setTime(newTime);
+            endTimeRef.current = Date.now() + newTime * 1000;
+        } else {
+            // resume time (if there is still time left on timer)
+            endTimeRef.current = Date.now() + time * 1000;
+        }
+
+
         setIsTimerRunning(true);
 
         const diff = Math.max(0, Math.floor((endTimeRef.current - Date.now()) / 1000));

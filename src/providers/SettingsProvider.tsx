@@ -23,8 +23,8 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
         focusSessions: 4,
         autoAdvance: false,
         autoStartRest: false,
-        autoStartFocus: false
-
+        autoStartFocus: false,
+        startEndSound: true
     })
 
     const handleSetSessionTime = (value: sessionTimeType) => {
@@ -86,7 +86,8 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
                 autoAdvance: devSettings.current.autoAdvance ? devSettings.current.autoAdvance : value.autoAdvance,
                 autoStartFocus: devSettings.current.autoStartFocus ? devSettings.current.autoStartFocus : value.autoStartFocus,
                 autoStartRest: devSettings.current.autoStartRest ? devSettings.current.autoStartRest : value.autoStartRest,
-                focusSessions: devSettings.current.focusSessions ? devSettings.current.focusSessions : value.focusSessions
+                focusSessions: devSettings.current.focusSessions ? devSettings.current.focusSessions : value.focusSessions,
+                startEndSound: devSettings.current.disableSound ? !devSettings.current.disableSound : value.startEndSound
             }
         })
     }, [])
@@ -114,4 +115,5 @@ type sessionSettingsType = {
     autoAdvance: boolean
     autoStartRest: boolean
     autoStartFocus: boolean
+    startEndSound: boolean
 }
