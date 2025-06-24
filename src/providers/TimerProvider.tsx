@@ -126,7 +126,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
             }
 
             if (diff <= 4) {
-                if (!devSettings.current.disableSound) {
+                if (sessionSettings.startEndSound) {
                     soundEnd.play()
                 }
             }
@@ -139,7 +139,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
 
     const start = (mode: Mode) => {
-        if (!devSettings.current.disableSound) {
+        if (sessionSettings.startEndSound) {
             soundStart.play()
             soundEnd.pause()
             soundEnd.currentTime = 0

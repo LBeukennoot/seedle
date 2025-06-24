@@ -157,6 +157,24 @@ export default function SettingsScreen() {
             </div>
 
 
+
+            <div>
+                <hr className="border-1 rounded-full text-light-blue"></hr>
+                <h2 className="text-lg my-3 font-bold">sound</h2>
+                <hr className="border-1 rounded-full text-light-blue"></hr>
+
+                <div className="my-4 flex flex-col gap-4 mb-10">
+                    <div>
+                        <h3 className="text-lg pb-2">start and end sounds</h3>
+                        <ToggleButton
+                            checked={sessionSettings.startEndSound}
+                            setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: "startEndSound" })}
+                        />
+                    </div>
+                </div>
+            </div>
+
+
             <hr className="border-1 mb-3 rounded-full text-light-blue"></hr>
         </div >
     )
