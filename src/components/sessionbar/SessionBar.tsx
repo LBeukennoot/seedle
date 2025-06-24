@@ -17,9 +17,9 @@ export default function SessionBar() {
 
             {
                 sessionsArray.map((s, key) => {
-                    console.log(sessionTime)
                     return (
                         <div
+                            key={key}
                             className={"w-8 text-center text-lg z-10 transition-all cursor-pointer " + (key <= currentSession ? "text-light-blue" : "") + " " + (key === currentSession ? "!text-blue !cursor-default" : "")}
                             onClick={() => {
                                 if (currentSession !== key) {
