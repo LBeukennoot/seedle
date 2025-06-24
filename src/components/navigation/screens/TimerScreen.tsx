@@ -55,35 +55,54 @@ export default function TimerScreen() {
 
             <div className="flex justify-center gap-2">
 
-                <div className="hidden card:inline-block">
-                    <SessionBar />
-                </div>
+                {sessionSettings.autoAdvance && (
+                    <div className="hidden card:inline-block">
+                        <SessionBar />
+                    </div>
+                )}
+
 
                 {isTimerRunning ? (
-                    <Button onClick={pause} expanded={expanded} >
-                        <PauseIcon className="fill-white" />
+                    <Button
+                        text={!sessionSettings.autoAdvance && "pause"}
+                        onClick={pause}
+                        expanded={expanded}
+                        className={!sessionSettings.autoAdvance && "px-4"}
+                    >
+                        {sessionSettings.autoAdvance && (
+                            <PauseIcon className="fill-white" />
+                        )}
                     </Button>
                 ) : (
-                    <Button onClick={() => {
-                        start(mode)
-                    }} expanded={expanded} >
+                    <Button
+                        text={!sessionSettings.autoAdvance && "start"}
+                        onClick={() => {
+                            start(mode)
+                        }}
+                        expanded={expanded}
+                        className={!sessionSettings.autoAdvance && "px-4"}
+                    >
+                        {sessionSettings.autoAdvance && (
                             <StartIcon className="fill-white" />
+                        )}
                     </Button>
                 )}
 
-                <Button
-                    onClick={() => {
-                        toNextSession()
-                    }}
-                    expanded={expanded}
-                    className={"inline-block card:hidden"}
-                >
-                    <div className="flex items-center gap-1.5 max-h-5">
-                        <p className="hidden xs:block">skip </p><p className="flex items-center whitespace-nowrap"> to {nextSession}</p>
-                        <NextIcon className="fill-white" />
-                    </div>
+                {sessionSettings.autoAdvance && (
+                    <Button
+                        onClick={() => {
+                            toNextSession()
+                        }}
+                        expanded={expanded}
+                        className={"inline-block card:hidden"}
+                    >
+                        <div className="flex items-center gap-1.5 max-h-5">
+                            <p className="hidden xs:block">skip </p><p className="flex items-center whitespace-nowrap"> to {nextSession}</p>
+                            <NextIcon className="fill-white" />
+                        </div>
 
-                </Button>
+                    </Button>
+                )}
 
 
                 {/* <div
