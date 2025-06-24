@@ -11,7 +11,7 @@ export default function ButtonsElement({ buttons, length, selectedButton, setSel
                             onChange(buttons[key]);
                         }
                     }}
-                    className={"px-4 py-2 rounded-full border-6 border-blue transition-all " + (selectedButton !== key ? "cursor-pointer hover:bg-light-blue" : null)}
+                    className={"px-4 py-2 rounded-full border-6 border-blue transition-all whitespace-nowrap " + (selectedButton !== key ? "cursor-pointer hover:bg-light-blue" : null)}
                 >
                     <a>{b.name}</a>
                     <div

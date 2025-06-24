@@ -19,4 +19,6 @@
     --font-lexend: "Lexend", sans-serif;
 
     --breakpoint-xs: 25rem;
+
+    --breakpoint-card: 450px;
 }

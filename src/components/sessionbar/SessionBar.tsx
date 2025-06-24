@@ -7,7 +7,7 @@ export default function SessionBar() {
     const { sessionTime } = useContext(SettingsContext)
 
     return (
-        <div className="flex items-center px-2 gap-2 bg-blue text-white rounded-full relative" style={{ scrollbarWidth: "none" }}>
+        <div className="flex items-center py-2.5 px-2 gap-2 bg-blue text-white rounded-full relative">
             <div
                 className="absolute w-12 h-12 bg-white left-0 top-0 border-4 border-blue rounded-full transition-all"
                 style={{ left: currentSession * 2.5 + "rem" }}
