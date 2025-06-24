@@ -1,6 +1,6 @@
 {
     "data": {
-        "june 24, 2025":"release v1.4.0 \n- ",
+        "june 24, 2025":"release v1.4.0 \n- changes how sessions are visualised \n- added option to turn off sounds \n- changed 'auto advance session' to 'automatic sessions' \n- fixes mobile visuals \n- rounded the left top corner \n- fixes problem where timer could be 0",
         "june 20, 2025": "release v1.3.1 \n- fixed wrong time bug when auto advance is turned on \n- stops timer when mode is switched",
         "june 4, 2025": "release v1.3.0 \n- added sessions \n- added option to auto advance to next session \n- added options to auto start timer \n- added skip button",
         "june 3, 2025": "release v1.2.0 \n- added support for phones \n- added typable slider value \n- visual improvements",
