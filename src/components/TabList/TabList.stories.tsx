@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
 import { TabList } from './index';
 import NavigationProvider from '../../providers/NavigationProvider';
 import DevProvider from '../../providers/DevProvider';

@@ -1,4 +1,5 @@
-import { Icon, type IconProps } from "./Icon";
+import type { IconProps } from ".";
+import { Icon } from "./Icon";
 
 export function TimerIcon(props: IconProps) {
     return (

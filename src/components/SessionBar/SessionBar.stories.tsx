@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
-import { SessionBar } from './SessionBar';
 import SettingsProvider from '../../providers/SettingsProvider';
 import DevProvider from '../../providers/DevProvider';
 import SessionProvider from '../../providers/SessionProvider';
 import NavigationProvider from '../../providers/NavigationProvider';
 import ModeProvider from '../../providers/ModeProvider';
+import { SessionBar } from '.';
 
 const meta = {
   component: SessionBar,

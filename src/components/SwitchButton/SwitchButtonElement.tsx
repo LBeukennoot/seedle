@@ -1,5 +1,5 @@
 import type { SessionData } from "../Modes";
-import type { SwitchButtonElementButtonType, SwitchButtonElementType } from "./types";
+import type { SwitchButtonElementType } from "./types";
 
 export default function ButtonsElement({ options, length, selectedButton, setSelectedButton, onSelect }: SwitchButtonElementType) {
     return options.map((b: SessionData, key: number) => {

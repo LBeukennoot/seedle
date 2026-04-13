@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
-import { Dropdown } from './Dropdown';
 import { DefaultMode, Mode, Modes, type SessionData } from '../Modes';
 import { useArgs } from 'storybook/internal/preview-api';
+import { Dropdown } from '.';
 
 const options: SessionData[] = Object.keys(Modes).map((key: string) => Modes[key])
 
