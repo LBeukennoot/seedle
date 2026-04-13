@@ -8,7 +8,7 @@ export default function Navigation() {
     const { ScreenElement } = useContext(NavigationContext)
 
     return (
-        <div className="min-h-screen grid grid-rows-[400px_1fr_1fr] bg-light-green">
+        <div className="min-h-screen grid grid-rows-[30vh_1fr_1fr] bg-light-green">
 
             {/* top garden */}
             <div className="relative overflow-hidden h-full">
@@ -19,7 +19,7 @@ export default function Navigation() {
 
             <div className="relative flex items-start inset-0 flex items-center justify-center">
                 <div className="max-w-xl w-full">
-                    <div className="absolute z-20 max-w-xl w-full">
+                    <div className="absolute z-20 max-w-xl w-full mt-15 md:mt-0">
                         <ScreenCard>
                             <ScreenElement />
                         </ScreenCard>
