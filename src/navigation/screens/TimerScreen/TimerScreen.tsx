@@ -3,13 +3,13 @@ import { TimerContext } from "../../../providers/TimerProvider"
 import { SwitchButton } from "../../../components/SwitchButton/SwitchButton"
 import { Modes, type SessionData } from "../../../components/Modes"
 import { ModeContext } from "../../../providers/ModeProvider"
-import { Dropdown } from "../../../components/Dropdown/Dropdown"
 import { SessionContext } from "../../../providers/SessionProvider"
 import { SettingsContext } from "../../../providers/SettingsProvider"
-import { SessionBar } from "../../../components/SessionBar/SessionBar"
 import { NextIcon, PauseIcon, StartIcon } from "../../../components/Icons"
 import { Timer } from "../../../components/Timer"
 import { Button } from "../../../components/Button"
+import { Dropdown } from "../../../components/Dropdown"
+import { SessionBar } from "../../../components/SessionBar"
 
 export const TimerScreen = () => {
 
@@ -56,6 +56,7 @@ export const TimerScreen = () => {
 
                 {isTimerRunning ? (
                     <Button
+                        label={"pause"}
                         onClick={() => pause()}
                         className={!sessionSettings.autoAdvance ? "px-4" : ""}
                     >
@@ -66,6 +67,7 @@ export const TimerScreen = () => {
                     </Button>
                 ) : (
                     <Button
+                        label={"start"}
                         onClick={() => {
                             start(mode)
                         }}
@@ -80,6 +82,7 @@ export const TimerScreen = () => {
 
                 {sessionSettings.autoAdvance && (
                     <Button
+                        label={"skip"}
                         onClick={() => {
                             toNextSession()
                         }}
