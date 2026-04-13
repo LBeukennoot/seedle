@@ -1,4 +1,4 @@
-import { createContext, JSX, useContext, useEffect, useState } from "react";
+import { createContext, type JSX, useContext, useEffect, useState } from "react";
 import { SettingsContext } from "./SettingsProvider";
 import { ModeContext } from "./ModeProvider";
 import { Mode } from "../components/Modes";

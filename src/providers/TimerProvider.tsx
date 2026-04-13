@@ -1,10 +1,10 @@
-import { createContext, useState, useEffect, JSX, useContext, useRef, useLayoutEffect } from "react";
+import { createContext, useState, useEffect, type JSX, useContext, useRef, useLayoutEffect } from "react";
 import { ModeContext } from "./ModeProvider";
 import { SettingsContext } from "./SettingsProvider";
-import { NavigationContext } from "./NavigationProvider";
 import { SessionContext } from "./SessionProvider";
 import { Mode } from "../components/Modes";
 import { DevContext } from "./DevProvider";
+import { NavigationContext } from "./NavigationContext";
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav')

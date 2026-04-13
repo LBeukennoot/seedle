@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import ArrowDownIcon from "./ArrowDownIcon"
+import type { DropdownProps } from "./types"
+import { ArrowDownIcon } from "../Icons"
 
-export default function Dropdown({ selected, options, onSelect }: any) {
+export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProps) => {
     const [collapsed, setCollapsed] = useState(false)
 
     const id = cyrb53(options.map((o: any) => o.id).join()).toString()
@@ -12,7 +13,10 @@ export default function Dropdown({ selected, options, onSelect }: any) {
     const newOptions = [selectedObject].concat(unselectedObjects)
 
     const handleCloseDropdownOnOutsideClick = (e: any) => {
-        e.target.id !== id && setCollapsed(false)
+        if (!disabled) {
+            console.log('collapsing')
+            e.target.id !== id && setCollapsed(false)
+        }
     }
 
     useEffect(() => {
@@ -22,34 +26,42 @@ export default function Dropdown({ selected, options, onSelect }: any) {
     }, [])
 
     return (
-        <div className={"w-full max-w-52 h-full relative text-xl text-center text-white rounded-4xl -mb-25 transition-all z-50"}>
+        <div className={"w-full max-w-52 h-full relative text-xl text-center text-white rounded-4xl -mb-25 transition-all z-50 font-lexend"}>
             <div className={"bg-blue absolute -z-10 w-full rounded-4xl transition-all " + (collapsed ? "h-full" : "")}></div>
             {newOptions.map((button: any, key: any) => {
 
                 if (button.id === selected) {
                     return (
-                        <div
+                        <button
+                            aria-label={button.name}
+                            disabled={disabled}
+                            data-testid={"selected"}
                             key={key}
-                            className={"max-h-full flex justify-center items-center gap-2 py-2 border-6 border-blue rounded-full transition-all bg-white text-blue cursor-pointer hover:bg-light-blue"}
+                            className={"max-h-full w-full flex justify-center items-center gap-2 py-2 border-6 border-blue rounded-full transition-all bg-white text-blue cursor-pointer hover:bg-light-blue " + (disabled ? "grayscale-100 hover:!bg-white" : "")}
                             onClick={() => setCollapsed(!collapsed)}
                             id={id}
                         >
                             {button.name}
                             <ArrowDownIcon className={"stroke-blue  inline-block " + (collapsed ? "rotate-180" : null)} id={id} />
-                        </div>
+                        </button>
                     )
                 } else {
                     return (
-                        <div
+                        <button
+                            aria-label={button.name}
                             key={key}
+                            data-testid={"not-selected"}
                             className={"max-h-full flex w-full justify-center items-center py-2 bg-blue border-6 border-blue rounded-full transition-all hover:bg-light-blue cursor-pointer " + (collapsed ? "opacity-100 delay-75 " : "opacity-0 -z-50 !cursor-default ")}
+                            disabled={disabled}
                             onClick={() => {
                                 setCollapsed(false)
-                                onSelect(button)
+                                if (collapsed) {
+                                    onSelect(button)
+                                }
                             }}
                         >
                             {button.name}
-                        </div>
+                        </button>
                     )
                 }
             })}
@@ -60,15 +72,15 @@ export default function Dropdown({ selected, options, onSelect }: any) {
 
 const cyrb53 = (str: string, seed = 3) => {
     let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
-    for(let i = 0, ch; i < str.length; i++) {
+    for (let i = 0, ch; i < str.length; i++) {
         ch = str.charCodeAt(i);
         h1 = Math.imul(h1 ^ ch, 2654435761);
         h2 = Math.imul(h2 ^ ch, 1597334677);
     }
-    h1  = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
     h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-    h2  = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
     h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  
+
     return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 };

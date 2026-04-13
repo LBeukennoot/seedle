@@ -1,16 +1,19 @@
-import { SwitchButtonElementButtonType, SwitchButtonElementType } from "./SwitchButtonType";
+import type { SessionData } from "../Modes";
+import type { SwitchButtonElementButtonType, SwitchButtonElementType } from "./types";
 
-export default function ButtonsElement({ buttons, length, selectedButton, setSelectedButton, onChange }: SwitchButtonElementType) {
-    return buttons.map((b: SwitchButtonElementButtonType, key: number) => {
+export default function ButtonsElement({ options, length, selectedButton, setSelectedButton, onSelect }: SwitchButtonElementType) {
+    return options.map((b: SessionData, key: number) => {
         return (
             <div key={key}>
                 <div
                     onClick={() => {
                         if (selectedButton !== key) {
                             setSelectedButton(key);
-                            onChange(buttons[key]);
+                            onSelect(options[key]);
                         }
                     }}
+                    data-testid={'switchbuttonelement_' + b.id + '_button'}
+                    aria-selected={selectedButton === key}
                     className={"px-4 py-2 rounded-full border-6 border-blue transition-all whitespace-nowrap " + (selectedButton !== key ? "cursor-pointer hover:bg-light-blue" : null)}
                 >
                     <a>{b.name}</a>

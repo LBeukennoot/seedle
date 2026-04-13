@@ -1,9 +1,10 @@
-import { createContext, JSX, useContext, useEffect, useState } from "react";
-import { DefaultScreen, Screen, Screens } from "../components/navigation/screens/ScreensIndex";
+import { createContext, type JSX, useContext, useEffect, useState } from "react";
 import { DevContext } from "./DevProvider";
+import { DefaultScreen, Screens, Screen } from "../navigation/screens/ScreensIndex";
+import { NavigationContext } from "./NavigationContext";
 
 // @ts-ignore
-export const NavigationContext = createContext<INavigationOptions>();
+// export const NavigationContext = createContext<INavigationOptions>();
 
 /**
  * Providing currentScreen to all screen components
@@ -32,15 +33,16 @@ export default function NavigationProvider({ children }: INavigationOptionsProvi
 
 
     const ScreenElement = () => {
-        const defaultScreen = Screens[DefaultScreen]?.screen
+        
+        const DefaultScreenComponent = Screens[DefaultScreen]?.screen
 
-        if (!currentScreen) return defaultScreen
+        if (!currentScreen) return <DefaultScreenComponent />
 
-        const screen = Screens[currentScreen]?.screen
+        const ScreenComponent = Screens[currentScreen.toString()]?.screen
 
-        if (!screen) return defaultScreen
+        if (!ScreenComponent) return <DefaultScreenComponent />
 
-        return screen
+        return <ScreenComponent />
     }
 
 

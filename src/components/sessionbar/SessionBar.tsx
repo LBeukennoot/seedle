@@ -2,12 +2,12 @@ import { useContext } from "react"
 import { SessionContext } from "../../providers/SessionProvider"
 import { SettingsContext } from "../../providers/SettingsProvider"
 
-export default function SessionBar() {
+export const SessionBar = () => {
     const { currentSession, setCurrentSession, sessionsArray } = useContext(SessionContext)
     const { sessionTime } = useContext(SettingsContext)
 
     return (
-        <div className="flex items-center py-2.5 px-2 gap-2 bg-blue text-white rounded-full relative">
+        <div className="flex items-center py-2.5 px-2 gap-2 bg-blue text-white rounded-full relative font-lexend">
             <div
                 className="absolute w-12 h-12 bg-white left-0 top-0 border-4 border-blue rounded-full transition-all"
                 style={{ left: currentSession * 2.5 + "rem" }}

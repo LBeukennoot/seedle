@@ -5,7 +5,7 @@ export enum Mode {
 }
 
 export const DefaultMode: Mode = Mode.FOCUS
-export const Modes: sessionTimeType = {
+export const Modes: SessionDataMap = {
     focus: {
         id: Mode.FOCUS,
         name: 'focus',
@@ -29,17 +29,37 @@ export const Modes: sessionTimeType = {
     }
 }
 
-export type sessionTimeType = {
-    [key: string]: {
-        id: Mode
-        name: string
-        time: number
-        min: number
-        max: number
-    }
+export type SessionData = {
+    id: Mode
+    name: string
+    time: number
+    min: number
+    max: number
 }
 
-export default function isSessionTimeType(obj: any): boolean | undefined {
+export type SessionDataMap = Record<string, SessionData>
+
+// export type sessionTimeType = {
+//     [key: string]: {
+//         id: Mode
+//         name: string
+//         time: number
+//         min: number
+//         max: number
+//     }
+// }
+
+// export type sessionTimeType = {
+//     [key: string]: {
+//         id: Mode
+//         name: string
+//         time: number
+//         min: number
+//         max: number
+//     }
+// }
+
+export function isSessionTimeType(obj: any): boolean | undefined {
 
     if (!obj) return
 
@@ -54,6 +74,6 @@ export default function isSessionTimeType(obj: any): boolean | undefined {
         ) return true
 
         return false
-    }).map(bool => bool === false ? output = false : null )
+    }).map(bool => bool === false ? output = false : null)
     return output
 }

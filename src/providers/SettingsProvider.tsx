@@ -1,5 +1,5 @@
-import { createContext, JSX, useContext, useEffect, useState } from "react";
-import isSessionTimeType, { Modes, sessionTimeType } from "../components/Modes";
+import { createContext, type JSX, useContext, useEffect, useState } from "react";
+import { isSessionTimeType, Modes, type SessionDataMap } from "../components/Modes";
 import LocalStorage from "../utils/LocalStorage";
 import { DevContext } from "./DevProvider";
 
@@ -18,7 +18,7 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
 
     const { devSettings } = useContext(DevContext)
 
-    const [sessionTime, setSessionTime] = useState<sessionTimeType>(Modes)
+    const [sessionTime, setSessionTime] = useState<SessionDataMap>(Modes)
     const [sessionSettings, setSessionSettings] = useState<sessionSettingsType>({
         focusSessions: 4,
         autoAdvance: false,
@@ -27,7 +27,7 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
         startEndSound: true
     })
 
-    const handleSetSessionTime = (value: sessionTimeType) => {
+    const handleSetSessionTime = (value: SessionDataMap) => {
         localStorage.setValue("sessionTimes", value)
         setSessionTime(value)
     }
@@ -38,7 +38,7 @@ export default function SettingsProvider({ children }: IModeOptionsProviderProps
     }
 
     useEffect(() => {
-        const newSessionTime = localStorage.getValue("sessionTimes") as sessionTimeType
+        const newSessionTime = localStorage.getValue("sessionTimes") as SessionDataMap
 
         // retreiving value from localStorage and checking its value
         if (isSessionTimeType(newSessionTime) === false) {
@@ -104,7 +104,7 @@ interface IModeOptionsProviderProps {
 }
 
 export interface IModeOptions {
-    sessionTime: sessionTimeType
+    sessionTime: SessionDataMap
     setSessionTime: Function
     sessionSettings: sessionSettingsType
     setSessionSettings: Function

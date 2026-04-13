@@ -1,4 +1,4 @@
-import { createContext, JSX, useEffect, useRef, useState } from "react";
+import { createContext, type JSX, useEffect, useRef, useState } from "react";
 import URLParams from "../utils/URLParams";
 
 

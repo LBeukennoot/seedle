@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import ButtonsElement from "./SwitchButtonElement";
-import { SwitchButtonType } from "./SwitchButtonType";
+import type { SwitchButtonType } from "./types";
 
 /**
  * Clickable object (button) that switches between multiple options
  *
- * @author      LBeukennoot for Seelde
+ * @author      LBeukennoot for Seedle
  * @created     28-04-2025
  */
-export default function SwitchButton({ buttons = [], selected = "", onChange = () => { } }: SwitchButtonType) {
-    const getSelectedButtonIndex = () => buttons.indexOf(buttons.find((b) => b.id === selected))
+export const SwitchButton = ({ options = [], selected, onSelect = () => { } }: SwitchButtonType) => {
+    
+    const getSelectedButtonIndex = () => options.indexOf(options.find((b) => b.id === selected)!)
 
     const [selectedButton, setSelectedButton] = useState<number>(getSelectedButtonIndex());
 
@@ -18,18 +19,19 @@ export default function SwitchButton({ buttons = [], selected = "", onChange = (
         setSelectedButton(getSelectedButtonIndex())
     }, [selected])
 
-    const length = buttons.length;
+    const length = options.length;
 
     return (
         <div className="flex justify-center pb-6 text-lg">
             <button>
-                <div className="grid grid-cols-3 bg-blue text-white text-xl rounded-full relative group">
+                <div className="grid grid-cols-3 bg-blue text-white text-xl rounded-full relative group font-lexend">
+
                     <ButtonsElement
-                        buttons={buttons}
+                        options={options}
                         length={length}
                         selectedButton={selectedButton}
                         setSelectedButton={setSelectedButton}
-                        onChange={onChange}
+                        onSelect={onSelect}
                     />
 
                     <div
