@@ -8,23 +8,34 @@ export default function Navigation() {
     const { ScreenElement } = useContext(NavigationContext)
 
     return (
-        <div className="w-screen h-screen max-w-screen overflow-x-hidden bg-light-green text-blue font-lexend p-2">
-            <div className="relative flex justify-center items-center ">
+        <div className="min-h-screen grid grid-rows-[400px_1fr_1fr] bg-light-green">
+
+            {/* top garden */}
+            <div className="relative overflow-hidden h-full">
+                <div className="h-full">
+                    {/* garden top */}
+                </div>
+            </div>
+
+            <div className="relative flex items-start inset-0 flex items-center justify-center">
                 <div className="max-w-xl w-full">
-
-
-                    <div className="z-20 absolute max-w-xl w-full mt-15 md:mt-0">
+                    <div className="absolute z-20 max-w-xl w-full">
                         <ScreenCard>
                             <ScreenElement />
                         </ScreenCard>
                     </div>
 
 
-                    <div className="w-20 h-20 absolute top-0 z-10 md:-ml-15">
+                    <div className="w-20 h-20 absolute top-0 -z-0 md:-ml-15">
                         <TabList />
                     </div>
+                </div>
+            </div>
 
-
+            {/* bottom garden */}
+            <div className="relative overflow-hidden h-full">
+                <div className="h-full">
+                    {/* garden bottom */}
                 </div>
             </div>
 
