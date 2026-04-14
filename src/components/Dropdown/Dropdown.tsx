@@ -14,7 +14,6 @@ export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProp
 
     const handleCloseDropdownOnOutsideClick = (e: any) => {
         if (!disabled) {
-            console.log('collapsing')
             e.target.id !== id && setCollapsed(false)
         }
     }

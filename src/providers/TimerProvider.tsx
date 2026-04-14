@@ -46,8 +46,11 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
 
     useEffect(() => {
-        if (!isTimerRunning) {
-            setTime(getDuration(mode))
+        console.log(time , getDuration(mode))
+        if (!isTimerRunning && time >= getDuration(mode)) {
+            // if (time === getDuration(mode)) {
+                setTime(getDuration(mode))
+            // }
         }
     }, [currentScreen, sessionSettings])
 
