@@ -5,6 +5,7 @@ import ModeProvider from './providers/ModeProvider';
 import SettingsProvider from './providers/SettingsProvider';
 import DevProvider from './providers/DevProvider';
 import SessionProvider from './providers/SessionProvider';
+import { UserDataProvider } from './context/UserData';
 
 export default function App() {
   return (
@@ -14,9 +15,11 @@ export default function App() {
           <SettingsProvider>
             <ModeProvider>
               <SessionProvider>
-                <TimerProvider>
-                  <Navigation />
-                </TimerProvider>
+                <UserDataProvider>
+                  <TimerProvider>
+                    <Navigation />
+                  </TimerProvider>
+                </UserDataProvider>
               </SessionProvider>
             </ModeProvider>
           </SettingsProvider>

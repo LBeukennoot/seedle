@@ -1,12 +1,12 @@
-import { createContext, useState, useEffect, type JSX, useContext, useRef, useLayoutEffect } from "react";
+import { createContext, useState, useEffect, type JSX, useContext, useRef } from "react";
 import { ModeContext } from "./ModeProvider";
 import { SettingsContext } from "./SettingsProvider";
 import { SessionContext } from "./SessionProvider";
 import { Mode } from "../components/Modes";
-import { DevContext } from "./DevProvider";
 import { NavigationContext } from "./NavigationContext";
-import { SwitchModeWarningPopup } from "../navigation/screens/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup";
-import { RewardPopup } from "../navigation/screens/Popup/RewardPopup/RewardPopup";
+import { useUserData } from "../context/UserData";
+import { RewardPopup } from "../components/Popup/RewardPopup";
+import { SwitchModeWarningPopup } from "../components/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup";
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav')
@@ -25,9 +25,10 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
     const { mode, setMode } = useContext(ModeContext)
     const { sessionTime, sessionSettings } = useContext(SettingsContext)
-    const { currentScreen, popup, setPopup } = useContext(NavigationContext)
+    const { currentScreen, setPopup } = useContext(NavigationContext)
     const { toNextSession, sessionsArray, setNextSession, currentSession } = useContext(SessionContext)
-    const { devSettings } = useContext(DevContext)
+    const { rewards, setRewards, createReward } = useUserData()
+    // const { devSettings } = useContext(DevContext)
 
     const getDuration = (mode: Mode) => {
         const newTime = sessionTime[mode]?.time * 60
@@ -74,6 +75,9 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
                     }}
                 />
             )
+        } else {
+            setIsTimerRunning(false)
+            setTime(getDuration(mode))
         }
 
 
@@ -127,6 +131,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
                 <RewardPopup
                     title={mode === Mode.FOCUS ? "session complete!" : "you completed a whole cycle!"}
                     claim={() => {
+                        setRewards([...rewards, createReward()])
                         setPopup(undefined)
                     }}
                 />

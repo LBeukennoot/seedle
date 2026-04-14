@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PlantElement } from ".";
-import { Plant } from "./types";
+import { Plants } from "./types";
 
 const meta = {
     component: PlantElement,
@@ -21,7 +21,7 @@ const meta = {
                 type: "select",
                 
             },
-            options: Object.values(Plant)
+            options: Object.values(Plants)
         }
     }
 } satisfies Meta<typeof PlantElement>;
@@ -33,6 +33,6 @@ export const Default: Story = {
     args: {
         stage: 1,
         // plant: undefined
-        plant: Plant.CHIRARY
+        plant: Plants.CHIRARY
     }
 }

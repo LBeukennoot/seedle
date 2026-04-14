@@ -1,10 +1,28 @@
-export enum Plant {
+import type { JSX } from "react";
+
+export enum Plants {
     CHIRARY = 'CHIRARY'
+}
+
+export class Plant {
+    name: Plants
+    stage: number
+
+    constructor({ name }: any) {
+        this.name = name
+        this.stage = 1
+    }
+
+    grow() {
+        if(this.stage < 4) {
+            this.stage += 1
+        }
+    }
 }
 
 export type PlantProps = {
     stage: number,
-    plant: Plant
+    plant: Plants
 }
 
 export type IndividualPlantProps = {
@@ -13,5 +31,5 @@ export type IndividualPlantProps = {
 }
 
 export type Stage = {
-    [key]: JSX.Element
+    [key: number]: JSX.Element
 }

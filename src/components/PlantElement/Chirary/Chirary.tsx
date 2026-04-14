@@ -7,13 +7,13 @@ import type { IndividualPlantProps, Stage } from "../types";
 
 export const Chirary = ({ stage, size }: IndividualPlantProps) => {
     const stages: Stage = {
-        1: ChiraryStage1,
-        2: ChiraryStage2,
-        3: ChiraryStage3,
-        4: ChiraryStage4,
+        1: <ChiraryStage1 size={size} />,
+        2: <ChiraryStage2 size={size} />,
+        3: <ChiraryStage3 size={size} />,
+        4: <ChiraryStage4 size={size} />,
     }
 
     const StageComponent = stages[stage]
 
-    return <StageComponent size={size} />
+    return StageComponent
 }

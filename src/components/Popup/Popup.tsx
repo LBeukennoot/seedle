@@ -1,4 +1,4 @@
-import ScreenCard from "../ScreenCard"
+import ScreenCard from "../../navigation/screens/ScreenCard"
 import type { PopupProps } from "./types"
 
 export const Popup = ({ children }: PopupProps) => {

@@ -1,6 +1,6 @@
 import type { RewardPopupProps } from "."
-import { Button } from "../../../../components/Button"
-import { Chirary } from "../../../../components/PlantElement/Chirary/Chirary"
+import { Button } from "../../Button"
+import { Chirary } from "../../PlantElement/Chirary/Chirary"
 import { SeedBag } from "./SeedBag"
 
 export const RewardPopup = ({ title = "session complete!", claim }: RewardPopupProps) => {

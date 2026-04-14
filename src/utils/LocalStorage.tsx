@@ -38,6 +38,5 @@ export default class LocalStorage {
         } else {
             return undefined
         }
-        
     }
 }

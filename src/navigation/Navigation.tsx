@@ -2,7 +2,7 @@ import { useContext, useState } from "react"
 import ScreenCard from "./screens/ScreenCard"
 import { TabList } from "../components/TabList"
 import { NavigationContext } from "../providers/NavigationContext"
-import { Popup } from "./screens/Popup/Popup"
+import { Popup } from "../components/Popup/Popup"
 
 export default function Navigation() {
 

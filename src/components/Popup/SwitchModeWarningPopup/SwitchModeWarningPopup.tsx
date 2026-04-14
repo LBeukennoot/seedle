@@ -1,4 +1,4 @@
-import { Button } from "../../../../components/Button"
+import { Button } from "../../Button"
 import type { SwitchModeWarningPopupProps } from "./types"
 
 export const SwitchModeWarningPopup = ({ ignore, cancel }: SwitchModeWarningPopupProps) => {
