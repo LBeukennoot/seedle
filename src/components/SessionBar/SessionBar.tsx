@@ -20,7 +20,7 @@ export const SessionBar = () => {
                     return (
                         <div
                             key={key}
-                            className={"w-8 text-center text-lg z-10 transition-all cursor-pointer " + (key <= currentSession ? "text-light-blue" : "") + " " + (key === currentSession ? "!text-blue !cursor-default" : "")}
+                            className={"w-8 text-center flex justify-center text-lg z-10 transition-all cursor-pointer " + (key <= currentSession ? "text-light-blue" : "") + " " + (key === currentSession ? "!text-blue !cursor-default" : "")}
                             onClick={() => {
                                 if (currentSession !== key) {
                                     setCurrentSession(key)

@@ -2,10 +2,11 @@ import { useContext, useState } from "react"
 import ScreenCard from "./screens/ScreenCard"
 import { TabList } from "../components/TabList"
 import { NavigationContext } from "../providers/NavigationContext"
+import { Popup } from "./screens/Popup/Popup"
 
 export default function Navigation() {
 
-    const { ScreenElement } = useContext(NavigationContext)
+    const { ScreenElement, popup } = useContext(NavigationContext)
 
     return (
         <div className="min-h-screen grid grid-rows-[30vh_1fr_1fr] bg-light-green">
@@ -23,14 +24,21 @@ export default function Navigation() {
                         <ScreenCard>
                             <ScreenElement />
                         </ScreenCard>
+
                     </div>
 
 
                     <div className="w-20 h-20 absolute top-0 -z-0 md:-ml-15">
                         <TabList />
                     </div>
+
+
                 </div>
+
             </div>
+
+            {popup && <Popup> {popup} </Popup>}
+
 
             {/* bottom garden */}
             <div className="relative overflow-hidden h-full">

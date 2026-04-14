@@ -5,6 +5,8 @@ import { SessionContext } from "./SessionProvider";
 import { Mode } from "../components/Modes";
 import { DevContext } from "./DevProvider";
 import { NavigationContext } from "./NavigationContext";
+import { SwitchModeWarningPopup } from "../navigation/screens/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup";
+import { RewardPopup } from "../navigation/screens/Popup/RewardPopup/RewardPopup";
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav')
@@ -23,7 +25,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
     const { mode, setMode } = useContext(ModeContext)
     const { sessionTime, sessionSettings } = useContext(SettingsContext)
-    const { currentScreen } = useContext(NavigationContext)
+    const { currentScreen, popup, setPopup } = useContext(NavigationContext)
     const { toNextSession, sessionsArray, setNextSession, currentSession } = useContext(SessionContext)
     const { devSettings } = useContext(DevContext)
 
@@ -46,11 +48,8 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
 
 
     useEffect(() => {
-        console.log(time , getDuration(mode))
         if (!isTimerRunning && time >= getDuration(mode)) {
-            // if (time === getDuration(mode)) {
-                setTime(getDuration(mode))
-            // }
+            setTime(getDuration(mode))
         }
     }, [currentScreen, sessionSettings])
 
@@ -60,8 +59,23 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         //     setIsTimerRunning(false)
         // }
         //TODO add 'switching mode will stop timer' warning
-        setIsTimerRunning(false)
-        setTime(getDuration(mode))
+        if (isTimerRunning) {
+            pause()
+            setPopup(
+                <SwitchModeWarningPopup
+                    ignore={() => {
+                        setIsTimerRunning(false)
+                        setTime(getDuration(mode))
+                        setPopup(undefined)
+                    }}
+                    cancel={() => {
+                        start(mode)
+                        setPopup(undefined)
+                    }}
+                />
+            )
+        }
+
 
     }, [mode])
 
@@ -107,6 +121,17 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         endTimeRef.current = null;
         clearInterval(intervalRef.current!);
         setIsTimerRunning(false);
+
+        if (mode !== Mode.REST) {
+            setPopup(
+                <RewardPopup
+                    title={mode === Mode.FOCUS ? "session complete!" : "you completed a whole cycle!"}
+                    claim={() => {
+                        setPopup(undefined)
+                    }}
+                />
+            )
+        }
 
         if (sessionSettings.autoAdvance) {
             isAutoAdvanceRef.current = true;
