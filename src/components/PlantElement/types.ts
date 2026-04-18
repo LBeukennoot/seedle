@@ -1,7 +1,8 @@
 import type { JSX } from "react";
 
 export enum Plants {
-    CHIRARY = 'CHIRARY'
+    CHIRARY = 'CHIRARY',
+    CHAMOMILE = 'CHAMOMILE',
 }
 
 export type Plant = {
@@ -16,6 +17,7 @@ export type Plant = {
     createdAt: number
     grownAt?: number | null
     maxAge: number //in days
+    mirrored: boolean
 
     // constructor({ id, gardenId, x, y, size, name }: Plant) {
     //     this.id = id
@@ -36,7 +38,8 @@ export type Plant = {
 
 export type PlantProps = {
     stage: number,
-    plant: Plants
+    plant: Plants,
+    size: number,
 }
 
 export type IndividualPlantProps = {

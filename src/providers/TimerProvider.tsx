@@ -7,6 +7,7 @@ import { NavigationContext } from "./NavigationContext";
 import { useUserData } from "../context/UserData";
 import { RewardPopup } from "../components/Popup/RewardPopup";
 import { SwitchModeWarningPopup } from "../components/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup";
+import { Plants } from "../components/PlantElement/types";
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav')
@@ -127,15 +128,20 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         setIsTimerRunning(false);
 
         if (mode !== Mode.REST) {
+
+            const plantValues = Object.values(Plants);
+            const randomPlant = plantValues[Math.floor(Math.random() * plantValues.length)];
+            
             setPopup(
                 <RewardPopup
+                    reward={randomPlant}
                     title={mode === Mode.FOCUS ? "session complete!" : "you completed a whole cycle!"}
                     claim={() => {
                         console.log('creating new plant!')
 
                         createPlant({
                             size: 0.05,
-                            name: "CHIRARY"
+                            name: randomPlant
                         })
                         // setPlants((prev: Plant[]) =>
                         //     [...prev, createPlant({

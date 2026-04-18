@@ -26,7 +26,7 @@ export const Garden = ({ gardenId, plants }: GardenProps) => {
                                 top: `${plant.y * 100}%`,
                             }}
                         >
-                            <div className="w-20 h-20 flex justify-center items-center">
+                            <div className="w-20 h-20 flex justify-center items-center" style={{transform: plant.mirrored? "scaleX(-1)" : ""}}>
                                 <PlantElement stage={plant.stage} plant={plant.name} />
                             </div>
                         </div>

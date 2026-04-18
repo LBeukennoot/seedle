@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react"
 import { UserDataContext } from "./UserDataContext"
 import LocalStorage from "../../utils/LocalStorage"
 import type { UserData, UserDataProviderProps } from "./types"
-import { type Plant } from "../../components/PlantElement/types"
+import { Plants, type Plant } from "../../components/PlantElement/types"
 import { getRandomGardenAndPosition } from "../../navigation/Navigation"
 
 const localStorage = new LocalStorage()
@@ -134,6 +134,8 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     const createPlant = (data: Omit<Plant, "id" | "createdAt">) => {
         const random = getRandomGardenAndPosition(plants)
 
+
+
         const plant: Plant = {
             id: crypto.randomUUID(),
             gardenId: random.gardenId,
@@ -145,6 +147,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
             maxStage: data.maxStage ?? 4,
             createdAt: Date.now(),
             maxAge: data.maxAge,
+            mirrored: Math.random() < 0.5,
         }
 
         dispatch({ type: "CREATE", plant })
