@@ -1,7 +1,6 @@
 import type { RewardPopupProps } from "."
 import { Button } from "../../Button"
 import { PlantElement } from "../../PlantElement"
-import { Chirary } from "../../PlantElement/Chirary/Chirary"
 import { SeedBag } from "./SeedBag"
 
 export const RewardPopup = ({ reward, title = "session complete!", claim }: RewardPopupProps) => {
@@ -17,7 +16,6 @@ export const RewardPopup = ({ reward, title = "session complete!", claim }: Rewa
                     </div>
                     <div className="h-[73%] w-full pb-5 flex items-center justify-center">
                         <PlantElement stage={4} plant={reward} size={100} />
-                        {/* <Chirary stage={4} size={100} /> */}
                     </div>
                 </div>
             </div>

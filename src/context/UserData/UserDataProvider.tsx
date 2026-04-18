@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react"
 import { UserDataContext } from "./UserDataContext"
 import LocalStorage from "../../utils/LocalStorage"
 import type { UserData, UserDataProviderProps } from "./types"
-import { Plants, type Plant } from "../../components/PlantElement/types"
+import { type Plant } from "../../components/PlantElement/types"
 import { getRandomGardenAndPosition } from "../../navigation/Navigation"
 
 const localStorage = new LocalStorage()
