@@ -27,7 +27,7 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
     const { sessionTime, sessionSettings } = useContext(SettingsContext)
     const { currentScreen, setPopup } = useContext(NavigationContext)
     const { toNextSession, sessionsArray, setNextSession, currentSession } = useContext(SessionContext)
-    const { rewards, setRewards, createReward } = useUserData()
+    const { createPlant } = useUserData()
     // const { devSettings } = useContext(DevContext)
 
     const getDuration = (mode: Mode) => {
@@ -131,11 +131,31 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
                 <RewardPopup
                     title={mode === Mode.FOCUS ? "session complete!" : "you completed a whole cycle!"}
                     claim={() => {
-                        setRewards([...rewards, createReward()])
+                        console.log('creating new plant!')
+
+                        createPlant({
+                            size: 0.05,
+                            name: "CHIRARY"
+                        })
+                        // setPlants((prev: Plant[]) =>
+                        //     [...prev, createPlant({
+                        //         // id: prev.length + 1,
+                        //         // gardenId: "A",
+                        //         // x: 0.4,
+                        //         // y: 0.3,
+                        //         size: 0.05,
+                        //         name: "CHIRARY"
+                        //     })]
+                        // )
                         setPopup(undefined)
                     }}
                 />
             )
+        }
+
+        if (mode === Mode.FOCUS) {
+            const customEvent = new Event('sessionFocusComplete')
+            window.dispatchEvent(customEvent)
         }
 
         if (sessionSettings.autoAdvance) {
