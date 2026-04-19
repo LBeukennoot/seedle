@@ -65,15 +65,9 @@ export default function Navigation() {
     const { plants } = useUserData()
 
     return (
-        <div className="min-h-screen grid grid-rows-[30vh_1fr_1fr] bg-light-green">
+        <div className="min-h-screen grid grid-rows-[30vh_1fr_30vh] bg-light-green overflow-hidden">
 
-            {/* <DragDropProvider
-                onDragEnd={(event) => {
-                    console.log(event)
-                }}
-            > */}
-            {/* top garden */}
-            <div className="relative overflow-hidden h-full">
+            <div className="relative  h-full">
                 <Garden
                     gardenId="A"
                     // plants={tempPlants}
@@ -104,7 +98,7 @@ export default function Navigation() {
             {popup && <Popup> {popup} </Popup>}
 
             {/* bottom garden */}
-            <div className="relative overflow-hidden h-full">
+            <div className="relative h-full">
                 <Garden
                     gardenId="B"
                     // plants={tempPlants}

@@ -39,7 +39,7 @@ export type Plant = {
 export type PlantProps = {
     stage: number,
     plant: Plants,
-    size: number,
+    size?: number,
 }
 
 export type IndividualPlantProps = {

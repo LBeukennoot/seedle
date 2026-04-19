@@ -22,3 +22,7 @@
 
     --breakpoint-card: 450px;
 }
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
