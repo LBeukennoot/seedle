@@ -1,2 +1,2 @@
 export * from './UserDataProvider'
-export * from './useUserData'
+export { useUserData } from './UserDataContext'

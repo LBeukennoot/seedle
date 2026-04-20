@@ -1,4 +1,5 @@
-import { createContext } from "react";
-import type { UserData } from "./types";
+import type { UserDataContextType } from "./types";
+import { createAppContext } from "../createAppContext";
 
-export const UserDataContext = createContext<UserData>({ plants: [], setPlants: () => { }, createPlant: () => { } })
+export const { Context: UserDataContext, useAppContext: useUserData } =
+    createAppContext<UserDataContextType>();

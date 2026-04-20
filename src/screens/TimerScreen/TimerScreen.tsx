@@ -1,22 +1,21 @@
-import { useContext } from "react"
-import { TimerContext } from "../../../providers/TimerProvider"
-import { SwitchButton } from "../../../components/SwitchButton/SwitchButton"
-import { Modes, type SessionData } from "../../../components/Modes"
-import { ModeContext } from "../../../providers/ModeProvider"
-import { SessionContext } from "../../../providers/SessionProvider"
-import { SettingsContext } from "../../../providers/SettingsProvider"
-import { NextIcon, PauseIcon, StartIcon } from "../../../components/Icons"
-import { Timer } from "../../../components/Timer"
-import { Button } from "../../../components/Button"
-import { Dropdown } from "../../../components/Dropdown"
-import { SessionBar } from "../../../components/SessionBar"
+import { useTimer } from "../../context/Timer"
+import { useSettings } from "../../context/Settings"
+import { useSession } from "../../context/Session"
+import { SwitchButton } from "../../components/SwitchButton"
+import { Dropdown } from "../../components/Dropdown"
+import { Timer } from "../../components/Timer"
+import { SessionBar } from "../../components/SessionBar"
+import { NextIcon, PauseIcon, StartIcon } from "../../components/Icons"
+import { Button } from "../../components/Button"
+import { Modes } from "../../components/Modes"
+import { useMode } from "../../context/Mode"
 
 export const TimerScreen = () => {
 
-    const { mode, setMode } = useContext(ModeContext)
-    const { getDisplayTime, start, pause, isTimerRunning } = useContext(TimerContext)
-    const { sessionSettings } = useContext(SettingsContext)
-    const { toNextSession, nextSession } = useContext(SessionContext)
+    const { mode, setMode } = useMode()
+    const { getDisplayTime, start, pause, isTimerRunning } = useTimer()
+    const { sessionSettings } = useSettings()
+    const { toNextSession, nextSession } = useSession()
 
 
     //@ts-ignore

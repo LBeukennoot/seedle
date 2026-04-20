@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from "react"
 import { UserDataContext } from "./UserDataContext"
 import LocalStorage from "../../utils/LocalStorage"
-import type { UserData, UserDataProviderProps } from "./types"
+import type { UserDataContextType, UserDataProviderProps } from "./types"
 import { type Plant } from "../../components/PlantElement/types"
 import { getRandomGardenAndPosition } from "../../navigation/Navigation"
 
@@ -159,7 +159,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     //     dispatch({ type: "REMOVE", id })
     // }
 
-    const value: UserData = {
+    const value: UserDataContextType = {
         plants,
         setPlants: () => {}, // optional: remove if not needed
         createPlant,

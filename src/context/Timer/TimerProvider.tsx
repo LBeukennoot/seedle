@@ -1,20 +1,18 @@
-import { createContext, useState, useEffect, type JSX, useContext, useRef } from "react";
-import { ModeContext } from "./ModeProvider";
-import { SettingsContext } from "./SettingsProvider";
-import { SessionContext } from "./SessionProvider";
-import { Mode } from "../components/Modes";
-import { NavigationContext } from "./NavigationContext";
-import { useUserData } from "../context/UserData";
-import { RewardPopup } from "../components/Popup/RewardPopup";
-import { SwitchModeWarningPopup } from "../components/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup";
-import { Plants } from "../components/PlantElement/types";
+import { useState, useEffect, useRef } from "react";
+import { TimerContext } from "./TimerContext";
+import { useUserData } from "../UserData";
+import { Mode } from "../../components/Modes";
+import { SwitchModeWarningPopup } from "../../components/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup";
+import { Plants } from "../../components/PlantElement/types";
+import { RewardPopup } from "../../components/Popup/RewardPopup";
+import type { TimerContextType, TimerProviderProps } from "./types";
+import { useSettings } from "../Settings";
+import { useSession } from "../Session";
+import { useNavigation } from "../Navigation";
+import { useMode } from "../Mode";
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav')
-
-
-// @ts-ignore
-export const TimerContext = createContext<ITimerOptions>();
 
 /**
  * Providing currentScreen to all screen components
@@ -22,12 +20,12 @@ export const TimerContext = createContext<ITimerOptions>();
  * @author      LBeukennoot
  * @created     19-03-2025
  */
-export default function TimerProvider({ children }: ITimerOptionsProviderProps) {
+export const TimerProvider = ({ children }: TimerProviderProps) => {
 
-    const { mode, setMode } = useContext(ModeContext)
-    const { sessionTime, sessionSettings } = useContext(SettingsContext)
-    const { currentScreen, setPopup } = useContext(NavigationContext)
-    const { toNextSession, sessionsArray, setNextSession, currentSession } = useContext(SessionContext)
+    const { mode, setMode } = useMode()
+    const { sessionTime, sessionSettings } = useSettings()
+    const { currentScreen, setPopup } = useNavigation()
+    const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession()
     const { createPlant } = useUserData()
     // const { devSettings } = useContext(DevContext)
 
@@ -143,16 +141,6 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
                             size: 0.05,
                             name: randomPlant
                         })
-                        // setPlants((prev: Plant[]) =>
-                        //     [...prev, createPlant({
-                        //         // id: prev.length + 1,
-                        //         // gardenId: "A",
-                        //         // x: 0.4,
-                        //         // y: 0.3,
-                        //         size: 0.05,
-                        //         name: "CHIRARY"
-                        //     })]
-                        // )
                         setPopup(undefined)
                     }}
                 />
@@ -234,37 +222,18 @@ export default function TimerProvider({ children }: ITimerOptionsProviderProps) 
         }
     };
 
-    // const resume = () => {
-    //     if (!isTimerRunning && pausedAtRef.current && endTimeRef.current) {
-    //         const pauseDuration = Date.now() - pausedAtRef.current;
-    //         endTimeRef.current += pauseDuration;
-    //         setIsTimerRunning(true);
-    //     }
-    // };
-
-    // const reset = () => {
-    //     setIsTimerRunning(false);
-    //     setTime(duration());
-    //     endTimeRef.current = null;
-    //     pausedAtRef.current = null;
-    // };
+    const value: TimerContextType = { 
+        time, 
+        getDisplayTime, 
+        start, 
+        pause, 
+        isTimerRunning 
+    }
 
     return (
-        <TimerContext.Provider value={{ time, getDisplayTime, start, pause, isTimerRunning }}>
+        <TimerContext.Provider value={value}>
             <title>{getDisplayTime() + " left on your timer!"}</title>
             {children}
         </TimerContext.Provider>
     )
-}
-
-interface ITimerOptionsProviderProps {
-    children: string | JSX.Element | JSX.Element[]
-}
-
-export interface ITimerOptions {
-    time: number
-    getDisplayTime: Function
-    start: Function
-    pause: Function
-    isTimerRunning: boolean
 }

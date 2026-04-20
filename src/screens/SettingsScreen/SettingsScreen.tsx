@@ -1,11 +1,10 @@
-import { useContext } from "react"
-import { SettingsContext } from "../../../providers/SettingsProvider"
-import { Slider } from "../../../components/Slider"
-import { Toggle } from "../../../components/Toggle"
+import { Slider } from "../../components/Slider"
+import { Toggle } from "../../components/Toggle"
+import { useSettings } from "../../context/Settings"
 
 export const SettingsScreen = () => {
 
-    const { sessionTime, setSessionTime, sessionSettings, setSessionSettings } = useContext(SettingsContext)
+    const { sessionTime, setSessionTime, sessionSettings, setSessionSettings } = useSettings()
 
     const handleSessionTimeChange = ({ newValue, mode }: { newValue: number, mode: string }) => {
         //TODO only setState when its different (preventing unessesary rerenders)

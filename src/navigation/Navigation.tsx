@@ -1,11 +1,10 @@
-import { useContext } from "react"
-import ScreenCard from "./screens/ScreenCard"
 import { TabList } from "../components/TabList"
-import { NavigationContext } from "../providers/NavigationContext"
 import { Popup } from "../components/Popup/Popup"
 import { Garden } from "../components/Garden/Garden"
 import { useUserData } from "../context/UserData"
 import { type Plant } from "../components/PlantElement/types"
+import ScreenCard from "../components/ScreenCard/ScreenCard"
+import { useNavigation } from "../context/Navigation"
 
 const COLS = 10
 const ROWS = 5
@@ -61,7 +60,7 @@ export const getRandomGardenAndPosition = (plants: Plant[]) => {
 
 export default function Navigation() {
 
-    const { ScreenElement, popup } = useContext(NavigationContext)
+    const { ScreenElement, popup } = useNavigation()
     const { plants } = useUserData()
 
     return (

@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown'
-import changelog from '../../../../changelog.md?raw'
-import { Button } from '../../../components/Button'
+import changelog from '../../../changelog.md?raw'
+import { Button } from '../../components/Button'
 
 export const ChangelogScreen = () => {
     return (

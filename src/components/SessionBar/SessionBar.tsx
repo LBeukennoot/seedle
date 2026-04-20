@@ -1,10 +1,9 @@
-import { useContext } from "react"
-import { SessionContext } from "../../providers/SessionProvider"
-import { SettingsContext } from "../../providers/SettingsProvider"
+import { useSettings } from "../../context/Settings"
+import { useSession } from "../../context/Session"
 
 export const SessionBar = () => {
-    const { currentSession, setCurrentSession, sessionsArray } = useContext(SessionContext)
-    const { sessionTime } = useContext(SettingsContext)
+    const { currentSession, setCurrentSession, sessionsArray } = useSession()
+    const { sessionTime } = useSettings()
 
     return (
         <div className="flex items-center py-2.5 px-2 gap-2 bg-blue text-white rounded-full relative font-lexend">

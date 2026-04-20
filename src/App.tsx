@@ -1,16 +1,16 @@
-import NavigationProvider from './providers/NavigationProvider';
-import TimerProvider from './providers/TimerProvider';
 import Navigation from './navigation/Navigation';
-import ModeProvider from './providers/ModeProvider';
-import SettingsProvider from './providers/SettingsProvider';
-import DevProvider from './providers/DevProvider';
-import SessionProvider from './providers/SessionProvider';
 import { UserDataProvider } from './context/UserData';
+import { SettingsProvider } from './context/Settings';
+import { DebugProvider } from './context/Debug';
+import { NavigationProvider } from './context/Navigation';
+import { ModeProvider } from './context/Mode';
+import { SessionProvider } from './context/Session';
+import { TimerProvider } from './context/Timer';
 
 export default function App() {
   return (
     <div>
-      <DevProvider>
+      <DebugProvider>
         <NavigationProvider>
           <SettingsProvider>
             <ModeProvider>
@@ -24,7 +24,7 @@ export default function App() {
             </ModeProvider>
           </SettingsProvider>
         </NavigationProvider>
-      </DevProvider>
+      </DebugProvider>
     </div>
   )
 }

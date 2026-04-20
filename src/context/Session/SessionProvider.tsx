@@ -1,10 +1,11 @@
-import { createContext, type JSX, useContext, useEffect, useState } from "react";
-import { SettingsContext } from "./SettingsProvider";
-import { ModeContext } from "./ModeProvider";
-import { Mode } from "../components/Modes";
+import { useEffect, useState } from "react";
+import type { SessionContextType, SessionProviderProps } from "./types";
+import { Mode } from "../../components/Modes";
+import { SessionContext } from "./SessionContext";
+import { useMode } from "../Mode";
+import { useSettings } from "../Settings";
 
 // @ts-ignore
-export const SessionContext = createContext<ISessionOptions>();
 
 /**
  * Providing currentScreen to all screen components
@@ -12,10 +13,10 @@ export const SessionContext = createContext<ISessionOptions>();
  * @author      LBeukennoot
  * @created     02-05-2025
  */
-export default function SessionProvider({ children }: ISessionOptionsProviderProps) {
+export const SessionProvider = ({ children }: SessionProviderProps) => {
 
-    const { sessionSettings } = useContext(SettingsContext)
-    const { setMode } = useContext(ModeContext)
+    const { sessionSettings } = useSettings()
+    const { setMode } = useMode()
     const [currentSession, setCurrentSession] = useState(0)
     const [nextSession, setNextSession] = useState(Mode.REST)
 
@@ -38,26 +39,18 @@ export default function SessionProvider({ children }: ISessionOptionsProviderPro
         setNextSession(sessionsArray[currentSession + 1])
     }, [currentSession])
 
+    const value: SessionContextType = {
+        currentSession, 
+        setCurrentSession, 
+        toNextSession, 
+        sessionsArray, 
+        nextSession, 
+        setNextSession
+    }
+
     return (
-        <SessionContext.Provider value={{ currentSession, setCurrentSession, toNextSession, sessionsArray, nextSession, setNextSession }}>
+        <SessionContext.Provider value={value}>
             {children}
         </SessionContext.Provider>
     )
-}
-
-interface ISessionOptionsProviderProps {
-    children: string | JSX.Element | JSX.Element[]
-}
-
-export interface ISessionOptions {
-    currentSession: number
-    setCurrentSession: Function
-    toNextSession: Function
-    sessionsArray: string[]
-    nextSession: Mode
-    setNextSession: Function
-}
-
-type sessionType = {
-    done: boolean
 }
