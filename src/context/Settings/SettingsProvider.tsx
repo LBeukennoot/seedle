@@ -39,15 +39,19 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
     }
 
     useEffect(() => {
-        const newSessionTime = localStorage.getValue("sessionTimes") as SessionDataMap
-        debugSettings.debug && console.log(newSessionTime)
-        // retreiving value from localStorage and checking its value
-        if (isSessionTimeType(newSessionTime) === false) {
-            console.error('Local storage value of "sessionTimes" is corrupted.');
-            return
-        }
+        const newSessionTime = localStorage.getValue("sessionTimes") as SessionDataMap | undefined
+        // const newSessionTime = {focus: {id: 1, time: 5, max: 2, min: 3}, rest: {id: 1, time: 5, max: 2, min: 3}, long_rest: {id: 1, time: 5, max: 2, min: 3}}
 
-        if (newSessionTime) setSessionTime(newSessionTime)
+        debugSettings.debug && console.log(newSessionTime)
+
+        if (newSessionTime) {
+            if (!isSessionTimeType(newSessionTime)) {
+                console.error('Local storage value of "sessionTimes" is corrupted.');
+                return
+            }
+
+            setSessionTime(newSessionTime)
+        }
 
         // applying devsettings (only if they are provided)
         setSessionTime(value => {
@@ -97,9 +101,9 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
     }, [debugSettings])
 
     const value: SettingsContextType = {
-        sessionTime, 
-        setSessionTime: handleSetSessionTime, 
-        sessionSettings, 
+        sessionTime,
+        setSessionTime: handleSetSessionTime,
+        sessionSettings,
         setSessionSettings: handleSetSessionSettings
     }
 
