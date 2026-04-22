@@ -43,7 +43,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: './src/index.ts', // Entry point for the library
+      entry: './src/main.tsx', // Entry point for the library
       name: 'ui', // Global variable name
       fileName: (format) => `ui.${format}.js`, // Output filenames
       formats: ['es', 'cjs'], // Output both ESModule and CommonJS builds
