@@ -7,7 +7,7 @@ export type SliderProps = {
     }
     invert: boolean
     value: number
-    setValue: Function
+    setValue: (value: number) => void
     name: string
     disabled?: boolean
 }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import type { ModeProviderProps } from "./types";
 import { ModeContext } from "./ModeContext";
-import { Mode } from "../../components/Modes";
 import { useDebug } from "../Debug";
+import { Mode } from "../../features/session/sessionTypes";
 
 /**
  * Providing currentScreen to all screen components
@@ -17,14 +17,14 @@ export const ModeProvider = ({ children }: ModeProviderProps) => {
     const { debugSettings } = useDebug()
 
     useEffect(() => {
-        let devModeString = debugSettings?.mode?.toUpperCase()
-        if (!devModeString) return
+        let debugModeString = debugSettings?.mode?.toUpperCase()
+        if (!debugModeString) return
 
 
-        let devMode = Mode[devModeString as keyof typeof Mode]
-        if (!devMode) return
+        let debugMode = Mode[debugModeString as keyof typeof Mode]
+        if (!debugMode) return
 
-        setMode(devMode)
+        setMode(debugMode)
     }, [debugSettings])
 
     return (

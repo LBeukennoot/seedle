@@ -1,6 +1,6 @@
 export interface DropdownProps {
-    options: SessionData[]
+    options: string[]
     selected: Mode
-    onSelect: Function
+    onSelect: (mode: SessionData) => void
     disabled?: boolean = false
 }

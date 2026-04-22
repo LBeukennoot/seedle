@@ -1,21 +1,34 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 import { SwitchButton } from './SwitchButton';
-import { DefaultMode, Mode, Modes, type SessionData } from '../Modes';
 import { useArgs } from 'storybook/internal/preview-api';
+import { Mode, type SessionData } from '../../features/session/sessionTypes';
+import { DefaultMode, Modes } from '../../features/session/sessionModes';
 
-const options: SessionData[] = Object.keys(Modes).map((key: string) => Modes[key])
+const options: string[] = Object.keys(Modes)
 
 const meta = {
     component: SwitchButton,
-    parameters: { layout: 'centered' },
+    parameters: {
+        layout: 'centered',
+        docs: {
+            description: {
+                component: "Button that switches between `Modes`."
+            }
+        }
+    },
     tags: ['autodocs'],
     // argTypes: {
     //   backgroundColor: { control: 'color' },
     // },
     argTypes: {
         options: {
-            
+            description: "An array of `Modes`.",
+            table: {
+                type: {
+                    summary: "SessionData[]"
+                }
+            }
         },
         selected: {
             control: { type: 'select' },
@@ -23,7 +36,15 @@ const meta = {
             // defaultValue: DefaultMode,
             // summary: "",
             description: "A value based on clicking on the button.",
-            table: { type: { summary: `${Mode.FOCUS} | ${Mode.REST} | ${Mode.LONG_REST}`}}
+            table: { type: { summary: `${Mode.FOCUS} | ${Mode.REST} | ${Mode.LONG_REST}` } }
+        },
+        onSelect: {
+            table: {
+                defaultValue: undefined,
+                type: {
+                    summary: "(mode: Mode) => void"
+                }
+            }
         }
     },
     args: {
@@ -35,8 +56,8 @@ const meta = {
         const [{ selected }, updateArgs] = useArgs();
 
         const handleChange = (mode: SessionData) => {
-            updateArgs({ selected: mode.id }); // 🔥 update Storybook state
-            args.onSelect(mode);            // still log action
+            updateArgs({ selected: mode });
+            args.onSelect(mode);
         };
 
         return (

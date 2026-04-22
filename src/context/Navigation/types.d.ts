@@ -1,3 +1,4 @@
+import type { Popup } from "../../components/Popup/types"
 import type { Screen } from "../../navigation/Screen"
 
 export type NavigationProviderProps = {
@@ -6,8 +7,8 @@ export type NavigationProviderProps = {
 
 export type NavigationContextType = {
     currentScreen: Screen
-    setCurrentScreen: Function
+    setCurrentScreen: (screen: Screen) => void
     popup: JSX.Element | undefined
-    setPopup: Function
+    setPopup: (popup: Popup) => void
     ScreenElement: () => JSX.Element
 }

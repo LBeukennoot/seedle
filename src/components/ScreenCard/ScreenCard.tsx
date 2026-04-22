@@ -1,5 +1,6 @@
+import type { ScreenCardProps } from "./types"
 
-export default function ScreenCard({ children, ...props }: any) {
+export const ScreenCard = ({ children, ...props }: ScreenCardProps) => {
 
     return (
         <div {...props} className={"bg-white z-20 mx-auto max-w-xl rounded-[3.5rem] max-h-[30rem] transition-all w-full p-10 md:min-h-[15rem] md:min-w-[30rem]"}>

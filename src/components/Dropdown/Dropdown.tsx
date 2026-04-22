@@ -1,13 +1,25 @@
 import { useEffect, useState } from "react"
 import type { DropdownProps } from "./types"
 import { ArrowDownIcon } from "../Icons"
+import type { Mode } from "../../features/session/sessionTypes"
 
+/**
+ * @author      LBeukennoot for Seedle
+ * @created     13-04-2026
+ * 
+ * @param selected Mode
+ * @param options SessionData[]
+ * @param onSelect (mode: SessionData) => void
+ * @param disabled boolean | undefined
+ */
 export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProps) => {
     const [collapsed, setCollapsed] = useState(false)
 
-    const id = cyrb53(options.map((o: any) => o.id).join()).toString()
 
-    const selectedObject = options.find((o: any) => o.id === selected)
+    const id = cyrb53(options.map((o: string) => o).join()).toString()
+
+    const selectedObject = options.find(o => o === selected)!
+
     const selectedIndex = options.indexOf(selectedObject)
     const unselectedObjects = options.toSpliced(selectedIndex, 1)
     const newOptions = [selectedObject].concat(unselectedObjects)
@@ -27,39 +39,41 @@ export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProp
     return (
         <div className={"w-full max-w-52 h-full relative text-xl text-center text-white rounded-4xl -mb-25 transition-all z-50 font-lexend"}>
             <div className={"bg-blue absolute -z-10 w-full rounded-4xl transition-all " + (collapsed ? "h-full" : "")}></div>
-            {newOptions.map((button: any, key: any) => {
+            {newOptions.map((value: string, index: number) => {
+                const mode = value as Mode
+                const modeName = mode.replace("_", " ")
 
-                if (button.id === selected) {
+                if (mode === selected) {
                     return (
                         <button
-                            aria-label={button.name}
+                            aria-label={modeName}
                             disabled={disabled}
                             data-testid={"selected"}
-                            key={key}
+                            key={index}
                             className={"max-h-full w-full flex justify-center items-center gap-2 py-2 border-6 border-blue rounded-full transition-all bg-white text-blue cursor-pointer hover:bg-light-blue " + (disabled ? "grayscale-100 hover:!bg-white" : "")}
                             onClick={() => setCollapsed(!collapsed)}
                             id={id}
                         >
-                            {button.name}
+                            {modeName}
                             <ArrowDownIcon className={"stroke-blue  inline-block " + (collapsed ? "rotate-180" : null)} id={id} />
                         </button>
                     )
                 } else {
                     return (
                         <button
-                            aria-label={button.name}
-                            key={key}
+                            aria-label={modeName}
+                            key={index}
                             data-testid={"not-selected"}
                             className={"max-h-full flex w-full justify-center items-center py-2 bg-blue border-6 border-blue rounded-full transition-all hover:bg-light-blue cursor-pointer " + (collapsed ? "opacity-100 delay-75 " : "opacity-0 -z-50 !cursor-default ")}
                             disabled={disabled}
                             onClick={() => {
                                 setCollapsed(false)
                                 if (collapsed) {
-                                    onSelect(button)
+                                    onSelect(mode)
                                 }
                             }}
                         >
-                            {button.name}
+                            {modeName}
                         </button>
                     )
                 }
@@ -69,6 +83,7 @@ export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProp
     )
 }
 
+// used to get a random string for key
 const cyrb53 = (str: string, seed = 3) => {
     let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
     for (let i = 0, ch; i < str.length; i++) {

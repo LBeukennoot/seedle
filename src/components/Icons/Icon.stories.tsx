@@ -2,12 +2,30 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StartIcon, PauseIcon, ArrowDownIcon, NextIcon, SettingsIcon, TimerIcon, ChangelogIcon, GardenIcon } from './index'
 import { Icon } from './Icon';
 
-
-
 const meta = {
     title: "components/Icons",
-    parameters: { layout: 'centered' },
+    parameters: { 
+        layout: 'centered',
+        docs: {
+            description: {
+                component: "Rendering `SVG` elements."
+            }
+        }
+    },
     tags: ['autodocs'],
+    argTypes: {
+        size: {
+            description: "The width/height in pixels.",
+            table: {
+                defaultValue: {
+                    summary: "25"
+                }
+            }
+        },
+        className: {
+            description: "TailwindCSS classes. `fill-<color>` and `stroke-<color>` are used for `SVG`s."
+        }
+    },
     args: {
         size: 25,
         className: "fill-blue",

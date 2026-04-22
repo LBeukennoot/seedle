@@ -1,4 +1,4 @@
 export type SwitchModeWarningPopupProps = {
-    ignore: Function
-    cancel: Function
+    ignore: () => void
+    cancel: () => void
 }

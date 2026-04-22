@@ -2,6 +2,10 @@ import { Slider } from "../../components/Slider"
 import { Toggle } from "../../components/Toggle"
 import { useSettings } from "../../context/Settings"
 
+/** 
+ * @author      LBeukennoot for Seedle
+ * @created     20-04-2026
+ */
 export const SettingsScreen = () => {
 
     const { sessionTime, setSessionTime, sessionSettings, setSessionSettings } = useSettings()
@@ -23,19 +27,6 @@ export const SettingsScreen = () => {
             [setting]: newValue
         })
     }
-
-    // const Section = ({ title, children }: any) => {
-    //     return (
-    //         <div>
-    //             <h2 className="text-lg mb-3 font-bold">{title}</h2>
-    //             <hr className="border-1 rounded-full text-light-blue"></hr>
-
-    //             <div className="my-4 flex flex-col gap-4 mb-10">
-    //                 {children}
-    //             </div>
-    //         </div>
-    //     )
-    // }
 
     return (
         <div className="overflow-y-auto max-h-[25rem] rounded-b-[2.3rem] md:rounded-b-[1.4rem] text-blue font-lexend">

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { TimerContext } from "./TimerContext";
 import { useUserData } from "../UserData";
-import { Mode } from "../../components/Modes";
 import { SwitchModeWarningPopup } from "../../components/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup";
 import { Plants } from "../../components/PlantElement/types";
 import { RewardPopup } from "../../components/Popup/RewardPopup";
@@ -10,6 +9,9 @@ import { useSettings } from "../Settings";
 import { useSession } from "../Session";
 import { useNavigation } from "../Navigation";
 import { useMode } from "../Mode";
+import { Mode } from "../../features/session/sessionTypes";
+import { useDebug } from "../Debug";
+import type { DebugContextType } from "../Debug/types";
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav')
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav')
@@ -27,12 +29,13 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     const { currentScreen, setPopup } = useNavigation()
     const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession()
     const { createPlant } = useUserData()
-    // const { devSettings } = useContext(DevContext)
+    // const { debugSettings }: DebugContextType = useDebug()
+    // console.log(sessionTime)
 
     const getDuration = (mode: Mode) => {
         const newTime = sessionTime[mode]?.time * 60
         if (!newTime || isNaN(newTime)) {
-            console.error("Invalid mode or missing time for mode:", mode);
+            console.error("Invalid mode or missing time for mode: ", mode);
             return 0;
         }
         return newTime
@@ -54,11 +57,6 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     }, [currentScreen, sessionSettings])
 
     useEffect(() => {
-        // if(isTimerRunning) {
-        //     alert("are you sure?")
-        //     setIsTimerRunning(false)
-        // }
-        //TODO add 'switching mode will stop timer' warning
         if (isTimerRunning) {
             pause()
             setPopup(
@@ -108,6 +106,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
 
 
     const getDisplayTime = (): string => {
+        // const time = getDuration(mode)
         if (typeof time !== 'number' || isNaN(time)) return "00:00";
 
         let minutes = Math.floor(time / 60);

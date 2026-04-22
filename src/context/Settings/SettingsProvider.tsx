@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import type { SessionSettings, SettingsContextType, SettingsProviderProps } from "./types";
-import { isSessionTimeType, Modes, type SessionDataMap } from "../../components/Modes";
 import LocalStorage from "../../utils/LocalStorage";
 import { SettingsContext } from "./SettingsContext";
 import { useDebug } from "../Debug";
+import type { SessionDataMap } from "../../features/session/sessionTypes";
+import { isSessionTimeType, Modes } from "../../features/session/sessionModes";
 
 const localStorage = new LocalStorage()
 
@@ -93,7 +94,7 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
             }
         })
 
-    }, [])
+    }, [debugSettings])
 
     const value: SettingsContextType = {
         sessionTime, 

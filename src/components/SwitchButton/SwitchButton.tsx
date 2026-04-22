@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ButtonsElement from "./SwitchButtonElement";
-import type { SwitchButtonType } from "./types";
+import type { SwitchButtonProps } from "./types";
 
 /**
  * Clickable object (button) that switches between multiple options
@@ -8,9 +8,9 @@ import type { SwitchButtonType } from "./types";
  * @author      LBeukennoot for Seedle
  * @created     28-04-2025
  */
-export const SwitchButton = ({ options = [], selected, onSelect = () => { } }: SwitchButtonType) => {
+export const SwitchButton = ({ options = [], selected, onSelect = () => { } }: SwitchButtonProps) => {
     
-    const getSelectedButtonIndex = () => options.indexOf(options.find((b) => b.id === selected)!)
+    const getSelectedButtonIndex = () => options.indexOf(options.find((b) => b === selected)!)
 
     const [selectedButton, setSelectedButton] = useState<number>(getSelectedButtonIndex());
 

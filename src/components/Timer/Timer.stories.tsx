@@ -1,14 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Timer } from './Timer';
-import { Modes } from '../Modes';
+import { Modes } from '../../features/session/sessionModes';
 
 const meta = {
   component: Timer,
   parameters: { layout: 'centered' },
   tags: ['autodocs'],
-  // argTypes: {
-  //   backgroundColor: { control: 'color' },
-  // },
+
+  argTypes: {
+    time: {
+      description: "Turns a string like `25:00` into an evenly spaced element. Must have two double digits seperated by `:`."
+    }
+  },
   args: {
     time: "00:00"
     // onClick: fn(),

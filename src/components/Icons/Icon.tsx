@@ -1,5 +1,13 @@
 import type { IconProps } from "./type";
 
+/**
+ * @author      LBeukennoot for Seedle
+ * @created     13-04-2026
+ * 
+ * @param size number
+ * @param className string | undefined
+ * @param children string | JSX.Element | JSX.Element[];
+ */
 export function Icon({
   size = 16,
   className,

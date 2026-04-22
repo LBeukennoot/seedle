@@ -1,35 +1,43 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TimerScreen } from './index';
-import DevProvider from '../../../providers/DevProvider';
-import NavigationProvider from '../../../providers/NavigationProvider';
-import SettingsProvider from '../../../providers/SettingsProvider';
-import ModeProvider from '../../../providers/ModeProvider';
-import SessionProvider from '../../../providers/SessionProvider';
-import TimerProvider from '../../../providers/TimerProvider';
 import { INITIAL_VIEWPORTS } from 'storybook/viewport';
+import { DebugProvider } from '../../context/Debug';
+import { NavigationProvider } from '../../context/Navigation';
+import { SettingsProvider } from '../../context/Settings';
+import { ModeProvider } from '../../context/Mode';
+import { SessionProvider } from '../../context/Session';
+import { TimerProvider } from '../../context/Timer';
+import { TimerScreen } from './TimerScreen';
+import { UserDataProvider } from '../../context/UserData';
 
 const meta = {
     component: TimerScreen,
     parameters: {
         viewport: {
             options: INITIAL_VIEWPORTS
+        },
+        docs: {
+            description: {
+                component: "A `Screen` that shows the actual timer. The user can switch `Mode`s and start a `session`."
+            }
         }
     },
     tags: ['autodocs'],
     render: () => (
-        <DevProvider>
+        <DebugProvider>
             <NavigationProvider>
                 <SettingsProvider>
                     <ModeProvider>
                         <SessionProvider>
-                            <TimerProvider>
-                                <TimerScreen />
-                            </TimerProvider>
+                            <UserDataProvider>
+                                <TimerProvider>
+                                    <TimerScreen />
+                                </TimerProvider>
+                            </UserDataProvider>
                         </SessionProvider>
                     </ModeProvider>
                 </SettingsProvider>
             </NavigationProvider>
-        </DevProvider>
+        </DebugProvider>
     )
 } satisfies Meta<typeof TimerScreen>;
 

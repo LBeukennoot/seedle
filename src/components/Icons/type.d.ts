@@ -4,5 +4,7 @@ export type IconType = {
 }
 
 export type IconProps = React.SVGProps<SVGSVGElement> & {
-  size?: number;
+  size?: number | undefined
+  className?: string | undefined
+  children?: string | JSX.Element | JSX.Element[]
 };

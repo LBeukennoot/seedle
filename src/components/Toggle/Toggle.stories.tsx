@@ -7,9 +7,22 @@ const meta = {
     component: Toggle,
     parameters: { layout: 'centered' },
     tags: ['autodocs'],
-    // argTypes: {
-    //   backgroundColor: { control: 'color' },
-    // },
+    argTypes: {
+        setValue: {
+            table: {
+                type: {
+                    summary: "(value: boolean) => void"
+                }
+            }
+        },
+        disabled: {
+            table: {
+                defaultValue: {
+                    summary: "false"
+                }
+            }
+        }
+    },
     args: {
         setValue: fn(),
         checked: false,

@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
 import type { SessionContextType, SessionProviderProps } from "./types";
-import { Mode } from "../../components/Modes";
 import { SessionContext } from "./SessionContext";
 import { useMode } from "../Mode";
 import { useSettings } from "../Settings";
+import type { SettingsContextType } from "../Settings/types";
+import type { ModeContextType } from "../Mode/types";
+import { Mode } from "../../features/session/sessionTypes";
 
-// @ts-ignore
+export const getSessionsArray = (focusSessions: number = 4): Mode[] => {
+    const isEven = (n: number) => {
+        return n % 2 == 0;
+    }
+
+    return Array.apply(null, Array((focusSessions * 2))).map(function (x: any, i: number) { return i === (focusSessions * 2) - 1 ? Mode.LONG_REST : (isEven(i) ? Mode.FOCUS : Mode.REST); })
+}
 
 /**
  * Providing currentScreen to all screen components
@@ -15,16 +23,13 @@ import { useSettings } from "../Settings";
  */
 export const SessionProvider = ({ children }: SessionProviderProps) => {
 
-    const { sessionSettings } = useSettings()
-    const { setMode } = useMode()
-    const [currentSession, setCurrentSession] = useState(0)
-    const [nextSession, setNextSession] = useState(Mode.REST)
+    const { sessionSettings }: SettingsContextType = useSettings()
+    const { setMode }: ModeContextType = useMode()
+    const [currentSession, setCurrentSession] = useState<number>(0)
+    const [nextSession, setNextSession] = useState<Mode>(Mode.REST)
 
-    function isEven(n: number) {
-        return n % 2 == 0;
-    }
 
-    const sessionsArray = Array.apply(null, Array((sessionSettings.focusSessions * 2))).map(function (x, i) { return i === (sessionSettings.focusSessions * 2) - 1 ? Mode.LONG_REST : (isEven(i) ? Mode.FOCUS : Mode.REST); })
+    const sessionsArray = getSessionsArray(sessionSettings.focusSessions)
 
     const toNextSession = () => {
         if (currentSession < sessionsArray.length - 1) {
@@ -40,11 +45,12 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     }, [currentSession])
 
     const value: SessionContextType = {
-        currentSession, 
-        setCurrentSession, 
-        toNextSession, 
-        sessionsArray, 
-        nextSession, 
+        currentSession,
+        setCurrentSession,
+        toNextSession,
+        sessionCount: sessionSettings.focusSessions,
+        sessionsArray,
+        nextSession,
         setNextSession
     }
 

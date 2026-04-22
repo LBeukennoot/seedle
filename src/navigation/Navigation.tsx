@@ -3,7 +3,7 @@ import { Popup } from "../components/Popup/Popup"
 import { Garden } from "../components/Garden/Garden"
 import { useUserData } from "../context/UserData"
 import { type Plant } from "../components/PlantElement/types"
-import ScreenCard from "../components/ScreenCard/ScreenCard"
+import { ScreenCard } from "../components/ScreenCard/ScreenCard"
 import { useNavigation } from "../context/Navigation"
 
 const COLS = 10
@@ -58,28 +58,27 @@ export const getRandomGardenAndPosition = (plants: Plant[]) => {
     throw new Error("All gardens are full 🌱")
 }
 
+/** 
+ * @author      LBeukennoot for Seedle
+ * @created     20-04-2026
+ */
 export default function Navigation() {
 
-    const { ScreenElement, popup } = useNavigation()
+    const { ScreenElement, popup, currentScreen, setCurrentScreen } = useNavigation()
     const { plants } = useUserData()
 
     return (
         <div className="min-h-screen grid grid-rows-[30vh_1fr_30vh] bg-light-green overflow-hidden">
 
+            {/* top garden */}
             <div className="relative  h-full">
                 <Garden
                     gardenId="A"
-                    // plants={tempPlants}
                     plants={plants}
-                // setPlants={setPlants}
-                // updatePlant={updatePlant}
-                // setPlants={setRewards}
-                // drag={drag}
-                // setDrag={setDrag}
-                // getGardenUnderCursor={getGardenUnderCursor} // ✅ NEW
                 />
             </div>
 
+            {/* screens */}
             <div className="relative flex items-start inset-0 flex items-center justify-center">
                 <div className="max-w-xl w-full">
                     <div className="absolute z-20 max-w-xl w-full mt-15 md:mt-0">
@@ -89,7 +88,7 @@ export default function Navigation() {
                     </div>
 
                     <div className="w-20 h-20 absolute top-0 -z-0 md:-ml-15">
-                        <TabList />
+                        <TabList currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
                     </div>
                 </div>
             </div>
@@ -100,17 +99,9 @@ export default function Navigation() {
             <div className="relative h-full">
                 <Garden
                     gardenId="B"
-                    // plants={tempPlants}
                     plants={plants}
-                // setPlants={setPlants}
-                // updatePlant={updatePlant}
-                // setPlants={setRewards}
-                // drag={drag}
-                // setDrag={setDrag}
-                // getGardenUnderCursor={getGardenUnderCursor} // ✅ NEW
                 />
             </div>
-            {/* </DragDropProvider> */}
 
         </div>
     )

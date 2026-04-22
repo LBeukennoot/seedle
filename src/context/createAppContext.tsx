@@ -1,5 +1,9 @@
 import { createContext, useContext } from "react";
 
+/** 
+ * @author      LBeukennoot for Seedle
+ * @created     20-04-2026
+ */
 export function createAppContext<T>() {
     const Context = createContext<T | null>(null);
 

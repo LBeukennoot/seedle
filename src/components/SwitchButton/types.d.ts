@@ -1,17 +1,17 @@
-import type { Mode, SessionData } from "../Modes"
+import type { Mode, SessionData } from "../../features/session/sessionModes"
 
-export type SwitchButtonType = {
-    options: SessionData[]
+export type SwitchButtonProps = {
+    options: string[]
     selected: Mode
-    onSelect: Function
+    onSelect: (mode: SessionData) => void
 }
 
-export type SwitchButtonElementType = {
-    options: any
+export type SwitchButtonElementProps = {
+    options: SessionDataMap
     length: number
     selectedButton: number
     setSelectedButton: Function
-    onSelect: Function
+    onSelect: (mode: SessionData) => void
 }
 
 export type SwitchButtonElementButtonType = {

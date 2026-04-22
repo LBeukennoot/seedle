@@ -1,34 +1,74 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
-import { DefaultMode, Mode, Modes, type SessionData } from '../Modes';
 import { useArgs } from 'storybook/internal/preview-api';
 import { Dropdown } from '.';
+import { DefaultMode, Modes } from '../../features/session/sessionModes';
+import { Mode, type SessionData } from '../../features/session/sessionTypes';
 
-const options: SessionData[] = Object.keys(Modes).map((key: string) => Modes[key])
+const options: string[] = Object.keys(Modes)
 
 const meta = {
     component: Dropdown,
-    parameters: { layout: 'centered' },
+    parameters: {
+        layout: 'centered',
+        docs: {
+            description: {
+                component: "A component that replaces `SwitchButton` on smaller screens."
+            }
+        }
+    },
     tags: ['autodocs'],
     argTypes: {
+        options: {
+            description: "A list that populates the dropdown.",
+            table: {
+                type: {
+                    summary: "SessionData[]"
+                }
+            }
+        },
         selected: {
             control: { type: 'select' },
             options: Object.values(Mode),
-            // defaultValue: DefaultMode,
-            // summary: "",
-            description: "A value based on clicking on the button. Either `" + Mode.FOCUS + "`, `" + Mode.REST + "` or `" + Mode.LONG_REST + "`."
+            description: "A value based on clicking the button.",
+            table: {
+                type: {
+                    summary: Object.values(Modes).join(' | ')
+                },
+                defaultValue: {
+                    summary: Mode.FOCUS
+                }
+            },
+        },
+        onSelect: {
+            description: "Is called when one of the options is clicked.",
+            table: {
+                type: {
+                    summary: "(mode: SessionData) => void"
+                }
+            }
+        },
+        disabled: {
+            description: "If `true`, shows the component in grayscale and disables interactions like `hover` and `onSelect`.",
+            type: "boolean",
+            table: {
+                defaultValue: {
+                    summary: "false"
+                }
+            }
         }
     },
     args: {
         options,
         selected: DefaultMode,
-        onSelect: fn()
+        onSelect: fn(),
+        disabled: false
     },
     render: (args) => {
         const [{ selected }, updateArgs] = useArgs();
 
         const handleChange = (mode: SessionData) => {
-            updateArgs({ selected: mode.id });
+            updateArgs({ selected: mode });
             args.onSelect(mode);
         };
 
@@ -44,21 +84,15 @@ const meta = {
             </div>
         );
     },
-    // play: async ({ canvas, userEvent }) => {
-    //     const focusButton = canvas.getByRole('button', { name: "focus" })
-    //     const restButton = canvas.getByRole('button', { name: "rest" })
-
-    //     await userEvent.click(focusButton)
-    //     .then(() => userEvent.click(restButton))
-    //     .then(() => expect(restButton).toHaveAttribute('data-testid', "selected"))
-    //     .then(() => expect(focusButton).toHaveAttribute('data-testid', "not-selected"))
-    // }
 } satisfies Meta<typeof Dropdown>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+
 export const Default: Story = {};
+
+export const Selected: Story = {args: {selected: Mode.LONG_REST}};
 
 export const Disabled: Story = {
     args: {

@@ -65,6 +65,8 @@ export const DebugProvider = ({ children }: DebugProviderProps) => {
         [debugSettings, urlParams]
     );
 
+    // console.log(value)
+
     return (
         <DebugContext.Provider value={value}>
             {children}

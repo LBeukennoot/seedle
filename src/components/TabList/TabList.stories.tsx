@@ -1,7 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabList } from './index';
-import NavigationProvider from '../../providers/NavigationProvider';
-import DevProvider from '../../providers/DevProvider';
+import { DebugProvider } from '../../context/Debug';
+import { NavigationProvider } from '../../context/Navigation';
+import type { TabListProps } from './types';
+import { DefaultScreen, ScreenRegistry } from '../../navigation/ScreenRegistry';
+import { fn } from 'storybook/test';
+import { useArgs } from 'storybook/internal/preview-api';
+import { Screen } from '../../navigation/Screen';
 
 const meta = {
     component: TabList,
@@ -20,19 +25,52 @@ const meta = {
         backgrounds: { value: 'light' },
     },
     tags: ['autodocs'],
-    // argTypes: {
-    //   backgroundColor: { control: 'color' },
-    // },
+
+    argTypes: {
+        currentScreen: {
+            control: {
+                type: "select",
+
+            },
+            options: Object.keys(ScreenRegistry),
+            table: {
+                type: {
+                    summary: "Screen"
+                },
+                defaultValue: {
+                    summary: Screen.TIMER
+                }
+            }
+        },
+        setCurrentScreen: {
+            table: {
+                type: {
+                    summary: "(screen: Screen) => void"
+                }
+            }
+        }
+    },
     args: {
         // onClick: fn(),
+        currentScreen: DefaultScreen,
+        setCurrentScreen: fn()
     },
-    render: () => (
-        <DevProvider>
-            <NavigationProvider>
-                <TabList />
-            </NavigationProvider>
-        </DevProvider>
-    )
+    render: (props: TabListProps) => {
+        const [{ }, updateArgs] = useArgs();
+
+        const handleChange = (screen: Screen) => {
+            updateArgs({ currentScreen: screen });
+            props.setCurrentScreen(screen);
+        };
+
+        return (
+            <DebugProvider>
+                <NavigationProvider>
+                    <TabList {...props} setCurrentScreen={handleChange} />
+                </NavigationProvider>
+            </DebugProvider>
+        );
+    }
 } satisfies Meta<typeof TabList>;
 
 export default meta;

@@ -1,9 +1,9 @@
-import { ScreenRegistry, type ScreensType } from "../../navigation/ScreenRegistry"
+import { ScreenRegistry } from "../../navigation/ScreenRegistry"
 import type { Screen } from "../../navigation/Screen"
-import { useNavigation } from "../../context/Navigation"
+import type { TabListProps, TabProps } from "./types"
 
 const Tab = ({ screens, currentScreen, setCurrentScreen }: TabProps) => {
-    return (Object.keys(screens) as Screen[]).map((key) => {
+    return (Object.keys(screens) as Screen[]).map((key: Screen) => {
         const screen = screens[key]
         return (
             <div
@@ -17,18 +17,12 @@ const Tab = ({ screens, currentScreen, setCurrentScreen }: TabProps) => {
     })
 }
 
-export const TabList = () => {
-    const { currentScreen, setCurrentScreen } = useNavigation()
+export const TabList = ({currentScreen, setCurrentScreen}: TabListProps) => {
+    // const { currentScreen, setCurrentScreen } = useNavigation()
 
     return (
         <div className={"flex md:inline-block w-screen max-w-xl md:w-auto"}>
             <Tab screens={ScreenRegistry} currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
         </div>
     )
-}
-
-type TabProps = {
-    screens: ScreensType
-    currentScreen: Screen
-    setCurrentScreen: Function
 }
