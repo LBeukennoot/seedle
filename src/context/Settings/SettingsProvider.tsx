@@ -40,7 +40,7 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
 
     useEffect(() => {
         const newSessionTime = localStorage.getValue("sessionTimes") as SessionDataMap
-
+        debugSettings.debug && console.log(newSessionTime)
         // retreiving value from localStorage and checking its value
         if (isSessionTimeType(newSessionTime) === false) {
             console.error('Local storage value of "sessionTimes" is corrupted.');
