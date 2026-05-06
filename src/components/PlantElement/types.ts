@@ -3,6 +3,8 @@ import type { JSX } from "react";
 export enum Plants {
     CHIRARY = 'CHIRARY',
     CHAMOMILE = 'CHAMOMILE',
+    FIREWEED = 'FIREWEED',
+    LAVENDER = 'LAVENDER',
 }
 
 export type Plant = {

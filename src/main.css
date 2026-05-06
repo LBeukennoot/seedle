@@ -21,8 +21,123 @@
     --breakpoint-xs: 25rem;
 
     --breakpoint-card: 450px;
+
+    --animate-plantlabel: plantLabel 1s cubic-bezier(0,1.85,0.91,1.11) 1;
+    --animate-plantmove: plantMove 10s ease-in-out infinite;
+    --animate-drizzleup: drizzleUp 10s ease-in-out infinite;
+
+    @keyframes plantLabel {
+        from {
+            opacity: 0;
+        }
+        to {
+            transform: rotate(90deg);
+        }
+    }
+
+    @keyframes plantMove {
+        from {
+            transform: skewX(0deg);
+        }
+        10% {
+            transform: rotateZ(-6deg);
+            transform-origin: bottom center;
+        }
+        20% {
+            transform: rotateZ(5deg);
+            transform-origin: bottom center;
+        }
+        30% {
+            transform: rotateZ(-2deg);
+            transform-origin: bottom center;
+        }
+        40% {
+            transform: rotateZ(10deg);
+            transform-origin: bottom center;
+        }
+        50% {
+            transform: rotateZ(-7deg);
+            transform-origin: bottom center;
+        }
+        60% {
+            transform: rotateZ(3deg);
+            transform-origin: bottom center;
+        }
+        70% {
+            transform: rotateZ(-1deg);
+            transform-origin: bottom center;
+        }
+        80% {
+            transform: rotateZ(5deg);
+            transform-origin: bottom center;
+        }
+        90% {
+            transform: rotateZ(-4deg);
+            transform-origin: bottom center;
+        }
+        to {
+            transform: skewX(0deg);
+        }
+    }
+
+    @keyframes drizzleUp {
+        0% {
+            bottom: -15px;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        50% {
+            opacity: 0.8;
+        }
+        100% {
+            bottom: 105%;
+            opacity: 0;
+            transform: translateY(-20px) scale(0.6);
+        }
+    }
 }
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+
+
+/* .animated-element {
+  animation-name: myAnimation;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0,1.85,0.91,1.11);
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-fill-mode: none;
+  animation-play-state: paused;
+} */
+
+/* @keyframes myAnimation {
+  from {
+    transform: skewX(0deg);
+  }
+  25% {
+    transform: skewX(5deg);
+    transform-origin: bottom center;
+  }
+  75% {
+    transform: skewX(-5deg);
+    transform-origin: bottom center;
+  }
+  to {
+    transform: skewX(0deg);
+  }
+} */
+
+.animated-element {
+  animation-name: myAnimation;
+  animation-duration: 3.6s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-fill-mode: none;
+  animation-play-state: running;
 }

@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "dev": "vite",
     "build": "vite build",
     "build:css": "npx @tailwindcss/cli -m -i ./src/tailwind-entry.css -o ./dist/styles.css",
     "storybook": "concurrently \"npm run storybook:css\" \"storybook dev -p 6006\"",

@@ -161,6 +161,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     useEffect(() => {
         if (!isTimerRunning) return;
 
+        //TODO figure out why timer start has a delay
         intervalRef.current = setInterval(() => {
             if (!endTimeRef.current) return;
 
