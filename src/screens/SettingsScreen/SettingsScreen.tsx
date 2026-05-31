@@ -29,13 +29,13 @@ export const SettingsScreen = () => {
     }
 
     return (
-        <div className="overflow-y-auto max-h-[25rem] rounded-b-[2.3rem] md:rounded-b-[1.4rem] text-blue font-lexend">
+        <div className="overflow-y-auto max-h-full pt-10 rounded-b-[2.3rem] md:rounded-b-[1.4rem] text-blue font-lexend">
             <h1 className="text-3xl mb-3">settings</h1>
 
             <div>
-                <hr className="border-1 rounded-full text-light-blue"></hr>
+                <hr className="border rounded-full text-light-blue"></hr>
                 <h2 className="text-lg my-3 font-bold">time</h2>
-                <hr className="border-1 rounded-full text-light-blue"></hr>
+                <hr className="border rounded-full text-light-blue"></hr>
 
                 <div className="my-4 flex flex-col gap-4 mb-10">
                     <div>
