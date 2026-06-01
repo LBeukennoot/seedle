@@ -1,0 +1,7 @@
+{
+    "focusSessions": 4,
+    "autoAdvance": true,
+    "autoStartRest": true,
+    "autoStartFocus": false,
+    "startEndSound": true
+}

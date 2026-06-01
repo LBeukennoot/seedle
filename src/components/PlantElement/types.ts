@@ -9,7 +9,7 @@ export enum Plants {
 
 export type Plant = {
     id: string;
-    gardenId: string;
+    // gardenId: string;
     x: number;   // 0–1
     y: number;   // 0–1
     size: number; // 0–1F

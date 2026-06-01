@@ -1,67 +1,62 @@
-import { useEffect, useReducer } from "react"
-import { UserDataContext } from "./UserDataContext"
-import LocalStorage from "../../utils/LocalStorage"
-import type { UserDataContextType, UserDataProviderProps } from "./types"
-import { type Plant } from "../../components/PlantElement/types"
-import { getRandomGardenAndPosition } from "../../navigation/Navigation"
-import { useDebug } from "../Debug"
+import { useEffect, useReducer } from 'react';
+import { UserDataContext } from './UserDataContext';
+import LocalStorage from '../../utils/LocalStorage';
+import type { UserDataContextType, UserDataProviderProps } from './types';
+import { type Plant } from '../../components/PlantElement/types';
+import { getRandomGardenAndPosition } from '../../navigation/Navigation';
+import { useDebug } from '../Debug';
 
-const localStorage = new LocalStorage()
+const localStorage = new LocalStorage();
 
 /* -----------------------------
    TYPES
 ------------------------------ */
 
-type PlantAction =
-    | { type: "CREATE"; plant: Plant }
-    | { type: "REMOVE"; id: string | number }
-    | { type: "TICK" }
+type PlantAction = { type: 'CREATE'; plant: Plant } | { type: 'REMOVE'; id: string | number } | { type: 'TICK' };
 
 /* -----------------------------
    REDUCER
 ------------------------------ */
 
 const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
-    const now = Date.now()
+  const now = Date.now();
 
-    switch (action.type) {
-        case "CREATE":
-            return [...state, action.plant]
+  switch (action.type) {
+    case 'CREATE':
+      return [...state, action.plant];
 
-        case "REMOVE":
-            return state.filter(p => p.id !== action.id)
+    case 'REMOVE':
+      return state.filter((p) => p.id !== action.id);
 
-        case "TICK":
-            return state
-                .filter(p => {
-                    // const isOld = p.createdAt < now - 30 * 1000 // 30 seconds
-                    const isOld = p.createdAt < now - p.maxAge * 24 * 60 * 60 * 1000 // 4 days (or maxAge)
-                    
-                    const isFullyGrown = p.stage === p.maxStage
+    case 'TICK':
+      return state
+        .filter((p) => {
+          // const isOld = p.createdAt < now - 30 * 1000 // 30 seconds
+          const isOld = p.createdAt < now - p.maxAge * 24 * 60 * 60 * 1000; // 4 days (or maxAge)
 
-                    // ❗ remove ONLY if BOTH conditions are true
-                    return !(isOld && isFullyGrown)
-                })
-                .map(p => {
-                    if (p.stage < p.maxStage) {
-                        const newStage = p.stage + 1
+          const isFullyGrown = p.stage === p.maxStage;
 
-                        return {
-                            ...p,
-                            stage: newStage,
-                            grownAt:
-                                newStage === p.maxStage ? now : p.grownAt,
-                        }
-                    }
+          // ❗ remove ONLY if BOTH conditions are true
+          return !(isOld && isFullyGrown);
+        })
+        .map((p) => {
+          if (p.stage < p.maxStage) {
+            const newStage = p.stage + 1;
 
-                    return p
-                })
+            return {
+              ...p,
+              stage: newStage,
+              grownAt: newStage === p.maxStage ? now : p.grownAt
+            };
+          }
 
+          return p;
+        });
 
-        default:
-            return state
-    }
-}
+    default:
+      return state;
+  }
+};
 
 /* -----------------------------
    LOCAL STORAGE HOOK
@@ -85,97 +80,101 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
 ------------------------------ */
 
 export const UserDataProvider = ({ children }: UserDataProviderProps) => {
-    // const [nextId, setNextId] = useLocalStorageState<number>("nextId", 0)
-    const {debugSettings} = useDebug()
+  // const [nextId, setNextId] = useLocalStorageState<number>("nextId", 0)
+  const { debugSettings } = useDebug();
 
-    const [plants, dispatch] = useReducer(
-        plantReducer,
-        [],
-        () => {
-            const stored = localStorage.getValue("plants")
-            return (stored as Plant[]) ?? []
-        }
-    )
+  const [plants, dispatch] = useReducer(plantReducer, [], () => {
+    const stored = localStorage.getValue<Plant[]>('plants');
 
-    /* -----------------------------
+    if (stored && stored.length > 0 && (stored[0] as Record<string, unknown>).gardenId) {
+      const cleanedPlants = stored.map((p) => {
+        // 1. Cast to Record so TS allows you to see 'gardenId'
+        // 2. Use destructuring to pull gardenId out, and collect the 'rest'
+        const { gardenId, ...rest } = p as Record<string, unknown>;
+
+        // 3. Return the rest of the object cast back to your clean Plant type
+        const random = getRandomGardenAndPosition(stored);
+
+        return {
+          ...rest,
+          x: random.x,
+          y: random.y
+        } as Plant;
+      });
+
+      return cleanedPlants
+
+    }
+
+    return (stored as Plant[]) ?? [];
+  });
+
+  /* -----------------------------
        PERSISTENCE
     ------------------------------ */
 
-    useEffect(() => {
-        if(!debugSettings.debug) {
-            localStorage.setValue("plants", plants)
-        } else console.log("Debug is enabled, so plants won't be saved.")
-    }, [plants, debugSettings])
+  useEffect(() => {
+    if (!debugSettings.debug) {
+      localStorage.setValue('plants', plants);
+    } else console.log("Debug is enabled, so plants won't be saved.");
+  }, [plants, debugSettings]);
 
-    /* -----------------------------
+  /* -----------------------------
        EVENT SYSTEM
     ------------------------------ */
 
-    useEffect(() => {
-        function handleEventListener() {
-            console.log("[UserDataProvider] sessionFocusComplete received")
+  useEffect(() => {
+    function handleEventListener() {
+      console.log('[UserDataProvider] sessionFocusComplete received');
 
-            dispatch({ type: "TICK" })
-        }
+      dispatch({ type: 'TICK' });
+    }
 
-        window.addEventListener(
-            "sessionFocusComplete",
-            handleEventListener
-        )
+    window.addEventListener('sessionFocusComplete', handleEventListener);
 
-        return () => {
-            window.removeEventListener(
-                "sessionFocusComplete",
-                handleEventListener
-            )
-        }
-    }, [])
+    return () => {
+      window.removeEventListener('sessionFocusComplete', handleEventListener);
+    };
+  }, []);
 
-    /* -----------------------------
+  /* -----------------------------
        ACTIONS
     ------------------------------ */
 
-    const createPlant = (data: Omit<Plant, "id" | "createdAt">) => {
-        const random = getRandomGardenAndPosition(plants)
+  const createPlant = (data: Omit<Plant, 'id' | 'createdAt'>) => {
+    const random = getRandomGardenAndPosition(plants);
 
+    const plant: Plant = {
+      id: crypto.randomUUID(),
+      // gardenId: random.gardenId,
+      x: random.x,
+      y: random.y,
+      size: data.size,
+      name: data.name,
+      stage: data.stage ?? 1,
+      maxStage: data.maxStage ?? 4,
+      createdAt: Date.now(),
+      maxAge: data.maxAge,
+      mirrored: Math.random() < 0.5
+    };
 
+    dispatch({ type: 'CREATE', plant });
 
-        const plant: Plant = {
-            id: crypto.randomUUID(),
-            gardenId: random.gardenId,
-            x: random.x,
-            y: random.y,
-            size: data.size,
-            name: data.name,
-            stage: data.stage ?? 1,
-            maxStage: data.maxStage ?? 4,
-            createdAt: Date.now(),
-            maxAge: data.maxAge,
-            mirrored: Math.random() < 0.5,
-        }
+    return plant;
+  };
 
-        dispatch({ type: "CREATE", plant })
+  // const removePlant = (id: string | number) => {
+  //     dispatch({ type: "REMOVE", id })
+  // }
 
-        return plant
-    }
+  const value: UserDataContextType = {
+    plants,
+    setPlants: () => {}, // optional: remove if not needed
+    createPlant
+  };
 
-    // const removePlant = (id: string | number) => {
-    //     dispatch({ type: "REMOVE", id })
-    // }
-
-    const value: UserDataContextType = {
-        plants,
-        setPlants: () => {}, // optional: remove if not needed
-        createPlant,
-    }
-
-    return (
-        <UserDataContext.Provider value={value}>
-            {children}
-        </UserDataContext.Provider>
-    )
-}
-
+  return <UserDataContext.Provider value={value}>{children}</UserDataContext.Provider>;
+};
 
 // import { useEffect, useState } from "react"
 // import { UserDataContext } from "./UserDataContext"
@@ -221,7 +220,6 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
 //     //     setPlants(localStoragePlants)
 //     // }, [])
 
-
 //     // const growPlant = (plantId: number) => {
 //     //     setPlants(prev =>
 //     //         prev
@@ -257,10 +255,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
 //     //         removePlant(plant)
 //     //     }
 
-
-
 //     // }
-
 
 //     // const updatePlant = ({
 //     //     id,
@@ -308,8 +303,6 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
 //             maxAge: data.maxAge,
 //         }
 
-        
-
 //         // return { id, gardenId, x, y, size, name, stage }
 //         return plant
 //     }
@@ -318,7 +311,6 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
 //         localStorage.setValue('plants', plants)
 //         console.log(localStorage.getValue('plants'))
 //     }, [plants])
-
 
 //     useEffect(() => {
 //         function handleEventListener() {
@@ -361,9 +353,6 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
 //             window.removeEventListener("sessionFocusComplete", handleEventListener)
 //         }
 //     }, [])
-
-
-
 
 //     const value: UserData = {
 //         plants,

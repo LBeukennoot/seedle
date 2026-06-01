@@ -7,7 +7,7 @@ import { ScreenCard } from '../components/ScreenCard/ScreenCard';
 import { useNavigation } from '../context/Navigation';
 
 const COLS = 10;
-const ROWS = 5;
+const ROWS = 10;
 
 const generateGridPositions = (cols: number, rows: number) => {
   const positions = [];
