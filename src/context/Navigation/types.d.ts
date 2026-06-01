@@ -11,4 +11,6 @@ export type NavigationContextType = {
     popup: JSX.Element | undefined
     setPopup: (popup: Popup) => void
     ScreenElement: () => JSX.Element
+    panelExpanded: boolean
+    setPanelExpanded: (panelExpanded: boolean) => void
 }

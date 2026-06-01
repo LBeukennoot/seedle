@@ -15,6 +15,7 @@ import { useDebug } from "../Debug";
 export const NavigationProvider = ({ children }: NavigationProviderProps) => {
 
     const [currentScreen, setCurrentScreen] = useState<Screen>(DefaultScreen)
+    const [panelExpanded, setPanelExpanded] = useState<boolean>(false)
     const [popup, setPopup] = useState<Popup>(undefined)
 
     const { debugSettings } = useDebug()
@@ -52,7 +53,9 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
         setCurrentScreen, 
         popup, 
         setPopup, 
-        ScreenElement
+        ScreenElement,
+        panelExpanded,
+        setPanelExpanded
     }
 
     return (

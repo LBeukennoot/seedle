@@ -1,6 +1,11 @@
+export interface DropdownOptions {
+  id: string;
+  label: string;
+}
+
 export interface DropdownProps {
-    options: string[]
-    selected: Mode
-    onSelect: (mode: SessionData) => void
-    disabled?: boolean = false
+  options: DropdownOptions[];
+  selected: Mode;
+  onSelect: (mode: SessionData) => void;
+  disabled?: boolean;
 }
