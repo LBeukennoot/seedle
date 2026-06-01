@@ -71,6 +71,8 @@ export default function Navigation() {
           <ScreenElement />
         </ScreenCard>
       </div>
+
+      {/* <div cl  */}
       {/* top garden */}
       {/* <div className="relative  h-full">
                 <Garden

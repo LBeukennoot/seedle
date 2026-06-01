@@ -4,6 +4,7 @@ import LocalStorage from "../../utils/LocalStorage"
 import type { UserDataContextType, UserDataProviderProps } from "./types"
 import { type Plant } from "../../components/PlantElement/types"
 import { getRandomGardenAndPosition } from "../../navigation/Navigation"
+import { useDebug } from "../Debug"
 
 const localStorage = new LocalStorage()
 
@@ -85,6 +86,7 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
 
 export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     // const [nextId, setNextId] = useLocalStorageState<number>("nextId", 0)
+    const {debugSettings} = useDebug()
 
     const [plants, dispatch] = useReducer(
         plantReducer,
@@ -100,8 +102,10 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     ------------------------------ */
 
     useEffect(() => {
-        localStorage.setValue("plants", plants)
-    }, [plants])
+        if(!debugSettings.debug) {
+            localStorage.setValue("plants", plants)
+        } else console.log("Debug is enabled, so plants won't be saved.")
+    }, [plants, debugSettings])
 
     /* -----------------------------
        EVENT SYSTEM
