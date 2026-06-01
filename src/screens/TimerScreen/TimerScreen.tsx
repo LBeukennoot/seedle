@@ -1,17 +1,17 @@
 import { useTimer } from '../../context/Timer';
-import { useSettings } from '../../context/Settings';
-import { useSession } from '../../context/Session';
-import { SwitchButton } from '../../components/SwitchButton';
+// import { useSettings } from '../../context/Settings';
+// import { useSession } from '../../context/Session';
+// import { SwitchButton } from '../../components/SwitchButton';
 import { Dropdown } from '../../components/Dropdown';
 import { Timer } from '../../components/Timer';
-import { SessionBar } from '../../components/SessionBar';
-import { NextIcon, PauseIcon, StartIcon } from '../../components/Icons';
+// import { SessionBar } from '../../components/SessionBar';
+import { StartIcon } from '../../components/Icons';
 import { Button } from '../../components/Button';
 import { useMode } from '../../context/Mode';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import type { TimerContextType } from '../../context/Timer/types';
-import type { SettingsContextType } from '../../context/Settings/types';
-import type { SessionContextType } from '../../context/Session/types';
+// import type { SettingsContextType } from '../../context/Settings/types';
+// import type { SessionContextType } from '../../context/Session/types';
 import { Modes } from '../../features/session/sessionModes';
 import type { SessionData } from '../../features/session/sessionTypes';
 
@@ -21,16 +21,16 @@ import type { SessionData } from '../../features/session/sessionTypes';
  */
 export const TimerScreen = () => {
   const { mode, setMode } = useMode();
-  const { getDisplayTime, start, pause, isTimerRunning }: TimerContextType = useTimer();
-  const { sessionSettings, sessionTime }: SettingsContextType = useSettings();
-  const {
-    toNextSession,
-    nextSession,
-    currentSession,
-    sessionsArray,
-    setCurrentSession,
-    sessionCount
-  }: SessionContextType = useSession();
+  const { getDisplayTime, start }: TimerContextType = useTimer();
+//   const { sessionSettings, sessionTime }: SettingsContextType = useSettings();
+//   const {
+//     // toNextSession,
+//     // nextSession,
+//     // currentSession,
+//     // sessionsArray,
+//     // setCurrentSession,
+//     // sessionCount
+//   }: SessionContextType = useSession();
 
   const options = Object.keys(Modes);
   // const options = Object.entries(Modes).map(([mode, data]) => ({
@@ -59,7 +59,11 @@ export const TimerScreen = () => {
   return (
     <div className={'flex h-full items-center justify-around'}>
     {/* <div className={'h-full flex items-center select-none font-lexend'}> */}
-      <Dropdown selected={mode} options={options} onSelect={handleChangeMode} />
+      <Dropdown 
+        selected={mode} 
+        options={options.map((value: string) => { return {id: value, label: value.replace('_', ' ')}})} 
+        onSelect={handleChangeMode}
+       />
       {/* <Button label={'test'} onClick={() => {}}>
         focus
       </Button> */}
