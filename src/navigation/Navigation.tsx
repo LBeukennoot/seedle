@@ -24,27 +24,27 @@ const generateGridPositions = (cols: number, rows: number) => {
   return positions;
 };
 
-const getFreePositions = (plants: Plant[], gardenId: string, cols: number, rows: number) => {
-  const gardenPlants = plants.filter((p) => p.gardenId === gardenId);
+const getFreePositions = (plants: Plant[], cols: number, rows: number) => {
+  // const gardenPlants = plants.filter((p) => p.gardenId === gardenId);
   const all = generateGridPositions(cols, rows);
 
-  return all.filter((pos) => !gardenPlants.some((p) => p.x === pos.x && p.y === pos.y));
+  return all.filter((pos) => !plants.some((p) => p.x === pos.x && p.y === pos.y));
 };
 
-const GARDENS = ['A', 'B'];
+// const GARDENS = ['A', 'B'];
 
 export const getRandomGardenAndPosition = (plants: Plant[]) => {
   // shuffle gardens so we try randomly
-  const shuffledGardens = [...GARDENS].sort(() => Math.random() - 0.5);
+  // const shuffledGardens = [...GARDENS].sort(() => Math.random() - 0.5);
 
-  for (const gardenId of shuffledGardens) {
-    const free = getFreePositions(plants, gardenId, COLS, ROWS);
+  // for (const gardenId of shuffledGardens) {
+  const free = getFreePositions(plants, COLS, ROWS);
 
-    if (free.length > 0) {
-      const pos = free[Math.floor(Math.random() * free.length)];
-      return { gardenId, ...pos };
-    }
+  if (free.length > 0) {
+    const pos = free[Math.floor(Math.random() * free.length)];
+    return { ...pos };
   }
+  // }
 
   throw new Error('All gardens are full 🌱');
 };
@@ -60,13 +60,17 @@ export default function Navigation() {
   return (
     // <div className="min-h-screen grid grid-rows-[30vh_1fr_30vh] bg-light-green overflow-hidden">
     <div className="relative min-h-screen bg-light-green overflow-hidden">
-      <div className="h-[80vh]">garden</div>
+      {popup && <Popup> {popup} </Popup>}
+
+      <div className="h-[80vh]">
+        <Garden plants={plants} />
+      </div>
       <div className="absolute bottom-0 mb-4 w-full flex justify-center">
-          {/* <div>arrow</div> */}
-          <ScreenCard>
-            <ScreenElement />
-          </ScreenCard>
-        </div>
+        {/* <div>arrow</div> */}
+        <ScreenCard>
+          <ScreenElement />
+        </ScreenCard>
+      </div>
       {/* top garden */}
       {/* <div className="relative  h-full">
                 <Garden
@@ -89,8 +93,6 @@ export default function Navigation() {
                     </div>
                 </div>
             </div> */}
-
-      {popup && <Popup> {popup} </Popup>}
 
       {/* bottom garden */}
       {/* <div className="relative h-full">

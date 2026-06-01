@@ -2,19 +2,19 @@ import { PlantElement } from "../PlantElement"
 import type { Plant } from "../PlantElement/types"
 
 type GardenProps = {
-    gardenId: string
+    // gardenId: string
     plants: Plant[]
 }
 
-export const Garden = ({ gardenId, plants }: GardenProps) => {
+export const Garden = ({ plants }: GardenProps) => {
 
-    const visiblePlants = plants
-        .filter((plant) => plant.gardenId === gardenId)
-        .sort((a, b) => a.y - b.y) // smaller y first, larger y last
+    // const visiblePlants = plants
+    //     .filter((plant) => plant.gardenId === gardenId)
+    //     .sort((a, b) => a.y - b.y) // smaller y first, larger y last
 
     return (
         <div>
-            {visiblePlants.map((plant: Plant) => (
+            {plants.map((plant: Plant) => (
                 <div
                     key={plant.id}
                     className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center"
