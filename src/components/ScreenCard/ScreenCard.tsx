@@ -36,7 +36,7 @@ export const ScreenCard = ({ children, ...props }: ScreenCardProps) => {
           <ArrowDownIcon className={'stroke-dark-blue ' + (panelExpanded ? 'rotate-180' : '')} />
         </div> */}
       </div>
-      <div className={"bg-white mx-auto max-w-xl rounded-[3.5rem] max-h-120 px-10 py-2 transition-all duration-300 ease-in-out " + (getScreenHeight(currentScreen))}>
+      <div className={"bg-white mx-auto max-w-xl rounded-[3.5rem] max-h-120 px-10 py-2 transition-all duration-500 ease-in-out " + (getScreenHeight(currentScreen))}>
         {/* <div className="max-h-[25rem]"> */}
         {children}
         {/* <div className=""></div> */}

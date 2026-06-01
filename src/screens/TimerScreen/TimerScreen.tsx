@@ -59,19 +59,19 @@ export const TimerScreen = () => {
   return (
     <div className={'flex h-full items-center justify-around'}>
     {/* <div className={'h-full flex items-center select-none font-lexend'}> */}
-      {/* <Dropdown selected={mode} options={options} onSelect={handleChangeMode} /> */}
-      <Button label={'test'} onClick={() => {}}>
+      <Dropdown selected={mode} options={options} onSelect={handleChangeMode} />
+      {/* <Button label={'test'} onClick={() => {}}>
         focus
-      </Button>
+      </Button> */}
 
-      <Timer time={getDisplayTime()} className={"text-6xl"} />
+      <Timer time={getDisplayTime()} className={"text-3xl xs:text-6xl"} />
 
       <Button
         label={'start'}
         onClick={() => {
           start(mode);
         }}
-        className={!sessionSettings.autoAdvance ? 'px-4' : ''}
+        className={""}
         >
         {/* {!sessionSettings.autoAdvance && 'start'}
         {sessionSettings.autoAdvance && <StartIcon className="fill-white" />} */}
