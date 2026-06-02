@@ -19,8 +19,8 @@ export const Garden = ({ plants }: GardenProps) => {
                     key={plant.id}
                     className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center animate-plantmove"
                     style={{
-                        left: `${(plant.x * 100) + (Math.random() * 2)}%`,
-                        top: `${(plant.y * 100) + (Math.random() * 2)}%`,
+                        left: `${(plant.x * 100)}%`,
+                        top: `${(plant.y * 100)}%`,
                         animationDelay: `${(plant.x * 3) + plant.y}s`,
                     }}
                 >
