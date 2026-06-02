@@ -1,4 +1,3 @@
-import { TabList } from '../components/TabList';
 import { Popup } from '../components/Popup/Popup';
 import { Garden } from '../components/Garden/Garden';
 import { useUserData } from '../context/UserData';

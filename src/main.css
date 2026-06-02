@@ -40,11 +40,11 @@
             transform: skewX(0deg);
         }
         10% {
-            transform: rotateZ(-6deg);
+            transform: rotateZ(-3deg);
             transform-origin: bottom center;
         }
         20% {
-            transform: rotateZ(5deg);
+            transform: rotateZ(4deg);
             transform-origin: bottom center;
         }
         30% {
@@ -52,11 +52,11 @@
             transform-origin: bottom center;
         }
         40% {
-            transform: rotateZ(10deg);
+            transform: rotateZ(5deg);
             transform-origin: bottom center;
         }
         50% {
-            transform: rotateZ(-7deg);
+            transform: rotateZ(-2deg);
             transform-origin: bottom center;
         }
         60% {
@@ -68,7 +68,7 @@
             transform-origin: bottom center;
         }
         80% {
-            transform: rotateZ(5deg);
+            transform: rotateZ(3deg);
             transform-origin: bottom center;
         }
         90% {

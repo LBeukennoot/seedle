@@ -21,7 +21,7 @@ export const Garden = ({ plants }: GardenProps) => {
                     style={{
                         left: `${(plant.x * 100)}%`,
                         top: `${(plant.y * 100)}%`,
-                        animationDelay: `${(plant.x * 3) + plant.y}s`,
+                        animationDelay: `${(plant.x * 1.5) + plant.y}s`,
                     }}
                 >
                     {/* TODO naamkaartje laten zien op hover (incl animatie) */}
