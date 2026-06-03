@@ -2,7 +2,7 @@ import { Icon } from "../../Icons/Icon"
 
 export const FireweedStage1 = ({ size }: { size: number }) => {
     return (
-        <Icon size={size} viewBox="0 0 208 208">
+        <Icon className="h-20" size={size} viewBox="0 0 208 208">
             <path
                 d="M102.5 139.5C114.5 161 113.5 175 113.5 208"
                 stroke="#668E5A"

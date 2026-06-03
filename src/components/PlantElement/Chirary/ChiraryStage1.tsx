@@ -2,7 +2,7 @@ import { Icon } from "../../Icons/Icon"
 
 export const ChiraryStage1 = ({ size }: { size: number }) => {
     return (
-        <Icon size={size} viewBox="0 0 208 208">
+        <Icon className="h-20" size={size} viewBox="0 0 208 208">
             <path
                 d="M125 164C107 174.5 104 182.5 104 208C104 182.5 102.5 162 100 149"
                 stroke="#668E5A"

@@ -18,21 +18,24 @@ export const DebugMenu = () => {
 
   return (
     <div className="absolute top-0 right-0 bg-black rounded-lg border border-white p-2 m-2 text-white flex flex-col w-50">
-      <Accordion>
+      <Accordion className='border border-white'>
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           {plants.length} Total Plants
         </AccordionSummary>
 
         <AccordionDetails className="bg-black! text-white!">
-          <Select
-            className="bg-white w-full"
-            value="Add plant"
-            onChange={(e) => createPlant({ size: 1, name: e.target.value, stage: 1, maxAge: 4 })}>
-            <MenuItem value="Add plant">Add Plant</MenuItem>
-            {Object.values(Plants).map((value: string) => {
-              return <MenuItem value={value}>{value}</MenuItem>;
-            })}
-          </Select>
+          <div className='mb-5'>
+            <input step={1} min={1} className='bg-white text-black w-full' placeholder='amount' />
+            <Select
+              className="bg-white w-full"
+              value="Add plant"
+              onChange={(e) => createPlant({ size: 1, name: e.target.value, stage: 1, maxAge: 4 })}>
+              <MenuItem value="Add plant">Add Plant</MenuItem>
+              {Object.values(Plants).map((value: string) => {
+                return <MenuItem value={value}>{value}</MenuItem>;
+              })}
+            </Select>
+          </div>
 
           <Button className="bg-white! w-full" onClick={() => tickPlants()}>
             Grow plants
@@ -52,7 +55,7 @@ export const DebugMenu = () => {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion>
+      <Accordion className='border border-white'>
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           {selectedPlant ? `Selected flower: ${selectedPlant.name}` : 'select'}
         </AccordionSummary>
