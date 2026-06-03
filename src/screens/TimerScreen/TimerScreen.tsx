@@ -5,7 +5,7 @@ import { useTimer } from '../../context/Timer';
 import { Dropdown } from '../../components/Dropdown';
 import { Timer } from '../../components/Timer';
 // import { SessionBar } from '../../components/SessionBar';
-import { StartIcon } from '../../components/Icons';
+import { PauseIcon, StartIcon } from '../../components/Icons';
 import { Button } from '../../components/Button';
 import { useMode } from '../../context/Mode';
 // import { useEffect } from 'react';
@@ -21,7 +21,7 @@ import type { SessionData } from '../../features/session/sessionTypes';
  */
 export const TimerScreen = () => {
   const { mode, setMode } = useMode();
-  const { getDisplayTime, start }: TimerContextType = useTimer();
+  const { getDisplayTime, start, pause, isTimerRunning }: TimerContextType = useTimer();
 //   const { sessionSettings, sessionTime }: SettingsContextType = useSettings();
 //   const {
 //     // toNextSession,
@@ -70,7 +70,8 @@ export const TimerScreen = () => {
 
       <Timer time={getDisplayTime()} className={"text-3xl xs:text-6xl"} />
 
-      <Button
+      {!isTimerRunning && (
+        <Button
         label={'start'}
         onClick={() => {
           start(mode);
@@ -81,6 +82,21 @@ export const TimerScreen = () => {
         {sessionSettings.autoAdvance && <StartIcon className="fill-white" />} */}
         <StartIcon className="fill-white" />
       </Button>
+      )}
+
+      {isTimerRunning && (
+        <Button
+        label={'pause'}
+        onClick={() => {
+          pause();
+        }}
+        className={""}
+        >
+        {/* {!sessionSettings.autoAdvance && 'start'}
+        {sessionSettings.autoAdvance && <StartIcon className="fill-white" />} */}
+        <PauseIcon className="fill-white" />
+      </Button>
+      )}
 
       {/* <div className="hidden card:block">
                 <SwitchButton
