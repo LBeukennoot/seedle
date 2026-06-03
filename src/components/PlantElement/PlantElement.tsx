@@ -7,6 +7,7 @@ import { Plants } from "./types"
 
 export const PlantElement = ({ stage = 1, plant, size = 200 }: PlantProps) => {
 
+    //TODO make sure plant is squared to prevent wrong clicking
     const elements = {
         [Plants.CHIRARY]: <Chirary size={size} stage={stage} />,
         [Plants.CHAMOMILE]: <Chamomile size={size} stage={stage} />,

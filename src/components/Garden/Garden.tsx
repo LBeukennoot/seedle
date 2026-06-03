@@ -13,6 +13,8 @@ export const Garden = ({ plants }: GardenProps) => {
   const { getParam, setParam, appendParam } = useURLParams();
   const selectedPlantID = getParam('plant');
 
+  plants = plants.sort((p1, p2) => p1.y - p2.y)
+
   return (
     <div>
       {plants.map((plant: Plant) => (
@@ -38,7 +40,7 @@ export const Garden = ({ plants }: GardenProps) => {
           }}
           style={{
             left: `${plant.x * 100}%`,
-            top: `${plant.y * 100}%`,
+            top: `${plant.y * 75}%`,
             animationDelay: `${plant.x * 1.5 + plant.y}s`
           }}>
           {/* TODO naamkaartje laten zien op hover (incl animatie) */}
