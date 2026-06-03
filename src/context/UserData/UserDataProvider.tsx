@@ -12,7 +12,12 @@ const localStorage = new LocalStorage();
    TYPES
 ------------------------------ */
 
-type PlantAction = { type: 'CREATE'; plant: Plant } | { type: 'REMOVE'; id: string | number } | { type: 'TICK' };
+type PlantAction =
+  | { type: 'CREATE'; plant: Plant }
+  | { type: 'EDIT'; data: Plant }
+  | { type: 'REMOVEALL' }
+  | { type: 'REMOVE'; id: string | number }
+  | { type: 'TICK' };
 
 /* -----------------------------
    REDUCER
@@ -24,6 +29,37 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
   switch (action.type) {
     case 'CREATE':
       return [...state, action.plant];
+
+    case 'EDIT':
+      return state.map((plant) => {
+        if (plant.id === action.data.id) {
+          return {
+            ...plant,
+            ...action.data
+          };
+        }
+
+        return plant;
+      });
+    // state.forEach(plant => {
+    //   if(plant.id === action.data.id) {
+    //     return {...plant, ...action.data}
+    //   }
+    // })
+    // break;
+    // const selectedPlant = state.findIndex(plant => plant.id === action.data.id)
+    // // console.log(selectedPlant)
+    // state[selectedPlant] = action.data
+    // console.log(state)
+    // return state
+    // return state.filter((plant) => {
+    //   if (plant.id === action.id) {
+    //     return { ...action, ...plant };
+    //   }
+    // });
+
+    case 'REMOVEALL':
+      return [];
 
     case 'REMOVE':
       return state.filter((p) => p.id !== action.id);
@@ -102,8 +138,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
         } as Plant;
       });
 
-      return cleanedPlants
-
+      return cleanedPlants;
     }
 
     return (stored as Plant[]) ?? [];
@@ -115,7 +150,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
 
   useEffect(() => {
     if (!debugSettings.debug) {
-      localStorage.setValue('plants', plants);
+      savePlants();
     } else console.log("Debug is enabled, so plants won't be saved.");
   }, [plants, debugSettings]);
 
@@ -163,14 +198,33 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     return plant;
   };
 
-  // const removePlant = (id: string | number) => {
-  //     dispatch({ type: "REMOVE", id })
-  // }
+  const tickPlants = () => {
+    dispatch({type: 'TICK'})
+  }
+
+  const editPlant = (plantId: string, data: Plant) => {
+    dispatch({ type: 'EDIT', data });
+  };
+
+  const removePlant = (id: string | number) => {
+    dispatch({ type: 'REMOVE', id });
+  };
+
+  const savePlants = (): void => {
+    localStorage.setValue('plants', plants);
+  };
 
   const value: UserDataContextType = {
     plants,
-    setPlants: () => {}, // optional: remove if not needed
-    createPlant
+    setPlants: () => {
+      console.log('[setPlants] not yet implemented');
+    }, // optional: remove if not needed
+    removeAllPlants: () => dispatch({ type: 'REMOVEALL' }),
+    editPlant,
+    createPlant,
+    removePlant,
+    savePlants,
+    tickPlants
   };
 
   return <UserDataContext.Provider value={value}>{children}</UserDataContext.Provider>;

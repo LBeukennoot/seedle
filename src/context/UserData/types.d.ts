@@ -6,6 +6,11 @@ export type UserDataProviderProps = {
 
 export type UserDataContextType = {
     plants: Plant[]
-    setPlants: Function
-    createPlant: Function
+    setPlants: () => void
+    removeAllPlants: () => void
+    editPlant: (plantId: string, data: Record<Plant>) => void
+    createPlant: (data) => void
+    removePlant: (id) => void
+    savePlants: () => void
+    tickPlants: () => void
 }

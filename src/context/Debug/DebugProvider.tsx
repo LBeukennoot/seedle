@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import URLParams from "../../utils/URLParams";
 import { DebugContext } from "./DebugContext";
 import type { DebugContextType, DebugProviderProps, DebugSettings } from "./types";
+import { useURLParams } from "../../utils/URLParams";
 
 
-const urlParams = new URLParams();
+// const urlParams = new URLParams();
 
 export const DebugProvider = ({ children }: DebugProviderProps) => {
+    const { getParam } = useURLParams()
+
     const [debugSettings, setDebugSettings] = useState<DebugSettings>({
         debug: false,
         screen: "",
@@ -38,15 +40,15 @@ export const DebugProvider = ({ children }: DebugProviderProps) => {
 
         // parsed values
         (Object.keys(parsers) as (keyof typeof parsers)[]).forEach((key) => {
-            const raw = urlParams.getParam(key);
+            const raw = getParam(key);
             if (typeof raw === "string") {
                 next[key] = parsers[key](raw) as any;
             }
         });
 
         // plain string values
-        const screen = urlParams.getParam("screen");
-        const mode = urlParams.getParam("mode");
+        const screen = getParam("screen");
+        const mode = getParam("mode");
 
         if (typeof screen === "string") next.screen = screen;
         if (typeof mode === "string") next.mode = mode;
@@ -60,9 +62,9 @@ export const DebugProvider = ({ children }: DebugProviderProps) => {
     const value = useMemo<DebugContextType>(
         () => ({
             debugSettings,
-            urlParams,
+            // urlParams,
         }),
-        [debugSettings, urlParams]
+        [debugSettings]
     );
 
     // console.log(value)

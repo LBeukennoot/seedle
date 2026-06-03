@@ -4,7 +4,7 @@ export type DebugProviderProps = {
 
 export type DebugContextType = {
     debugSettings: DebugSettings
-    urlParams: Object
+    // urlParams: Object
 }
 
 export type DebugSettings = {

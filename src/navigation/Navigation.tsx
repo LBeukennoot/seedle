@@ -4,6 +4,8 @@ import { useUserData } from '../context/UserData';
 import { type Plant } from '../components/PlantElement/types';
 import { ScreenCard } from '../components/ScreenCard/ScreenCard';
 import { useNavigation } from '../context/Navigation';
+import { DebugMenu } from '../components/Debug/DebugMenu';
+import { useDebug } from '../context/Debug';
 
 const COLS = 10;
 const ROWS = 10;
@@ -53,8 +55,9 @@ export const getRandomGardenAndPosition = (plants: Plant[]) => {
  * @created     20-04-2026
  */
 export default function Navigation() {
-  const { ScreenElement, popup, currentScreen, setCurrentScreen } = useNavigation();
+  const { ScreenElement, popup } = useNavigation();
   const { plants } = useUserData();
+  const {debugSettings} = useDebug()
 
   return (
     // <div className="min-h-screen grid grid-rows-[30vh_1fr_30vh] bg-light-green overflow-hidden">
@@ -71,7 +74,7 @@ export default function Navigation() {
         </ScreenCard>
       </div>
 
-      {/* <div cl  */}
+      {debugSettings.debug && <DebugMenu />}
       {/* top garden */}
       {/* <div className="relative  h-full">
                 <Garden
