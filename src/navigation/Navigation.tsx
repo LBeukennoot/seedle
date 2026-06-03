@@ -60,7 +60,6 @@ export default function Navigation() {
   const {debugSettings} = useDebug()
 
   return (
-    // <div className="min-h-screen grid grid-rows-[30vh_1fr_30vh] bg-light-green overflow-hidden">
     <div className="relative min-h-screen bg-light-green overflow-hidden">
       {popup && <Popup> {popup} </Popup>}
 
@@ -68,43 +67,12 @@ export default function Navigation() {
         <Garden plants={plants} />
       </div>
       <div className="absolute bottom-0 mb-4 w-full flex justify-center">
-        {/* <div>arrow</div> */}
         <ScreenCard>
           <ScreenElement />
         </ScreenCard>
       </div>
 
       {debugSettings.debug && <DebugMenu />}
-      {/* top garden */}
-      {/* <div className="relative  h-full">
-                <Garden
-                    gardenId="A"
-                    plants={plants}
-                />
-            </div> */}
-
-      {/* screens */}
-      {/* <div className="relative flex items-start inset-0 flex items-center justify-center">
-                <div className="max-w-xl w-full">
-                    <div className="absolute z-20 max-w-xl w-full mt-15 md:mt-0">
-                        <ScreenCard>
-                            <ScreenElement />
-                        </ScreenCard>
-                    </div>
-
-                    <div className="w-20 h-20 absolute top-0 -z-0 md:-ml-15">
-                        <TabList currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
-                    </div>
-                </div>
-            </div> */}
-
-      {/* bottom garden */}
-      {/* <div className="relative h-full">
-                <Garden
-                    gardenId="B"
-                    plants={plants}
-                />
-            </div> */}
     </div>
   );
 }

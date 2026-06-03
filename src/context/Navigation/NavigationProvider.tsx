@@ -16,7 +16,7 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
 
     const [currentScreen, setCurrentScreen] = useState<Screen>(DefaultScreen)
     const [panelExpanded, setPanelExpanded] = useState<boolean>(false)
-    const [popup, setPopup] = useState<Popup>(undefined)
+    const [popup, setPopup] = useState<Popup>()
 
     const { debugSettings } = useDebug()
 
