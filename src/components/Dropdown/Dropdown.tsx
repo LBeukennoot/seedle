@@ -1,6 +1,7 @@
 import type { DropdownOptions, DropdownProps } from './types';
 import { ArrowDownIcon } from '../Icons';
 import { MenuItem, Select } from '@mui/material';
+import { useState } from 'react';
 
 /**
  * @author      LBeukennoot for Seedle
@@ -12,6 +13,8 @@ import { MenuItem, Select } from '@mui/material';
  * @param disabled boolean | undefined
  */
 export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProps) => {
+  const [open, setOpen] = useState(false)
+
   return (
     <Select
       className={"bg-white border-6 border-blue rounded-full! px-4 text-xl! text-blue! " + (!disabled && "hover:cursor-pointer!")}
@@ -39,8 +42,12 @@ export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProp
           }
         }
       }}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      open={open}
       displayEmpty={false}
       value={selected}
+      onClick={() => setOpen(!open)}
       onChange={(e) => onSelect(e.target.value)}
       >
       {options.map((value: DropdownOptions) => {
