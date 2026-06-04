@@ -8,7 +8,7 @@ import { Button } from '../../components/Button'
  */
 export const ChangelogScreen = () => {
     return (
-        <div className="overflow-y-auto max-h-[25rem] rounded-b-[2.3rem] md:rounded-b-[1.4rem] text-blue font-lexend">
+        <div className="overflow-y-auto max-h-full pt-10 rounded-b-[2.3rem] md:rounded-b-[1.4rem] text-blue font-lexend">
             <h1 className="text-3xl mb-5">changelog</h1>
 
             <div className='mb-8'>
