@@ -1,5 +1,5 @@
 export type ButtonProps = {
-  label: string = button;
+  label: string;
   children: string | JSX.Element | JSX.Element[];
   onClick: () => void;
   className?: string;

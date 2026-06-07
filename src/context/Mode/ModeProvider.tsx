@@ -5,7 +5,7 @@ import { useDebug } from "../Debug";
 import { Mode } from "../../features/session/sessionTypes";
 
 /**
- * Providing currentScreen to all screen components
+ * Providing mode to all screen components
  * 
  * @author      LBeukennoot
  * @created     02-05-2025
@@ -17,11 +17,11 @@ export const ModeProvider = ({ children }: ModeProviderProps) => {
     const { debugSettings } = useDebug()
 
     useEffect(() => {
-        let debugModeString = debugSettings?.mode?.toUpperCase()
+        const debugModeString = debugSettings?.mode?.toUpperCase()
         if (!debugModeString) return
 
 
-        let debugMode = Mode[debugModeString as keyof typeof Mode]
+        const debugMode = Mode[debugModeString as keyof typeof Mode]
         if (!debugMode) return
 
         setMode(debugMode)

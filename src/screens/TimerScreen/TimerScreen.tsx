@@ -14,6 +14,7 @@ import type { TimerContextType } from '../../context/Timer/types';
 // import type { SessionContextType } from '../../context/Session/types';
 import { Modes } from '../../features/session/sessionModes';
 import type { SessionData } from '../../features/session/sessionTypes';
+import { useEffect } from 'react';
 
 /**
  * @author      LBeukennoot for Seedle
@@ -22,15 +23,15 @@ import type { SessionData } from '../../features/session/sessionTypes';
 export const TimerScreen = () => {
   const { mode, setMode } = useMode();
   const { getDisplayTime, start, pause, isTimerRunning }: TimerContextType = useTimer();
-//   const { sessionSettings, sessionTime }: SettingsContextType = useSettings();
-//   const {
-//     // toNextSession,
-//     // nextSession,
-//     // currentSession,
-//     // sessionsArray,
-//     // setCurrentSession,
-//     // sessionCount
-//   }: SessionContextType = useSession();
+  //   const { sessionSettings, sessionTime }: SettingsContextType = useSettings();
+  //   const {
+  //     // toNextSession,
+  //     // nextSession,
+  //     // currentSession,
+  //     // sessionsArray,
+  //     // setCurrentSession,
+  //     // sessionCount
+  //   }: SessionContextType = useSession();
 
   const options = Object.keys(Modes);
   // const options = Object.entries(Modes).map(([mode, data]) => ({
@@ -42,7 +43,7 @@ export const TimerScreen = () => {
   // const options: SessionData[] = Object.keys(Modes).map((key: string) => Modes[key])
 
   const handleChangeMode = (mode: SessionData) => {
-    setMode(mode);
+    setMode(mode); // TODO only change mode/time if user allows after warning prompt
   };
 
   // useEffect(() => {
@@ -58,44 +59,44 @@ export const TimerScreen = () => {
 
   return (
     <div className={'flex h-full items-center justify-around'}>
-    {/* <div className={'h-full flex items-center select-none font-lexend'}> */}
-      <Dropdown 
-        selected={mode} 
-        options={options.map((value: string) => { return {id: value, label: value.replace('_', ' ')}})} 
+      {/* <div className={'h-full flex items-center select-none font-lexend'}> */}
+      <Dropdown
+        selected={mode}
+        options={options.map((value: string) => {
+          return { id: value, label: value.replace('_', ' ') };
+        })}
         onSelect={handleChangeMode}
-       />
+      />
       {/* <Button label={'test'} onClick={() => {}}>
         focus
       </Button> */}
 
-      <Timer time={getDisplayTime()} className={"text-3xl xs:text-6xl"} />
+      <Timer time={getDisplayTime()} className={'text-3xl xs:text-6xl'} />
 
       {!isTimerRunning && (
         <Button
-        label={'start'}
-        onClick={() => {
-          start(mode);
-        }}
-        className={""}
-        >
-        {/* {!sessionSettings.autoAdvance && 'start'}
+          label={'start'}
+          onClick={() => {
+            start(mode);
+          }}
+          className={''}>
+          {/* {!sessionSettings.autoAdvance && 'start'}
         {sessionSettings.autoAdvance && <StartIcon className="fill-white" />} */}
-        <StartIcon className="fill-white" />
-      </Button>
+          <StartIcon className="fill-white" />
+        </Button>
       )}
 
       {isTimerRunning && (
         <Button
-        label={'pause'}
-        onClick={() => {
-          pause();
-        }}
-        className={""}
-        >
-        {/* {!sessionSettings.autoAdvance && 'start'}
+          label={'pause'}
+          onClick={() => {
+            pause();
+          }}
+          className={''}>
+          {/* {!sessionSettings.autoAdvance && 'start'}
         {sessionSettings.autoAdvance && <StartIcon className="fill-white" />} */}
-        <PauseIcon className="fill-white" />
-      </Button>
+          <PauseIcon className="fill-white" />
+        </Button>
       )}
 
       {/* <div className="hidden card:block">
