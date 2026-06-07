@@ -38,6 +38,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     return newTime;
   };
 
+  //TODO save time in localstorage if user closes tab unexpectedly (AND add warning when user closes tab when timer is still running)
   const [time, setTime] = useState(getDuration(mode));
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const endTimeRef = useRef<number | null>(null);

@@ -178,6 +178,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
 
   const createPlant = (data: Omit<Plant, 'id' | 'createdAt'>) => {
     const random = getRandomGardenAndPosition(plants);
+    // TODO let users choose a location
 
     const plant: Plant = {
       id: crypto.randomUUID(),
