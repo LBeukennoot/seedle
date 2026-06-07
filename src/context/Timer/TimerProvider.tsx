@@ -130,12 +130,12 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     setNextSession(sessionsArray[currentSession + 1]);
   }, [
     currentSession,
-    sessionSettings.autoStartFocus,
-    sessionSettings.autoStartRest,
+    // sessionSettings.autoStartFocus,
+    // sessionSettings.autoStartRest,
     sessionTime,
-    sessionsArray,
-    setMode,
-    setNextSession
+    // sessionsArray,
+    // setMode,
+    // setNextSession
   ]);
 
   const getDisplayTime = (): string => {
