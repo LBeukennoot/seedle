@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { TimerContext } from './TimerContext';
-import { useUserData } from '../UserData';
 import { SwitchModeWarningPopup } from '../../components/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup';
 import { Plants } from '../../components/PlantElement/types';
 import { RewardPopup } from '../../components/Popup/RewardPopup';
@@ -10,6 +9,7 @@ import { useSession } from '../Session';
 import { useNavigation } from '../Navigation';
 import { useMode } from '../Mode';
 import { Mode } from '../../features/session/sessionTypes';
+import { usePlantData } from '../PlantData';
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav');
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav');
@@ -25,7 +25,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const { sessionTime, sessionSettings } = useSettings();
   const { currentScreen, setPopup } = useNavigation();
   const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession();
-  const { createPlant } = useUserData();
+  const { createPlant } = usePlantData();
   // const { debugSettings }: DebugContextType = useDebug()
   // console.log(sessionTime)
 

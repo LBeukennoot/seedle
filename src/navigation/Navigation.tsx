@@ -1,11 +1,11 @@
 import { Popup } from '../components/Popup/Popup';
 import { Garden } from '../components/Garden/Garden';
-import { useUserData } from '../context/UserData';
 import { type Plant } from '../components/PlantElement/types';
 import { ScreenCard } from '../components/ScreenCard/ScreenCard';
 import { useNavigation } from '../context/Navigation';
 import { DebugMenu } from '../components/Debug/DebugMenu';
 import { useDebug } from '../context/Debug';
+import { usePlantData } from '../context/PlantData';
 
 const COLS = 10;
 const ROWS = 10;
@@ -56,7 +56,7 @@ export const getRandomGardenAndPosition = (plants: Plant[]) => {
  */
 export default function Navigation() {
   const { ScreenElement, popup } = useNavigation();
-  const { plants } = useUserData();
+  const { plants } = usePlantData();
   const {debugSettings} = useDebug()
 
   return (

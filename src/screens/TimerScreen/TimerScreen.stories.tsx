@@ -7,7 +7,7 @@ import { ModeProvider } from '../../context/Mode';
 import { SessionProvider } from '../../context/Session';
 import { TimerProvider } from '../../context/Timer';
 import { TimerScreen } from './TimerScreen';
-import { UserDataProvider } from '../../context/UserData';
+import { PlantDataProvider } from '../../context/PlantData';
 
 const meta = {
     component: TimerScreen,
@@ -28,11 +28,11 @@ const meta = {
                 <SettingsProvider>
                     <ModeProvider>
                         <SessionProvider>
-                            <UserDataProvider>
+                            <PlantDataProvider>
                                 <TimerProvider>
                                     <TimerScreen />
                                 </TimerProvider>
-                            </UserDataProvider>
+                            </PlantDataProvider>
                         </SessionProvider>
                     </ModeProvider>
                 </SettingsProvider>

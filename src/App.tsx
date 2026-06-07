@@ -1,11 +1,11 @@
 import Navigation from './navigation/Navigation';
-import { UserDataProvider } from './context/UserData';
 import { SettingsProvider } from './context/Settings';
 import { DebugProvider } from './context/Debug';
 import { NavigationProvider } from './context/Navigation';
 import { ModeProvider } from './context/Mode';
 import { SessionProvider } from './context/Session';
 import { TimerProvider } from './context/Timer';
+import { PlantDataProvider } from './context/PlantData';
 
 export default function App() {
   return (
@@ -15,11 +15,11 @@ export default function App() {
           <SettingsProvider>
             <ModeProvider>
               <SessionProvider>
-                <UserDataProvider>
+                <PlantDataProvider>
                   <TimerProvider>
                     <Navigation />
                   </TimerProvider>
-                </UserDataProvider>
+                </PlantDataProvider>
               </SessionProvider>
             </ModeProvider>
           </SettingsProvider>

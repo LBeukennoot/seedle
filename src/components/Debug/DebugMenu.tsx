@@ -1,11 +1,11 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, MenuItem, Select } from '@mui/material';
-import { useUserData } from '../../context/UserData';
 import { Plants, type Plant } from '../PlantElement/types';
 import { ArrowDownIcon } from '../Icons';
 import { useURLParams } from '../../utils/URLParams';
+import { usePlantData } from '../../context/PlantData';
 
 export const DebugMenu = () => {
-  const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants, tickPlants } = useUserData();
+  const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants, tickPlants } = usePlantData();
 
   const { getParam } = useURLParams();
   const selectedPlantID = getParam('plant');

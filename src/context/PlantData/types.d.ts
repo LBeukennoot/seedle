@@ -1,10 +1,10 @@
 import type { Plant } from "../../components/PlantElement/types"
 
-export type UserDataProviderProps = {
+export type PlantDataProviderProps = {
     children: string | JSX.Element | JSX.Element[]
 }
 
-export type UserDataContextType = {
+export type PlantDataContextType = {
     plants: Plant[]
     setPlants: () => void
     removeAllPlants: () => void

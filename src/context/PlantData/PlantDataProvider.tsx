@@ -1,10 +1,10 @@
 import { useEffect, useReducer } from 'react';
-import { UserDataContext } from './UserDataContext';
 import LocalStorage from '../../utils/LocalStorage';
-import type { UserDataContextType, UserDataProviderProps } from './types';
 import { type Plant } from '../../components/PlantElement/types';
 import { getRandomGardenAndPosition } from '../../navigation/Navigation';
 import { useDebug } from '../Debug';
+import type { PlantDataContextType, PlantDataProviderProps } from './types';
+import { PlantDataContext } from './PlantDataContext';
 
 const localStorage = new LocalStorage();
 
@@ -115,7 +115,7 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
    PROVIDER
 ------------------------------ */
 
-export const UserDataProvider = ({ children }: UserDataProviderProps) => {
+export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   // const [nextId, setNextId] = useLocalStorageState<number>("nextId", 0)
   const { debugSettings } = useDebug();
 
@@ -160,7 +160,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
 
   useEffect(() => {
     function handleEventListener() {
-      console.log('[UserDataProvider] sessionFocusComplete received');
+      console.log('[PlantDataProvider] sessionFocusComplete received');
 
       dispatch({ type: 'TICK' });
     }
@@ -214,7 +214,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     localStorage.setValue('plants', plants);
   };
 
-  const value: UserDataContextType = {
+  const value: PlantDataContextType = {
     plants,
     setPlants: () => {
       console.log('[setPlants] not yet implemented');
@@ -227,7 +227,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     tickPlants
   };
 
-  return <UserDataContext.Provider value={value}>{children}</UserDataContext.Provider>;
+  return <PlantDataContext.Provider value={value}>{children}</PlantDataContext.Provider>;
 };
 
 // import { useEffect, useState } from "react"
