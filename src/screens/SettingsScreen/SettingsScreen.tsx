@@ -42,7 +42,7 @@ export const SettingsScreen = () => {
             {Object.entries(sessionTime).map(([key, data]) => {
               const modeData = data as SessionData
               return (
-                <div>
+                <div key={key}>
                   <h3 className="text-lg">{key.replace('_', ' ')}</h3>
                   <Slider
                     min={5}
