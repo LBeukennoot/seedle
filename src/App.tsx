@@ -6,25 +6,28 @@ import { ModeProvider } from './context/Mode';
 import { SessionProvider } from './context/Session';
 import { TimerProvider } from './context/Timer';
 import { PlantDataProvider } from './context/PlantData';
+import { UserDataProvider } from './context/UserData/UserDataProvider';
 
 export default function App() {
   return (
-    <div>
+    <>
       <DebugProvider>
         <NavigationProvider>
           <SettingsProvider>
             <ModeProvider>
               <SessionProvider>
-                <PlantDataProvider>
-                  <TimerProvider>
-                    <Navigation />
-                  </TimerProvider>
-                </PlantDataProvider>
+                <UserDataProvider>
+                  <PlantDataProvider>
+                    <TimerProvider>
+                      <Navigation />
+                    </TimerProvider>
+                  </PlantDataProvider>
+                </UserDataProvider>
               </SessionProvider>
             </ModeProvider>
           </SettingsProvider>
         </NavigationProvider>
       </DebugProvider>
-    </div>
-  )
+    </>
+  );
 }

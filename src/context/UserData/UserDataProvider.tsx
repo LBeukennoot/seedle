@@ -1,29 +1,85 @@
-import type { UserDataContextType, UserDataProviderProps } from "./types";
-import { UserDataContext } from "./UserDataContext";
+import { useEffect, useState } from 'react';
+import { Experience, type UserData, type UserDataContextType, type UserDataProviderProps } from './types';
+import { UserDataContext } from './UserDataContext';
+import LocalStorage from '../../utils/LocalStorage';
+
+const localStorage = new LocalStorage();
 
 export const UserDataProvider = ({ children }: UserDataProviderProps) => {
+  const [userData, setUserData] = useState<UserData>({
+    growthPoints: 0,
+    experience: 0
+  });
 
-    //TODO saving props like growthPoints (points to grow plants), xp (points after fully growing plants, unlock new levels)  
-    //TODO save data immediately, even before user actions
+  useEffect(() => {
+    const stored = localStorage.getValue('userData');
 
-    // common, rare, unique, blessed, divine
+    if (stored) {
+      //   console.log(stored);
+    } else {
+      localStorage.setValue('userData', userData);
+    }
 
-    // chirary: common
-    // chamomile: rare
-    // fireweed: divine
-    // lavender: rare
+    // console.log(stored);
+  }, []);
 
-    const value: UserDataContextType = {
-        // time,
-        // getDisplayTime,
-        // start,
-        // pause,
-        // isTimerRunning
-    };
+  const addGrowthPoints = (amount: number = 1) => {
+    setUserData({ ...userData, growthPoints: userData.growthPoints + amount });
+  };
 
-    return (
-        <UserDataContext.Provider value={value}>
-            {children}
-        </UserDataContext.Provider>
-    );
+  const removeGrowthPoints = (amount: number = 1) => {
+    setUserData({ ...userData, growthPoints: userData.growthPoints - amount });
+  };
+
+  const addExperience = (amount: number = 1) => {
+    setUserData({ ...userData, experience: userData.experience + amount });
+  };
+
+  const removeExperience = (amount: number = 1) => {
+    setUserData({ ...userData, experience: userData.experience - amount });
+  };
+  //TODO save data immediately, even before user actions
+
+  // common, rare, unique, blessed, divine
+
+function getExperienceTier(xp: number): keyof typeof Experience {
+  const Tiers = Object.entries(Experience)
+    .filter(([key, value]) => typeof value === 'number') as [string, number][];
+
+  // Sort tiers from highest XP to lowest XP
+  Tiers.sort((a, b) => b[1] - a[1]);
+
+  // Find the first tier where the player's XP is >= the threshold
+  const matchedTier = Tiers.find(([key, value]) => xp >= value);
+
+  if (matchedTier) {
+    // Return the string key (e.g., "RARE")
+    return matchedTier[0] as keyof typeof Experience;
+  }
+
+  return 'COMMON';
+}
+
+//   console.log(getExperienceTier(41));
+  // chirary: common
+  // chamomile: rare
+  // fireweed: divine
+  // lavender: rare
+
+  const value: UserDataContextType = {
+    userData,
+    setUserData,
+    addGrowthPoints,
+    removeGrowthPoints,
+    addExperience,
+    removeExperience,
+    getExperienceTier
+    // time,
+    // getDisplayTime,
+    // start,
+    // pause,
+    // isTimerRunning
+  };
+
+  return <UserDataContext.Provider value={value}>{children}</UserDataContext.Provider>;
 };
