@@ -1,5 +1,6 @@
 export enum Screen {
     TIMER = 'timer',
     SETTINGS = 'settings',
-    CHANGELOG = 'changelog'
+    CHANGELOG = 'changelog',
+    PLANTS = 'plants',
 }

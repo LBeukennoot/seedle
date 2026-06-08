@@ -101,7 +101,16 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: transparent;
+}
 
+::-webkit-scrollbar-thumb {
+    background: var(--color-blue)!important;
+    border-radius: 100px;
+}
 
 /* .animated-element {
   animation-name: myAnimation;
