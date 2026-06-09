@@ -1,6 +1,5 @@
 import { useNavigation } from '../../context/Navigation';
 import type { Screen } from '../../navigation/Screen';
-import { ArrowDownIcon } from '../Icons';
 import { TabList } from '../TabList';
 import type { ScreenCardProps } from './types';
 
@@ -14,6 +13,9 @@ export const ScreenCard = ({ children, ...props }: ScreenCardProps) => {
             
         case "settings":
             return "h-120"
+            
+        case "plants":
+            return "h-150"
     
         default:
             return "h-120"
@@ -36,7 +38,7 @@ export const ScreenCard = ({ children, ...props }: ScreenCardProps) => {
           <ArrowDownIcon className={'stroke-dark-blue ' + (panelExpanded ? 'rotate-180' : '')} />
         </div> */}
       </div>
-      <div className={"bg-white mx-auto max-w-xl rounded-[3.5rem] max-h-120 px-10 py-2 transition-all duration-500 ease-in-out " + (getScreenHeight(currentScreen))}>
+      <div className={"bg-white mx-auto max-w-xl rounded-[3.5rem] max-h-150 px-10 py-2 transition-all duration-500 ease-in-out " + (getScreenHeight(currentScreen))}>
         {/* <div className="max-h-[25rem]"> */}
         {children}
         {/* <div className=""></div> */}
