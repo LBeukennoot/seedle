@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Experience, type UserData, type UserDataContextType, type UserDataProviderProps } from './types';
+import { Experience, Tiers, type UserData, type UserDataContextType, type UserDataProviderProps } from './types';
 import { UserDataContext } from './UserDataContext';
 import LocalStorage from '../../utils/LocalStorage';
 
@@ -42,7 +42,9 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
 
   // common, rare, unique, blessed, divine
 
-function getExperienceTier(xp: number): keyof typeof Experience {
+function getExperienceTier(xp: number) {
+  // const tiers = Object.entries(Tiers).find(([key, value]) => value.experienceThreshold >= xp)
+  // console.log(tiers)
   const Tiers = Object.entries(Experience)
     .filter(([key, value]) => typeof value === 'number') as [string, number][];
 
@@ -59,6 +61,9 @@ function getExperienceTier(xp: number): keyof typeof Experience {
 
   return 'COMMON';
 }
+
+getExperienceTier(0)
+getExperienceTier(3)
 
 //   console.log(getExperienceTier(41));
   // chirary: common

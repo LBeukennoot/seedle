@@ -133,8 +133,8 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
 
         return {
           ...rest,
-          x: random.x,
-          y: random.y
+          // x: random.x,
+          // y: random.y
         } as Plant;
       });
 

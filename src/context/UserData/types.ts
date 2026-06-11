@@ -13,11 +13,41 @@ export type UserDataProviderProps = {
 // }
 
 export enum Experience {
-  COMMON = 0,
-  RARE = 40,
-  UNIQUE = 90,
-  BLESSED = 150,
-  DIVINE = 200
+  COMMON = 'COMMON',
+  RARE = 'RARE',
+  UNIQUE = 'UNIQUE',
+  BLESSED = 'BLESSED',
+  DIVINE = 'DIVINE'
+}
+
+type TiersType = {
+  [tier: string]: {
+    experienceThreshold: number
+    color: string
+  }
+}
+
+export const Tiers: TiersType = {
+  [Experience.COMMON]: {
+    experienceThreshold: 0,
+    color: "#F3BACF"
+  },
+  [Experience.RARE]: {
+    experienceThreshold: 40,
+    color: "#FFDD80"
+  },
+  [Experience.UNIQUE]: {
+    experienceThreshold: 90,
+    color: "#FF8B72"
+  },
+  [Experience.BLESSED]: {
+    experienceThreshold: 150,
+    color: "#DB7CAD"
+  },
+  [Experience.DIVINE]: {
+    experienceThreshold: 200,
+    color: "#9C99F6"
+  },
 }
 
 export type UserData = {
