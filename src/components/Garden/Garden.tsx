@@ -1,4 +1,6 @@
 import { useDebug } from '../../context/Debug';
+import { usePlantData } from '../../context/PlantData';
+import { useUserData } from '../../context/UserData';
 import { useURLParams } from '../../utils/URLParams';
 import { PlantElement } from '../PlantElement';
 import type { Plant } from '../PlantElement/types';
@@ -9,19 +11,31 @@ type GardenProps = {
 };
 
 export const Garden = ({ plants }: GardenProps) => {
+  const { userData, editState, removeGrowthPoints } = useUserData();
+  const { growPlant } = usePlantData();
   const { debugSettings } = useDebug();
   const { getParam, setParam, appendParam } = useURLParams();
   const selectedPlantID = getParam('plant');
 
-  plants = plants.sort((p1, p2) => p1.y - p2.y)
+  plants = plants.sort((p1, p2) => p1.y - p2.y);
 
   return (
     <div>
       {plants.map((plant: Plant) => (
         <div
           key={plant.id}
-          className={"absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center animate-plantmove " + (selectedPlantID === plant.id && debugSettings.debug ? "border-2 border-white rounded-lg p-2" : "")}
+          className={
+            'absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center animate-plantmove ' +
+            (selectedPlantID === plant.id && debugSettings.debug ? 'border-2 border-white rounded-lg p-2' : '')
+          }
           onClick={() => {
+            if (userData.growthPoints > 0 && editState === 'GROW') {
+              growPlant(plant.id);
+              removeGrowthPoints(1)
+            }
+            // const customEvent = new CustomEvent('plantClicked', {detail: {plantId: plant.id}});
+            // window.dispatchEvent(customEvent);
+
             if (debugSettings.debug) {
               // const urlParams = new URLParams()
 

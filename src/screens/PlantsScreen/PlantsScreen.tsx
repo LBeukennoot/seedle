@@ -1,12 +1,15 @@
 import { Button } from '../../components/Button';
 import { ArrowDownIcon } from '../../components/Icons';
+import { useNavigation } from '../../context/Navigation';
 import { usePlantData } from '../../context/PlantData';
 import { useUserData } from '../../context/UserData';
 import { Tiers } from '../../context/UserData/types';
+import { Screen } from '../../navigation/Screen';
 
 export const PlantsScreen = () => {
-  const { userData, getExperienceTier } = useUserData();
+  const { userData, setEditState } = useUserData();
   const { plants } = usePlantData();
+  const {setCurrentScreen} = useNavigation()
   const plantsAmount = plants.filter((p) => p.x !== undefined).length;
   const unplantedPlants = plants.length !== plantsAmount;
 
@@ -42,7 +45,10 @@ export const PlantsScreen = () => {
             <div className="text-8xl">{userData.growthPoints}</div>
           </div>
           {userData.growthPoints > 0 && (
-            <Button label="add_plants" className="w-full mt-2" onClick={() => {}}>
+            <Button label="add_plants" className="w-full mt-2" onClick={() => {
+              setEditState('GROW');
+              setCurrentScreen(Screen.TIMER)
+            }}>
               <div className="flex whitespace-nowrap items-center justify-center gap-1 w-full">
                 <div className="text-base">grow plants</div>
                 <ArrowDownIcon className={'stroke-white -rotate-90'}></ArrowDownIcon>

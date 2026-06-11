@@ -10,7 +10,7 @@ export type PlantDataContextType = {
     removeAllPlants: () => void
     editPlant: (plantId: string, data: Record<Plant>) => void
     createPlant: (data) => void
-    removePlant: (id) => void
+    removePlant: (id: string) => void
     savePlants: () => void
-    tickPlants: () => void
+    growPlant: (id: string) => void
 }

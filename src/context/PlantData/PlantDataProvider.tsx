@@ -17,7 +17,7 @@ type PlantAction =
   | { type: 'EDIT'; data: Plant }
   | { type: 'REMOVEALL' }
   | { type: 'REMOVE'; id: string | number }
-  | { type: 'TICK' };
+  | { type: 'TICK'; id: string };
 
 /* -----------------------------
    REDUCER
@@ -41,22 +41,6 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
 
         return plant;
       });
-    // state.forEach(plant => {
-    //   if(plant.id === action.data.id) {
-    //     return {...plant, ...action.data}
-    //   }
-    // })
-    // break;
-    // const selectedPlant = state.findIndex(plant => plant.id === action.data.id)
-    // // console.log(selectedPlant)
-    // state[selectedPlant] = action.data
-    // console.log(state)
-    // return state
-    // return state.filter((plant) => {
-    //   if (plant.id === action.id) {
-    //     return { ...action, ...plant };
-    //   }
-    // });
 
     case 'REMOVEALL':
       return [];
@@ -69,6 +53,7 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
         .filter((p) => {
           // const isOld = p.createdAt < now - 30 * 1000 // 30 seconds
           const isOld = p.createdAt < now - p.maxAge * 24 * 60 * 60 * 1000; // 4 days (or maxAge)
+          // const selectedPlant = p.id === action.id;
 
           const isFullyGrown = p.stage === p.maxStage;
 
@@ -76,7 +61,7 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
           return !(isOld && isFullyGrown);
         })
         .map((p) => {
-          if (p.stage < p.maxStage) {
+          if (p.id === action.id && p.stage < p.maxStage) {
             const newStage = p.stage + 1;
 
             return {
@@ -132,7 +117,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
         const random = getRandomGardenAndPosition(stored);
 
         return {
-          ...rest,
+          ...rest
           // x: random.x,
           // y: random.y
         } as Plant;
@@ -148,29 +133,9 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
        PERSISTENCE
     ------------------------------ */
 
-  useEffect(() => {
-    if (!debugSettings.debug) {
-      savePlants();
-    } else console.log("Debug is enabled, so plants won't be saved.");
-  }, [plants, debugSettings]);
-
   /* -----------------------------
        EVENT SYSTEM
     ------------------------------ */
-
-  useEffect(() => {
-    function handleEventListener() {
-      console.log('[PlantDataProvider] sessionFocusComplete received');
-
-      dispatch({ type: 'TICK' });
-    }
-
-    window.addEventListener('sessionFocusComplete', handleEventListener);
-
-    return () => {
-      window.removeEventListener('sessionFocusComplete', handleEventListener);
-    };
-  }, []);
 
   /* -----------------------------
        ACTIONS
@@ -199,9 +164,9 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     return plant;
   };
 
-  const tickPlants = () => {
-    dispatch({type: 'TICK'})
-  }
+  const growPlant = (plantId: string) => {
+    dispatch({ type: 'TICK', id: plantId });
+  };
 
   const editPlant = (plantId: string, data: Plant) => {
     dispatch({ type: 'EDIT', data });
@@ -215,6 +180,27 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     localStorage.setValue('plants', plants);
   };
 
+  useEffect(() => {
+    if (!debugSettings.debug) {
+      savePlants();
+    } else console.log("Debug is enabled, so plants won't be saved.");
+  }, [plants, debugSettings]);
+
+  // useEffect(() => {
+  //   function handleEventListener(e) {
+  //     console.log('[PlantDataProvider] plantClicked received');
+
+  //     tickPlant(e.detail.plantId);
+  //     // dispatch({ type: 'TICK' });
+  //   }
+
+  //   window.addEventListener('plantClicked', handleEventListener);
+
+  //   return () => {
+  //     window.removeEventListener('plantClicked', handleEventListener);
+  //   };
+  // }, []);
+
   const value: PlantDataContextType = {
     plants,
     setPlants: () => {
@@ -225,7 +211,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     createPlant,
     removePlant,
     savePlants,
-    tickPlants
+    growPlant
   };
 
   return <PlantDataContext.Provider value={value}>{children}</PlantDataContext.Provider>;

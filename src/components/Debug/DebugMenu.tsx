@@ -5,7 +5,7 @@ import { useURLParams } from '../../utils/URLParams';
 import { usePlantData } from '../../context/PlantData';
 
 export const DebugMenu = () => {
-  const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants, tickPlants } = usePlantData();
+  const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants } = usePlantData();
 
   const { getParam } = useURLParams();
   const selectedPlantID = getParam('plant');
@@ -37,9 +37,9 @@ export const DebugMenu = () => {
             </Select>
           </div>
 
-          <Button className="bg-white! w-full" onClick={() => tickPlants()}>
+          {/* <Button className="bg-white! w-full" onClick={() => tickPlants()}>
             Grow plants
-          </Button>
+          </Button> */}
 
           <Button className="bg-white! w-full" onClick={() => removeAllPlants()}>
             Clear plants

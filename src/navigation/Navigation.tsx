@@ -6,6 +6,7 @@ import { useNavigation } from '../context/Navigation';
 import { DebugMenu } from '../components/Debug/DebugMenu';
 import { useDebug } from '../context/Debug';
 import { usePlantData } from '../context/PlantData';
+import { useUserData } from '../context/UserData';
 
 const COLS = 10;
 const ROWS = 10;
@@ -57,10 +58,26 @@ export const getRandomGardenAndPosition = (plants: Plant[]) => {
 export default function Navigation() {
   const { ScreenElement, popup } = useNavigation();
   const { plants } = usePlantData();
-  const {debugSettings} = useDebug()
+  const { userData, editState, setEditState } = useUserData();
+  const { debugSettings } = useDebug();
 
   return (
     <div className="relative min-h-screen bg-light-green overflow-hidden">
+      {editState !== 'OFF' && (
+        <>
+          <div className="absolute w-full h-full p-1">
+            <div className="w-full h-full rounded-lg border-6 border-[#FF8B72]"></div>
+          </div>
+          <div className='absolute w-full flex justify-center my-3.5 z-50'>
+            <div className='bg-[#FF8B72] px-4 py-2 rounded-full text-white font-lexend flex align-center gap-5'>
+              <div className='py-1'>{userData.growthPoints} grow points</div>
+              <div className='px-3 py-1 bg-white rounded-full text-[#FF8B72] hover:cursor-pointer' onClick={() => {
+                setEditState('OFF')
+              }}>stop growing</div>
+            </div>
+          </div>
+        </>
+      )}
       {popup && <Popup> {popup} </Popup>}
 
       <div className="h-[80vh]">

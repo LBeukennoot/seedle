@@ -10,6 +10,7 @@ import { useNavigation } from '../Navigation';
 import { useMode } from '../Mode';
 import { Mode } from '../../features/session/sessionTypes';
 import { usePlantData } from '../PlantData';
+import { useUserData } from '../UserData';
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav');
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav');
@@ -26,6 +27,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const { currentScreen, setPopup } = useNavigation();
   const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession();
   const { createPlant } = usePlantData();
+  const { addGrowthPoints } = useUserData();
   // const { debugSettings }: DebugContextType = useDebug()
   // console.log(sessionTime)
 
@@ -133,7 +135,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     currentSession,
     // sessionSettings.autoStartFocus,
     // sessionSettings.autoStartRest,
-    sessionTime,
+    sessionTime
     // sessionsArray,
     // setMode,
     // setNextSession
@@ -180,8 +182,9 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     }
 
     if (mode === Mode.FOCUS) {
-      const customEvent = new Event('sessionFocusComplete');
-      window.dispatchEvent(customEvent);
+      addGrowthPoints(2)
+    //   const customEvent = new Event('sessionFocusComplete');
+    //   window.dispatchEvent(customEvent);
     }
 
     if (sessionSettings.autoAdvance) {
