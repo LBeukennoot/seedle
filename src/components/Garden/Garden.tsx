@@ -1,10 +1,19 @@
 import { usePlantData } from '../../context/PlantData';
 import { PlantElement } from '../PlantElement';
+import type { Plant } from '../PlantElement/types';
 
-// type GardenProps = {
-//   // gardenId: string
-//   plants: Plant[];
-// };
+const _Plant = ({x, y, plant}: {x: number, y: number, plant: Plant}) => {
+  return (
+    <div
+      key={`${x},${y}`}
+      className="relative max-h-fit h-full flex justify-center"
+      style={{ transform: plant.mirrored ? 'scaleX(-1)' : '' }}>
+      <div className="absolute w-16 h-full animate-plantmove" style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}>
+        <PlantElement plant={plant.name} stage={plant.stage} className={'h-full w-full'} />
+      </div>
+    </div>
+  );
+};
 
 export const Garden = () => {
   // const { userData, editState, removeGrowthPoints } = useUserData();
@@ -13,6 +22,7 @@ export const Garden = () => {
   // const { getParam, setParam, appendParam } = useURLParams();
   // const selectedPlantID = getParam('plant');
 
+  //TODO sort plants to make sure higher y-values are displayed on top
   // plants = plants.sort((p1, p2) => p1.y - p2.y);
 
   // Create a single row: [1, 2, 3]
@@ -21,11 +31,8 @@ export const Garden = () => {
 
   const createRow = () => Array.from({ length: COLS }, (_, i) => i - 1 + 1);
 
-  // Create the final grid of 2 rows
   const coordinateArray = Array.from({ length: ROWS }, createRow);
 
-  // console.log(coordinateArray);
-  // Output: [[1, 2, 3], [1, 2, 3]]
 
   return (
     // <div>
@@ -36,17 +43,13 @@ export const Garden = () => {
 
           const plant = plants.find((p) => p.x === x && p.y === y);
 
+          //TODO make plant clickable
+          //TODO make slot hoverable (only if in planting mode)
+          //TODO make plant hoverable (only if in growing mode)
           return (
             <>
               {plant && (
-                <div
-                  key={`${x},${y}`}
-                  className="relative max-h-fit h-full flex justify-center"
-                  style={{ transform: plant.mirrored ? 'scaleX(-1)' : '' }}>
-                  <div className="absolute w-16 h-full animate-plantmove" style={{animationDelay: `${(x * 1.5 + y) / 20}s`}}>
-                    <PlantElement plant={plant.name} stage={plant.stage} className={'h-full w-full'} />
-                  </div>
-                </div>
+                <_Plant x={x} y={y} plant={plant} />
               )}
 
               {!plant && (

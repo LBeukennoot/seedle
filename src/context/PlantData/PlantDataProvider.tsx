@@ -1,23 +1,39 @@
 import { useEffect, useReducer } from 'react';
 import LocalStorage from '../../utils/LocalStorage';
 import { type Plant } from '../../components/PlantElement/types';
-import { getRandomGardenAndPosition } from '../../navigation/Navigation';
 import { useDebug } from '../Debug';
-import type { PlantDataContextType, PlantDataProviderProps } from './types';
+import { COLS, ROWS, type PlantAction, type PlantDataContextType, type PlantDataProviderProps } from './types';
 import { PlantDataContext } from './PlantDataContext';
 
 const localStorage = new LocalStorage();
+
+const generateGridPositions = (cols: number, rows: number) => {
+  const positions = [];
+
+  for (let x = 0; x < cols; x++) {
+    for (let y = 0; y < rows; y++) {
+      positions.push({
+        x: (x * 10) / cols,
+        y: (y * 10) / rows
+      });
+    }
+  }
+
+  return positions;
+};
+
+const getFreePositions = (plants: Plant[], cols: number, rows: number) => {
+  // const gardenPlants = plants.filter((p) => p.gardenId === gardenId);
+  const all = generateGridPositions(cols, rows);
+
+  return all.filter((pos) => !plants.some((p) => p.x === pos.x && p.y === pos.y));
+};
 
 /* -----------------------------
    TYPES
 ------------------------------ */
 
-type PlantAction =
-  | { type: 'CREATE'; plant: Plant }
-  | { type: 'EDIT'; data: Plant }
-  | { type: 'REMOVEALL' }
-  | { type: 'REMOVE'; id: string | number }
-  | { type: 'TICK'; id: string };
+
 
 /* -----------------------------
    REDUCER
@@ -107,19 +123,34 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   const [plants, dispatch] = useReducer(plantReducer, [], () => {
     const stored = localStorage.getValue<Plant[]>('plants');
 
+    // updating old data where gardenId still exists, removing the element from data
     if (stored && stored.length > 0 && (stored[0] as Record<string, unknown>).gardenId) {
       const cleanedPlants = stored.map((p) => {
-        // 1. Cast to Record so TS allows you to see 'gardenId'
-        // 2. Use destructuring to pull gardenId out, and collect the 'rest'
-        const { gardenId, ...rest } = p as Record<string, unknown>;
 
-        // 3. Return the rest of the object cast back to your clean Plant type
-        const random = getRandomGardenAndPosition(stored);
+        const { gardenId, ...rest } = p as Record<string, unknown>;
+        console.log(`[PlantDataProvider] removing gardenId (${gardenId}) from plants`)
 
         return {
-          ...rest
-          // x: random.x,
-          // y: random.y
+          ...rest,
+        } as Plant;
+      });
+
+      return cleanedPlants;
+    }
+
+    // updating old data where x and y are floats (0.05) and updating them with new valid garden positions
+    if (stored && stored.length > 0 && (stored[0] as Record<string, unknown>).x % 1 !== 0) {
+      const cleanedPlants = stored.map((p) => {
+
+        const {...rest } = p as Record<string, unknown>;
+
+        const freePositions = getFreePositions(stored, COLS, ROWS);
+        const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)]
+
+        return {
+          ...rest,
+          x: randomFreePosition.x,
+          y: randomFreePosition.y
         } as Plant;
       });
 
@@ -128,6 +159,8 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
 
     return (stored as Plant[]) ?? [];
   });
+
+  // console.log(plants)
 
   /* -----------------------------
        PERSISTENCE
@@ -142,7 +175,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     ------------------------------ */
 
   const createPlant = (data: Omit<Plant, 'id' | 'createdAt'>) => {
-    const random = getRandomGardenAndPosition(plants);
+    const random = getFreePositions(plants, COLS, ROWS);
     // TODO let users choose a location
 
     const plant: Plant = {
@@ -168,7 +201,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     dispatch({ type: 'TICK', id: plantId });
   };
 
-  const editPlant = (plantId: string, data: Plant) => {
+  const editPlant = (data: Plant) => {
     dispatch({ type: 'EDIT', data });
   };
 
