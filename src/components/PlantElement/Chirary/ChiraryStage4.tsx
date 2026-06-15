@@ -1,8 +1,9 @@
 import { Icon } from "../../Icons/Icon"
+import type { IndividualPlantStageProps } from "../types"
 
-export const ChiraryStage4 = ({ size }: { size: number }) => {
+export const ChiraryStage4 = ({ className }: IndividualPlantStageProps) => {
     return (
-        <Icon className="h-20" size={size} viewBox="0 0 208 208">
+        <Icon className={className} viewBox="0 0 208 208">
             <path
                 d="M67 66C77.5 71 87 83.5 96 109.5C105 135.5 104 182.5 104 208"
                 stroke="#668E5A"

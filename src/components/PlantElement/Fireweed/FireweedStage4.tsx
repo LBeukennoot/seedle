@@ -1,8 +1,9 @@
 import { Icon } from "../../Icons/Icon"
+import type { IndividualPlantStageProps } from "../types"
 
-export const FireweedStage4 = ({ size }: { size: number }) => {
+export const FireweedStage4 = ({ className }: IndividualPlantStageProps) => {
     return (
-        <Icon className="h-20" size={size} viewBox="0 0 208 208">
+        <Icon className={className} viewBox="0 0 208 208">
             <path
                 d="M67.5 78.5C102 114 113.5 146 113.5 208"
                 stroke="#668E5A"
