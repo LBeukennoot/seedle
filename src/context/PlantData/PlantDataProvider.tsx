@@ -23,17 +23,10 @@ const generateGridPositions = (cols: number, rows: number) => {
 };
 
 const getFreePositions = (plants: Plant[], cols: number, rows: number) => {
-  // const gardenPlants = plants.filter((p) => p.gardenId === gardenId);
   const all = generateGridPositions(cols, rows);
 
   return all.filter((pos) => !plants.some((p) => p.x === pos.x && p.y === pos.y));
 };
-
-/* -----------------------------
-   TYPES
------------------------------- */
-
-
 
 /* -----------------------------
    REDUCER
@@ -66,14 +59,12 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
 
     case 'TICK':
       return state
+      //searching plants that have o lower stage than maxStage
         .filter((p) => {
-          // const isOld = p.createdAt < now - 30 * 1000 // 30 seconds
           const isOld = p.createdAt < now - p.maxAge * 24 * 60 * 60 * 1000; // 4 days (or maxAge)
-          // const selectedPlant = p.id === action.id;
 
           const isFullyGrown = p.stage === p.maxStage;
 
-          // ❗ remove ONLY if BOTH conditions are true
           return !(isOld && isFullyGrown);
         })
         .map((p) => {

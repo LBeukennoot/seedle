@@ -1,4 +1,5 @@
 import { usePlantData } from '../../context/PlantData';
+import { COLS, ROWS } from '../../context/PlantData/types';
 import { PlantElement } from '../PlantElement';
 import type { Plant } from '../PlantElement/types';
 
@@ -8,7 +9,7 @@ const _Plant = ({x, y, plant}: {x: number, y: number, plant: Plant}) => {
       key={`${x},${y}`}
       className="relative max-h-fit h-full flex justify-center"
       style={{ transform: plant.mirrored ? 'scaleX(-1)' : '' }}>
-      <div className="absolute w-16 h-full animate-plantmove" style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}>
+      <div className="absolute w-20 h-20 animate-plantmove" style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}>
         <PlantElement plant={plant.name} stage={plant.stage} className={'h-full w-full'} />
       </div>
     </div>
@@ -26,9 +27,6 @@ export const Garden = () => {
   // plants = plants.sort((p1, p2) => p1.y - p2.y);
 
   // Create a single row: [1, 2, 3]
-  const COLS = 10;
-  const ROWS = 10;
-
   const createRow = () => Array.from({ length: COLS }, (_, i) => i - 1 + 1);
 
   const coordinateArray = Array.from({ length: ROWS }, createRow);

@@ -55,8 +55,9 @@ export default function Navigation() {
       )}
       {popup && <Popup> {popup} </Popup>}
 
-      <div className="h-[80vh]">
+      <div className="grid grid-rows-[1fr_16rem] h-screen">
         <Garden/>
+        <div></div>
       </div>
       <div className="absolute bottom-0 mb-4 w-full flex justify-center">
         <ScreenCard>
