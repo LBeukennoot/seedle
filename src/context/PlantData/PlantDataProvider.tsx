@@ -1,9 +1,10 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import LocalStorage from '../../utils/LocalStorage';
 import { type Plant } from '../../components/PlantElement/types';
 import { useDebug } from '../Debug';
 import { COLS, ROWS, type PlantAction, type PlantDataContextType, type PlantDataProviderProps } from './types';
 import { PlantDataContext } from './PlantDataContext';
+import { useUserData } from '../UserData';
 
 const localStorage = new LocalStorage();
 
@@ -58,28 +59,30 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
       return state.filter((p) => p.id !== action.id);
 
     case 'TICK':
-      return state
-      //searching plants that have o lower stage than maxStage
-        .filter((p) => {
-          const isOld = p.createdAt < now - p.maxAge * 24 * 60 * 60 * 1000; // 4 days (or maxAge)
+      return (
+        state
+          //searching plants that have o lower stage than maxStage
+          .filter((p) => {
+            const isOld = p.createdAt < now - p.maxAge * 24 * 60 * 60 * 1000; // 4 days (or maxAge)
 
-          const isFullyGrown = p.stage === p.maxStage;
+            const isFullyGrown = p.stage === p.maxStage;
 
-          return !(isOld && isFullyGrown);
-        })
-        .map((p) => {
-          if (p.id === action.id && p.stage < p.maxStage) {
-            const newStage = p.stage + 1;
+            return !(isOld && isFullyGrown);
+          })
+          .map((p) => {
+            if (p.id === action.id && p.stage < p.maxStage) {
+              const newStage = p.stage + 1;
 
-            return {
-              ...p,
-              stage: newStage,
-              grownAt: newStage === p.maxStage ? now : p.grownAt
-            };
-          }
+              return {
+                ...p,
+                stage: newStage,
+                grownAt: newStage === p.maxStage ? now : p.grownAt
+              };
+            }
 
-          return p;
-        });
+            return p;
+          })
+      );
 
     default:
       return state;
@@ -110,6 +113,9 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
 export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   // const [nextId, setNextId] = useLocalStorageState<number>("nextId", 0)
   const { debugSettings } = useDebug();
+  const { editState, setEditState } = useUserData();
+
+  const [plantables, setPlantables] = useState<Plant[] | undefined>(undefined);
 
   const [plants, dispatch] = useReducer(plantReducer, [], () => {
     const stored = localStorage.getValue<Plant[]>('plants');
@@ -117,12 +123,11 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     // updating old data where gardenId still exists, removing the element from data
     if (stored && stored.length > 0 && (stored[0] as Record<string, unknown>).gardenId) {
       const cleanedPlants = stored.map((p) => {
-
         const { gardenId, ...rest } = p as Record<string, unknown>;
-        console.log(`[PlantDataProvider] removing gardenId (${gardenId}) from plants`)
+        console.log(`[PlantDataProvider] removing gardenId (${gardenId}) from plants`);
 
         return {
-          ...rest,
+          ...rest
         } as Plant;
       });
 
@@ -132,11 +137,10 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     // updating old data where x and y are floats (0.05) and updating them with new valid garden positions
     if (stored && stored.length > 0 && (stored[0] as Record<string, unknown>).x % 1 !== 0) {
       const cleanedPlants = stored.map((p) => {
-
-        const {...rest } = p as Record<string, unknown>;
+        const { ...rest } = p as Record<string, unknown>;
 
         const freePositions = getFreePositions(stored, COLS, ROWS);
-        const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)]
+        const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)];
 
         return {
           ...rest,
@@ -165,21 +169,25 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
        ACTIONS
     ------------------------------ */
 
-  const createPlant = (data: Omit<Plant, 'id' | 'createdAt'>) => {
-    const random = getFreePositions(plants, COLS, ROWS);
+  const createPlant = (
+    data: Omit<Plant, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'stage' | 'maxStage' | 'mirrored'>
+  ) => {
+    // const random = getFreePositions(plants, COLS, ROWS);
     // TODO let users choose a location
 
     const plant: Plant = {
       id: crypto.randomUUID(),
       // gardenId: random.gardenId,
-      x: random.x,
-      y: random.y,
+      x: undefined,
+      y: undefined,
+      // x: random.x,
+      // y: random.y,
       size: data.size,
       name: data.name,
       stage: data.stage ?? 1,
       maxStage: data.maxStage ?? 4,
       createdAt: Date.now(),
-      maxAge: data.maxAge,
+      maxAge: undefined,
       mirrored: Math.random() < 0.5
     };
 
@@ -193,6 +201,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   };
 
   const editPlant = (data: Plant) => {
+    console.log(data);
     dispatch({ type: 'EDIT', data });
   };
 
@@ -209,6 +218,25 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
       savePlants();
     } else console.log("Debug is enabled, so plants won't be saved.");
   }, [plants, debugSettings]);
+
+  useEffect(() => {
+    if (editState === 'PLANT') {
+      setPlantables(plants.filter((p) => p.x === undefined || p.y === undefined));
+      // if (plantables === undefined) {
+      //   console.log('nothing to grow anymore');
+      // }
+    }
+
+    if (editState !== 'PLANT') {
+      setPlantables(undefined);
+    }
+  }, [editState, plants]);
+
+  useEffect(() => {
+    if (plantables && plantables[0] === undefined) {
+      setEditState('OFF');
+    }
+  }, [plantables]);
 
   // useEffect(() => {
   //   function handleEventListener(e) {
@@ -235,7 +263,9 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     createPlant,
     removePlant,
     savePlants,
-    growPlant
+    growPlant,
+    plantables,
+    setPlantables
   };
 
   return <PlantDataContext.Provider value={value}>{children}</PlantDataContext.Provider>;

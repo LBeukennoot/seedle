@@ -66,7 +66,7 @@ export const DebugMenu = () => {
                 className="bg-white!"
                 onClick={() =>
                   checkNewStageValue(selectedPlant.stage - 1, 1, selectedPlant.maxStage) &&
-                  editPlant(selectedPlant.id, { ...selectedPlant, stage: selectedPlant.stage - 1 })
+                  editPlant({ ...selectedPlant, stage: selectedPlant.stage - 1 })
                 }>
                 -
               </Button>
@@ -75,7 +75,7 @@ export const DebugMenu = () => {
                 className="bg-white!"
                 onClick={() =>
                   checkNewStageValue(selectedPlant.stage + 1, 1, selectedPlant.maxStage) &&
-                  editPlant(selectedPlant.id, { ...selectedPlant, stage: selectedPlant.stage + 1 })
+                  editPlant({ ...selectedPlant, stage: selectedPlant.stage + 1 })
                 }>
                 +
               </Button>
@@ -83,7 +83,7 @@ export const DebugMenu = () => {
             <Select
               className="bg-white w-full"
               value={selectedPlant.name}
-              onChange={(e) => editPlant(selectedPlant.id, { ...selectedPlant, name: e.target.value })}>
+              onChange={(e) => editPlant({ ...selectedPlant, name: e.target.value })}>
               {Object.values(Plants).map((value: string) => {
                 return <MenuItem value={value}>{value}</MenuItem>;
               })}

@@ -164,17 +164,16 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
       const plantValues = Object.values(Plants);
       const randomPlant = plantValues[Math.floor(Math.random() * plantValues.length)];
 
+      createPlant({
+        size: 0.05,
+        name: randomPlant
+      });
+
       setPopup(
         <RewardPopup
           reward={randomPlant}
           title={mode === Mode.FOCUS ? 'session complete!' : 'you completed a whole cycle!'}
           claim={() => {
-            console.log('creating new plant!');
-
-            createPlant({
-              size: 0.05,
-              name: randomPlant
-            });
             setPopup(undefined);
           }}
         />
@@ -182,9 +181,9 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     }
 
     if (mode === Mode.FOCUS) {
-      addGrowthPoints(2)
-    //   const customEvent = new Event('sessionFocusComplete');
-    //   window.dispatchEvent(customEvent);
+      addGrowthPoints(2);
+      //   const customEvent = new Event('sessionFocusComplete');
+      //   window.dispatchEvent(customEvent);
     }
 
     if (sessionSettings.autoAdvance) {

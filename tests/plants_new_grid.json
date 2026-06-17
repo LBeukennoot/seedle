@@ -12,12 +12,22 @@
         "grownAt": 1778141271934
     },
     {
-        "id": "2b734483-1257-4a1d-a701-c7fd3bda3ec2",
+        "id": "6eadfae4-0697-40de-968a-64db61267a54",
         "x": 7,
         "y": 8,
         "size": 0.05,
         "name": "CHAMOMILE",
         "stage": 4,
+        "maxStage": 4,
+        "createdAt": 1778072703497,
+        "mirrored": true,
+        "grownAt": 1778141271934
+    },
+    {
+        "id": "781ec651-8388-4986-989c-a97280d0cf3e",
+        "size": 0.05,
+        "name": "FIREWEED",
+        "stage": 1,
         "maxStage": 4,
         "createdAt": 1778072703497,
         "mirrored": true,

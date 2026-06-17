@@ -1,14 +1,18 @@
+import { useDebug } from '../../context/Debug';
 import { usePlantData } from '../../context/PlantData';
 import { COLS, ROWS } from '../../context/PlantData/types';
+import { useUserData } from '../../context/UserData';
+import { useURLParams } from '../../utils/URLParams';
 import { PlantElement } from '../PlantElement';
 import type { Plant } from '../PlantElement/types';
 
-const _Plant = ({x, y, plant}: {x: number, y: number, plant: Plant}) => {
+const _Plant = ({ x, y, plant, onClick }: { x: number; y: number; plant: Plant; onClick: () => void }) => {
   return (
     <div
       key={`${x},${y}`}
       className="relative max-h-fit h-full flex justify-center"
-      style={{ transform: plant.mirrored ? 'scaleX(-1)' : '' }}>
+      style={{ transform: plant && plant.mirrored ? 'scaleX(-1)' : '' }}
+      onClick={onClick}>
       <div className="absolute w-20 h-20 animate-plantmove" style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}>
         <PlantElement plant={plant.name} stage={plant.stage} className={'h-full w-full'} />
       </div>
@@ -16,21 +20,23 @@ const _Plant = ({x, y, plant}: {x: number, y: number, plant: Plant}) => {
   );
 };
 
+const createRow = () => Array.from({ length: COLS }, (_, i) => i - 1 + 1);
+
+const coordinateArray = Array.from({ length: ROWS }, createRow);
+
 export const Garden = () => {
-  // const { userData, editState, removeGrowthPoints } = useUserData();
-  const { plants } = usePlantData();
-  // const { debugSettings } = useDebug();
-  // const { getParam, setParam, appendParam } = useURLParams();
+  const { userData, editState, removeGrowthPoints } = useUserData();
+  const { plants, plantables, growPlant, editPlant } = usePlantData();
+  const { debugSettings } = useDebug();
+  const { getParam, setParam, appendParam } = useURLParams();
+
+
   // const selectedPlantID = getParam('plant');
 
   //TODO sort plants to make sure higher y-values are displayed on top
   // plants = plants.sort((p1, p2) => p1.y - p2.y);
 
   // Create a single row: [1, 2, 3]
-  const createRow = () => Array.from({ length: COLS }, (_, i) => i - 1 + 1);
-
-  const coordinateArray = Array.from({ length: ROWS }, createRow);
-
 
   return (
     // <div>
@@ -39,20 +45,62 @@ export const Garden = () => {
         return arr.map((y) => {
           // console.log(x,y)
 
-          const plant = plants.find((p) => p.x === x && p.y === y);
+          const plant: Plant | undefined = plants.find((p) => p.x === x && p.y === y);
 
-          //TODO make plant clickable
-          //TODO make slot hoverable (only if in planting mode)
-          //TODO make plant hoverable (only if in growing mode)
+          // console.log(plant)
+          // if(!plant) return
+
+          // console.log(plant.name)
+
+          // TODO make slot clickable (so plant can be planted)
           return (
             <>
               {plant && (
-                <_Plant x={x} y={y} plant={plant} />
+                <_Plant
+                  x={x}
+                  y={y}
+                  plant={plant}
+                  onClick={() => {
+                    if (userData.growthPoints > 0 && editState === 'GROW') {
+                      growPlant(plant.id);
+                      removeGrowthPoints(1);
+                    }
+
+                    // const customEvent = new CustomEvent('plantClicked', {detail: {plantId: plant.id}});
+                    // window.dispatchEvent(customEvent);
+
+                    if (debugSettings.debug) {
+                      // const urlParams = new URLParams()
+
+                      const param = getParam('plant');
+
+                      if (param) {
+                        setParam('plant', plant.id);
+                      } else {
+                        appendParam('plant', plant.id);
+                      }
+
+                      const url = new URL(window.location.href);
+                      url.searchParams.set('plant', plant.id);
+                      window.history.pushState({}, '', url.search);
+                    }
+                  }}
+                />
               )}
 
               {!plant && (
                 <>
-                  <div key={`${x},${y}`} className="w-full h-full"></div>
+                  <div
+                    key={`${x},${y}`}
+                    className="w-full h-full opacity-0 hover:opacity-50"
+                    onClick={() => {
+                      if (editState === 'PLANT' && plantables) {
+                        // console.log({ ...plantables[0], x, y } as Plant)
+                        editPlant({ ...plantables[0], x, y } as Plant);
+                      }
+                    }}>
+                    {plantables && plantables[0] && <_Plant x={x} y={y} plant={plantables[0]} onClick={() => {}} />}
+                  </div>
                 </>
               )}
             </>

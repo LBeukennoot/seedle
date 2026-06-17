@@ -32,7 +32,7 @@ import { useUserData } from '../context/UserData';
  */
 export default function Navigation() {
   const { ScreenElement, popup } = useNavigation();
-  const { plants } = usePlantData();
+  const { plantables } = usePlantData();
   const { userData, editState, setEditState } = useUserData();
   const { debugSettings } = useDebug();
 
@@ -45,10 +45,26 @@ export default function Navigation() {
           </div>
           <div className='absolute w-full flex justify-center my-3.5 z-50'>
             <div className='bg-[#FF8B72] px-4 py-2 rounded-full text-white font-lexend flex align-center gap-5'>
-              <div className='py-1'>{userData.growthPoints} grow points</div>
+              <div className='py-1'>
+                {editState === 'GROW' && (
+                  <>{userData.growthPoints} grow points</>
+                )}
+
+                {editState === 'PLANT' && (
+                  <>{plantables?.length} plants to plant</>
+                )}
+              </div>
               <div className='px-3 py-1 bg-white rounded-full text-[#FF8B72] hover:cursor-pointer' onClick={() => {
                 setEditState('OFF')
-              }}>stop growing</div>
+              }}>
+                {editState === 'GROW' && (
+                  <>stop growing</>
+                )}
+
+                {editState === 'PLANT' && (
+                  <>stop planting</>
+                )}
+              </div>
             </div>
           </div>
         </>

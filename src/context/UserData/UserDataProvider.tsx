@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Experience, Tiers, type EditState, type UserData, type UserDataContextType, type UserDataProviderProps } from './types';
+import {
+  Experience,
+  Tiers,
+  type EditState,
+  type UserData,
+  type UserDataContextType,
+  type UserDataProviderProps
+} from './types';
 import { UserDataContext } from './UserDataContext';
 import LocalStorage from '../../utils/LocalStorage';
 
@@ -8,24 +15,22 @@ const localStorage = new LocalStorage();
 export const UserDataProvider = ({ children }: UserDataProviderProps) => {
   const [editState, setEditState] = useState<EditState>('OFF');
   const [userData, setUserData] = useState<UserData>({
-    growthPoints: 5,
+    growthPoints: 0,
     experience: 0
   });
 
   useEffect(() => {
-    if(userData.growthPoints <= 0) setEditState('OFF')
-  }, [editState, userData.growthPoints])
+    if (userData.growthPoints <= 0) setEditState('OFF');
+  }, [editState, userData.growthPoints]);
 
   useEffect(() => {
     const stored = localStorage.getValue('userData');
 
     if (stored) {
-      //   console.log(stored);
+      setUserData(stored as UserData);
     } else {
       localStorage.setValue('userData', userData);
     }
-
-    // console.log(stored);
   }, []);
 
   const addGrowthPoints = (amount: number = 1) => {
@@ -96,7 +101,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     addExperience,
     removeExperience,
     getExperienceTier,
-    editState, 
+    editState,
     setEditState
     // time,
     // getDisplayTime,

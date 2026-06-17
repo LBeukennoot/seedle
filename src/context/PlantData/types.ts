@@ -10,10 +10,12 @@ export type PlantDataContextType = {
     setPlants: () => void
     removeAllPlants: () => void
     editPlant: (data: Plant) => void
-    createPlant: (data: Omit<Plant, 'id' | 'createdAt'>) => void
+    createPlant: (data: Omit<Plant, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'stage' | 'maxStage' | 'mirrored'>) => void
     removePlant: (id: string) => void
     savePlants: () => void
     growPlant: (id: string) => void
+    plantables: Plant[] | undefined
+    setPlantables: (plantables: Plant[] | undefined) => void
 }
 
 export type PlantAction =

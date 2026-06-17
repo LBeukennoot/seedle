@@ -10,15 +10,15 @@ export enum Plants {
 export type Plant = {
   id: string;
   // gardenId: string;
-  x: number; // 0–1
-  y: number; // 0–1
+  x: number | undefined; // 0–1
+  y: number | undefined; // 0–1
   size: number; // 0–1F
   name: Plants;
   stage: number;
   maxStage: number;
   createdAt: number;
   grownAt?: number | null;
-  maxAge: number; //in days
+  maxAge: number | undefined; //in days
   mirrored: boolean;
 
   // constructor({ id, gardenId, x, y, size, name }: Plant) {
