@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useDebug } from '../../context/Debug';
 import { usePlantData } from '../../context/PlantData';
 import { COLS, ROWS } from '../../context/PlantData/types';
@@ -6,22 +7,7 @@ import { useURLParams } from '../../utils/URLParams';
 import { PlantElement } from '../PlantElement';
 import type { Plant } from '../PlantElement/types';
 
-const _Plant = ({ x, y, plant, onClick }: { x: number; y: number; plant: Plant; onClick: () => void }) => {
-  return (
-    <div
-      key={`${x},${y}`}
-      className="relative max-h-fit h-full flex justify-center"
-      style={{ transform: plant && plant.mirrored ? 'scaleX(-1)' : '' }}
-      onClick={onClick}>
-      <div className="absolute w-20 h-20 animate-plantmove" style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}>
-        <PlantElement plant={plant.name} stage={plant.stage} className={'h-full w-full'} />
-      </div>
-    </div>
-  );
-};
-
 const createRow = () => Array.from({ length: COLS }, (_, i) => i - 1 + 1);
-
 const coordinateArray = Array.from({ length: ROWS }, createRow);
 
 export const Garden = () => {
@@ -30,48 +16,32 @@ export const Garden = () => {
   const { debugSettings } = useDebug();
   const { getParam, setParam, appendParam } = useURLParams();
 
-
-  // const selectedPlantID = getParam('plant');
-
   //TODO sort plants to make sure higher y-values are displayed on top
   // plants = plants.sort((p1, p2) => p1.y - p2.y);
-
-  // Create a single row: [1, 2, 3]
 
   return (
     // <div>
     <div className=" h-full grid grid-cols-10">
       {coordinateArray.map((arr, x) => {
         return arr.map((y) => {
-          // console.log(x,y)
-
           const plant: Plant | undefined = plants.find((p) => p.x === x && p.y === y);
 
-          // console.log(plant)
-          // if(!plant) return
-
-          // console.log(plant.name)
-
-          // TODO make slot clickable (so plant can be planted)
           return (
             <>
               {plant && (
-                <_Plant
+                <PlantElement
                   x={x}
                   y={y}
                   plant={plant}
+                  className="relative max-h-fit h-full flex justify-center bg-red"
                   onClick={() => {
+                    //TODO only allow growing if plant isnt fully grown
                     if (userData.growthPoints > 0 && editState === 'GROW') {
                       growPlant(plant.id);
                       removeGrowthPoints(1);
                     }
 
-                    // const customEvent = new CustomEvent('plantClicked', {detail: {plantId: plant.id}});
-                    // window.dispatchEvent(customEvent);
-
                     if (debugSettings.debug) {
-                      // const urlParams = new URLParams()
-
                       const param = getParam('plant');
 
                       if (param) {
@@ -99,7 +69,15 @@ export const Garden = () => {
                         editPlant({ ...plantables[0], x, y } as Plant);
                       }
                     }}>
-                    {plantables && plantables[0] && <_Plant x={x} y={y} plant={plantables[0]} onClick={() => {}} />}
+                    {plantables && plantables[0] && (
+                      <PlantElement
+                        x={x}
+                        y={y}
+                        className="relative max-h-fit h-full flex justify-center bg-red"
+                        plant={plantables[0]}
+                        onClick={() => {}}
+                      />
+                    )}
                   </div>
                 </>
               )}

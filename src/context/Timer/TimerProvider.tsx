@@ -47,7 +47,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const pausedAtRef = useRef<number | null>(null);
   const isAutoAdvanceRef = useRef(false);
-
+//TODO add notification when timer is over
   const start = (mode: Mode) => {
     if (sessionSettings.startEndSound) {
       soundStart.play();

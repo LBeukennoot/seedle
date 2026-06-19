@@ -39,9 +39,11 @@ export type Plant = {
 };
 
 export type PlantProps = {
-  stage: number;
-  plant: Plants;
+  plant: Plant;
   className: string;
+  x: number;
+  y: number;
+  onClick: () => void;
 };
 
 export type IndividualPlantGroupProps = {
