@@ -3,9 +3,11 @@ import { Plants, type Plant } from '../PlantElement/types';
 import { ArrowDownIcon } from '../Icons';
 import { useURLParams } from '../../utils/URLParams';
 import { usePlantData } from '../../context/PlantData';
+import { useUserData } from '../../context/UserData';
 
 export const DebugMenu = () => {
   const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants } = usePlantData();
+  const {setEditState} = useUserData()
 
   const { getParam } = useURLParams();
   const selectedPlantID = getParam('plant');
@@ -88,6 +90,12 @@ export const DebugMenu = () => {
                 return <MenuItem value={value}>{value}</MenuItem>;
               })}
             </Select>
+            <Button className="bg-white! w-full" onClick={() => {
+              editPlant({ ...selectedPlant, x: undefined, y: undefined })
+              setEditState('PLANT')
+            }}>
+              Move plant
+            </Button>
             <Button className="bg-white! w-full" onClick={() => removePlant(selectedPlant.id)}>
               Delete plant
             </Button>
