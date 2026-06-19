@@ -4,13 +4,18 @@ import { ArrowDownIcon } from '../Icons';
 import { useURLParams } from '../../utils/URLParams';
 import { usePlantData } from '../../context/PlantData';
 import { useUserData } from '../../context/UserData';
+import { useState } from 'react';
 
 export const DebugMenu = () => {
   const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants } = usePlantData();
-  const {setEditState} = useUserData()
-
+  const { setEditState } = useUserData();
   const { getParam } = useURLParams();
   const selectedPlantID = getParam('plant');
+
+  const [newPlants, setNewPlants] = useState({
+    amount: 1,
+    name: Plants.CHIRARY
+  });
 
   const selectedPlant = plants.find((plant: Plant) => plant.id === selectedPlantID);
 
@@ -20,28 +25,30 @@ export const DebugMenu = () => {
 
   return (
     <div className="absolute top-0 right-0 bg-black rounded-lg border border-white p-2 m-2 text-white flex flex-col w-50">
-      <Accordion className='border border-white'>
+      <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           {plants.length} Total Plants
         </AccordionSummary>
 
         <AccordionDetails className="bg-black! text-white!">
-          <div className='mb-5'>
-            <input step={1} min={1} className='bg-white text-black w-full' placeholder='amount' />
+          <div className="mb-5">
+            <input type="number" step={1} min={1} className="bg-white text-black w-full" placeholder="amount" value={newPlants.amount} onChange={(e) => setNewPlants({...newPlants, amount: parseInt(e.target.value)})}/>
             <Select
               className="bg-white w-full"
-              value="Add plant"
-              onChange={(e) => createPlant({ size: 1, name: e.target.value, stage: 1, maxAge: 4 })}>
-              <MenuItem value="Add plant">Add Plant</MenuItem>
+              value={newPlants.name ? newPlants.name : undefined}
+              onChange={(e) => console.log({...newPlants, name: e.target.value})}>
               {Object.values(Plants).map((value: string) => {
                 return <MenuItem value={value}>{value}</MenuItem>;
               })}
             </Select>
+            <Button 
+            className="bg-white! w-full"
+            onClick={() => {
+              Array(newPlants.amount).fill(undefined).map(() => {
+                createPlant({ name: newPlants.name, size: 1 })
+              })
+            }}>Add plant</Button>
           </div>
-
-          {/* <Button className="bg-white! w-full" onClick={() => tickPlants()}>
-            Grow plants
-          </Button> */}
 
           <Button className="bg-white! w-full" onClick={() => removeAllPlants()}>
             Clear plants
@@ -57,7 +64,7 @@ export const DebugMenu = () => {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion className='border border-white'>
+      <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           {selectedPlant ? `Selected flower: ${selectedPlant.name}` : 'select'}
         </AccordionSummary>
@@ -90,16 +97,17 @@ export const DebugMenu = () => {
                 return <MenuItem value={value}>{value}</MenuItem>;
               })}
             </Select>
-            <Button className="bg-white! w-full" onClick={() => {
-              editPlant({ ...selectedPlant, x: undefined, y: undefined })
-              setEditState('PLANT')
-            }}>
+            <Button
+              className="bg-white! w-full"
+              onClick={() => {
+                editPlant({ ...selectedPlant, x: undefined, y: undefined });
+                setEditState('PLANT');
+              }}>
               Move plant
             </Button>
             <Button className="bg-white! w-full" onClick={() => removePlant(selectedPlant.id)}>
               Delete plant
             </Button>
-            {/* //TODO move plant (first insert system so users can manually place plants) */}
           </div>
         )}
       </Accordion>
