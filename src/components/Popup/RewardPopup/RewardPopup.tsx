@@ -3,6 +3,7 @@ import { Button } from "../../Button"
 import { PlantElement } from "../../PlantElement"
 import { SeedBag } from "./SeedBag"
 
+//TODO update plant element
 export const RewardPopup = ({ reward, title = "session complete!", claim }: RewardPopupProps) => {
     return (
         <div className="text-center">

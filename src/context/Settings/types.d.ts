@@ -1,8 +1,8 @@
 export type SettingsContextType = {
     sessionTime: SessionDataMap
-    setSessionTime: Function
+    setSessionTime: (sessionTime: SessionDataMap) => void
     sessionSettings: SessionSettings
-    setSessionSettings: Function
+    setSessionSettings: (sessionSettings: SessionSettings) => void
 }
 
 export type SessionSettings = {
@@ -11,6 +11,7 @@ export type SessionSettings = {
     autoStartRest: boolean
     autoStartFocus: boolean
     startEndSound: boolean
+    timerCompleteNotification: boolean
 }
 
 export type SettingsProviderProps = {

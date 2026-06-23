@@ -47,7 +47,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const pausedAtRef = useRef<number | null>(null);
   const isAutoAdvanceRef = useRef(false);
-//TODO add notification when timer is over
+
   const start = (mode: Mode) => {
     if (sessionSettings.startEndSound) {
       soundStart.play();
@@ -189,6 +189,20 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     if (sessionSettings.autoAdvance) {
       isAutoAdvanceRef.current = true;
       toNextSession();
+    }
+
+    //TODO add notification provider
+    const notificationMessage = `Your ${mode} session is over!`;
+    if (!('Notification' in window)) {
+      alert('This browser does not support desktop notification');
+    } else if (Notification.permission === 'granted') {
+      new Notification(notificationMessage);
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          new Notification(notificationMessage);
+        }
+      });
     }
   };
 

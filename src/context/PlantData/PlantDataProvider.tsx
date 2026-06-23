@@ -113,7 +113,7 @@ const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
 export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   // const [nextId, setNextId] = useLocalStorageState<number>("nextId", 0)
   const { debugSettings } = useDebug();
-  const { editState, setEditState } = useUserData();
+  const { userData, editState, setEditState } = useUserData();
 
   const [plantables, setPlantables] = useState<Plant[] | undefined>(undefined);
 
@@ -155,16 +155,6 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     return (stored as Plant[]) ?? [];
   });
 
-  // console.log(plants)
-
-  /* -----------------------------
-       PERSISTENCE
-    ------------------------------ */
-
-  /* -----------------------------
-       EVENT SYSTEM
-    ------------------------------ */
-
   /* -----------------------------
        ACTIONS
     ------------------------------ */
@@ -172,20 +162,14 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   const createPlant = (
     data: Omit<Plant, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'stage' | 'maxStage' | 'mirrored'>
   ) => {
-    // const random = getFreePositions(plants, COLS, ROWS);
-    // TODO let users choose a location
-
     const plant: Plant = {
       id: crypto.randomUUID(),
-      // gardenId: random.gardenId,
-      x: undefined,
+      x: undefined, //x,y will be set once the user plants the plant
       y: undefined,
-      // x: random.x,
-      // y: random.y,
       size: data.size,
       name: data.name,
-      stage: data.stage ?? 1,
-      maxStage: data.maxStage ?? 4,
+      stage: 1,
+      maxStage: 4,
       createdAt: Date.now(),
       maxAge: undefined,
       mirrored: Math.random() < 0.5
@@ -201,7 +185,6 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   };
 
   const editPlant = (data: Plant) => {
-    console.log(data);
     dispatch({ type: 'EDIT', data });
   };
 
@@ -220,22 +203,27 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   }, [plants, debugSettings]);
 
   useEffect(() => {
-    if (editState === 'PLANT') {
+    // if (editState === 'PLANT') {
       setPlantables(plants.filter((p) => p.x === undefined || p.y === undefined));
-      // if (plantables === undefined) {
-      //   console.log('nothing to grow anymore');
-      // }
-    }
+    // }
 
-    if (editState !== 'PLANT') {
-      setPlantables(undefined);
-    }
-  }, [editState, plants]);
+    // if (editState !== 'PLANT') {
+    //   setPlantables(undefined);
+    // }
+  }, [plants]);
 
   useEffect(() => {
-    if (plantables && plantables[0] === undefined) {
+    if(editState === 'PLANT' && plantables && plantables.length <= 0) {
       setEditState('OFF');
     }
+
+    if (editState === 'GROW' && userData.growthPoints <= 0) {
+      setEditState('OFF');
+    }
+    // if (plantables && plantables.length <= 0) {
+    // if (plantables && plantables[0] === undefined) {
+    //   setEditState('OFF');
+    // }
   }, [plantables]);
 
   // useEffect(() => {
@@ -255,9 +243,6 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
 
   const value: PlantDataContextType = {
     plants,
-    setPlants: () => {
-      console.log('[setPlants] not yet implemented');
-    }, // optional: remove if not needed
     removeAllPlants: () => dispatch({ type: 'REMOVEALL' }),
     editPlant,
     createPlant,

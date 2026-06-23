@@ -7,18 +7,21 @@ import { Lavender } from './Lavender/Lavender';
 import { Plants, type Plant } from './types';
 import { useUserData } from '../../context/UserData';
 
+
+const PLANT_COMPONENTS: Record<Plants, React.ComponentType<{stage: number; className: string}>> ={
+  [Plants.CHIRARY]: Chirary,
+  [Plants.CHAMOMILE]: Chamomile,
+  [Plants.FIREWEED]: Fireweed,
+  [Plants.LAVENDER]: Lavender,
+}
+
 const Element = ({ name, stage, className }: { name: Plants; stage: number; className: string }) => {
-  //TODO generate element automatically based on a json file or smth
-  switch (name) {
-    case Plants.CHIRARY:
-      return <Chirary stage={stage} className={className} />;
-    case Plants.CHAMOMILE:
-      return <Chamomile stage={stage} className={className} />;
-    case Plants.FIREWEED:
-      return <Fireweed stage={stage} className={className} />;
-    case Plants.LAVENDER:
-      return <Lavender stage={stage} className={className} />;
+  const PlantComponent = PLANT_COMPONENTS[name]
+  if(!PlantComponent) {
+    return null;
   }
+
+  return <PlantComponent stage={stage} className={className} />
 };
 
 export const PlantElement = ({ plant, className, x, y, onClick }: PlantProps) => {

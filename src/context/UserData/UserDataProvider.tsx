@@ -19,13 +19,14 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     experience: 0
   });
 
-  useEffect(() => {
-    if (userData.growthPoints <= 0) setEditState('OFF');
-  }, [editState, userData.growthPoints]);
+  // useEffect(() => {
+  //   if (userData.growthPoints <= 0) setEditState('OFF');
+  // }, [editState, userData.growthPoints]);
 
   useEffect(() => {
     const stored = localStorage.getValue('userData');
 
+    //TODO also save data when its being changed
     if (stored) {
       setUserData(stored as UserData);
     } else {

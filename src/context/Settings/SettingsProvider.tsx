@@ -24,7 +24,8 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
         autoAdvance: false,
         autoStartRest: false,
         autoStartFocus: false,
-        startEndSound: true
+        startEndSound: true,
+        timerCompleteNotification: true
     })
 
 

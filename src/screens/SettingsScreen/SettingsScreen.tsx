@@ -14,7 +14,6 @@ export const SettingsScreen = () => {
   const { sessionTime, setSessionTime, sessionSettings, setSessionSettings } = useSettings();
 
   const handleSessionTimeChange = ({ newValue, mode }: { newValue: number; mode: string }) => {
-    //TODO only setState when its different (preventing unessesary rerenders)
     setSessionTime({
       ...sessionTime,
       [mode]: {
@@ -31,6 +30,8 @@ export const SettingsScreen = () => {
     });
   };
 
+  //TODO change categories
+  //TODO add setting descriptions
   return (
     <div className="overflow-y-auto max-h-full pt-10 rounded-b-[2.3rem] md:rounded-b-[1.4rem] text-blue font-lexend">
       <h1 className="text-3xl mb-3">settings</h1>
@@ -163,6 +164,18 @@ export const SettingsScreen = () => {
             <Toggle
               checked={sessionSettings.startEndSound}
               setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: 'startEndSound' })}
+            />
+          </div>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary>notifications</AccordionSummary>
+        <AccordionDetails className="my-4 flex flex-col gap-4 mb-10">
+          <div>
+            <h3 className="text-lg pb-2">notifications</h3>
+            <Toggle
+              checked={sessionSettings.timerCompleteNotification}
+              setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: 'timerCompleteNotification' })}
             />
           </div>
         </AccordionDetails>

@@ -7,7 +7,7 @@ export type PlantDataProviderProps = {
 
 export type PlantDataContextType = {
     plants: Plant[]
-    setPlants: () => void
+    // setPlants: () => void
     removeAllPlants: () => void
     editPlant: (data: Plant) => void
     createPlant: (data: Omit<Plant, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'stage' | 'maxStage' | 'mirrored'>) => void

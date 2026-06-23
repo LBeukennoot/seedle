@@ -23,6 +23,8 @@ export const DebugMenu = () => {
     return value >= min && value <= max;
   };
 
+  //TODO add editability for userData
+  //TODO add button to remove plant location (make it plantable)
   return (
     <div className="absolute top-0 right-0 bg-black rounded-lg border border-white p-2 m-2 text-white flex flex-col w-50">
       <Accordion className="border border-white">

@@ -16,8 +16,7 @@ export const Garden = () => {
   const { debugSettings } = useDebug();
   const { getParam, setParam, appendParam } = useURLParams();
 
-  //TODO sort plants to make sure higher y-values are displayed on top
-  // plants = plants.sort((p1, p2) => p1.y - p2.y);
+  // console.log(editState)
 
   return (
     // <div>
@@ -33,10 +32,9 @@ export const Garden = () => {
                   x={x}
                   y={y}
                   plant={plant}
-                  className="relative max-h-fit h-full flex justify-center bg-red"
+                  className="relative max-h-fit h-full flex justify-center"
                   onClick={() => {
-                    //TODO only allow growing if plant isnt fully grown
-                    if (userData.growthPoints > 0 && editState === 'GROW') {
+                    if (userData.growthPoints > 0 && editState === 'GROW' && plant.stage < plant.maxStage) {
                       growPlant(plant.id);
                       removeGrowthPoints(1);
                     }
@@ -69,11 +67,11 @@ export const Garden = () => {
                         editPlant({ ...plantables[0], x, y } as Plant);
                       }
                     }}>
-                    {plantables && plantables[0] && (
+                    {plantables && plantables[0] && editState === 'PLANT' && (
                       <PlantElement
                         x={x}
                         y={y}
-                        className="relative max-h-fit h-full flex justify-center bg-red"
+                        className="relative max-h-fit h-full flex justify-center"
                         plant={plantables[0]}
                         onClick={() => {}}
                       />
