@@ -209,11 +209,10 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   useEffect(() => {
     if (!isTimerRunning) return;
 
-    //TODO figure out why timer start has a delay
-    intervalRef.current = setInterval(() => {
+    const tick = () => {
       if (!endTimeRef.current) return;
 
-      const diff = Math.max(0, Math.ceil((endTimeRef.current - Date.now()) / 1000));
+      const diff = Math.max(0, Math.floor((endTimeRef.current - Date.now()) / 1000));
       setTime(diff);
 
       if (diff <= 0) {
@@ -225,7 +224,11 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
           soundEnd.play();
         }
       }
-    }, 1000);
+    };
+
+    tick();
+
+    intervalRef.current = setInterval(tick, 1000);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);

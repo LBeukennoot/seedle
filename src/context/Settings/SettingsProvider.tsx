@@ -77,12 +77,6 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
 
         const newSessionSettings = localStorage.getValue("sessionSettings") as SessionSettings
 
-        // TODO check local storage value is correct
-        // if (isSessionTimeType(newSessionTime) === false) {
-        //     console.error('Local storage value of "sessionTimes" is corrupted.');
-        //     return
-        // }
-
         if (newSessionSettings) setSessionSettings(newSessionSettings)
 
         // applying devsettings (only if they are provided)
