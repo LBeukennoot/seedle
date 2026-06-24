@@ -65,15 +65,15 @@ export const PlantsScreen = () => {
             </Button>
           )}
         </div>
-        <div>
+        {/* <div>
           <div className="bg-blue text-white text-center w-35 h-40 rounded-3xl p-5 flex flex-col justify-center">
             <div>experience</div>
             <div className="text-8xl">{userData.experience}</div>
           </div>
-        </div>
+        </div> */}
       </div>
 
-      <h1 className="text-3xl mb-3 mt-5">tiers</h1>
+      {/* <h1 className="text-3xl mb-3 mt-5">tiers</h1>
       <div className="relative grid grid-cols-3 gap-y-5 max-w-xs">
         {Object.entries(Object.entries(Tiers)).map(([index, [key, value]]) => {
           return (
@@ -84,7 +84,7 @@ export const PlantsScreen = () => {
           );
         })}
         <div className="absolute z-0 border-35 border-l-0 rounded-r-full border-light-green w-70 min-h-34 ml-18 my-5"></div>
-      </div>
+      </div> */}
     </div>
   );
 };
