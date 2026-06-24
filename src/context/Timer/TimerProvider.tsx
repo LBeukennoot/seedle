@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { TimerContext } from './TimerContext';
 import { SwitchModeWarningPopup } from '../../components/Popup/SwitchModeWarningPopup/SwitchModeWarningPopup';
-import { Plants } from '../../components/PlantElement/types';
 import { RewardPopup } from '../../components/Popup/RewardPopup';
 import type { TimerContextType, TimerProviderProps } from './types';
 import { useSettings } from '../Settings';
@@ -11,6 +10,7 @@ import { useMode } from '../Mode';
 import { Mode } from '../../features/session/sessionTypes';
 import { usePlantData } from '../PlantData';
 import { useUserData } from '../UserData';
+import { PlantSpecies } from '../../components/Plant/types';
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav');
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav');
@@ -161,7 +161,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     setIsTimerRunning(false);
 
     if (mode !== Mode.REST) {
-      const plantValues = Object.values(Plants);
+      const plantValues = Object.values(PlantSpecies);
       const randomPlant = plantValues[Math.floor(Math.random() * plantValues.length)];
 
       createPlant({

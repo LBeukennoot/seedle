@@ -4,8 +4,9 @@ import { usePlantData } from '../../context/PlantData';
 import { COLS, ROWS } from '../../context/PlantData/types';
 import { useUserData } from '../../context/UserData';
 import { useURLParams } from '../../utils/URLParams';
-import { PlantElement } from '../PlantElement';
-import type { Plant } from '../PlantElement/types';
+// import { PlantElement } from '../PlantElement';
+import { PlantInGarden } from '../Plant/PlantInGarden';
+import type { PlantData } from '../Plant/types';
 
 const createRow = () => Array.from({ length: COLS }, (_, i) => i - 1 + 1);
 const coordinateArray = Array.from({ length: ROWS }, createRow);
@@ -23,12 +24,12 @@ export const Garden = () => {
     <div className=" h-full grid grid-cols-10">
       {coordinateArray.map((arr, x) => {
         return arr.map((y) => {
-          const plant: Plant | undefined = plants.find((p) => p.x === x && p.y === y);
+          const plant: PlantData | undefined = plants.find((p) => p.x === x && p.y === y);
 
           return (
             <>
               {plant && (
-                <PlantElement
+                <PlantInGarden
                   x={x}
                   y={y}
                   plant={plant}
@@ -64,11 +65,11 @@ export const Garden = () => {
                     onClick={() => {
                       if (editState === 'PLANT' && plantables) {
                         // console.log({ ...plantables[0], x, y } as Plant)
-                        editPlant({ ...plantables[0], x, y } as Plant);
+                        editPlant({ ...plantables[0], x, y } as PlantData);
                       }
                     }}>
                     {plantables && plantables[0] && editState === 'PLANT' && (
-                      <PlantElement
+                      <PlantInGarden
                         x={x}
                         y={y}
                         className="relative max-h-fit h-full flex justify-center"

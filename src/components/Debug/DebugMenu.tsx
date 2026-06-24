@@ -1,10 +1,10 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, MenuItem, Select } from '@mui/material';
-import { Plants, type Plant } from '../PlantElement/types';
 import { ArrowDownIcon } from '../Icons';
 import { useURLParams } from '../../utils/URLParams';
 import { usePlantData } from '../../context/PlantData';
 import { useUserData } from '../../context/UserData';
 import { useState } from 'react';
+import { PlantSpecies, type PlantData } from '../Plant/types';
 
 export const DebugMenu = () => {
   const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants } = usePlantData();
@@ -14,17 +14,15 @@ export const DebugMenu = () => {
 
   const [newPlants, setNewPlants] = useState({
     amount: 1,
-    name: Plants.CHIRARY
+    name: PlantSpecies.CHIRARY
   });
 
-  const selectedPlant = plants.find((plant: Plant) => plant.id === selectedPlantID);
+  const selectedPlant = plants.find((plant: PlantData) => plant.id === selectedPlantID);
 
   const checkNewStageValue = (value: number, min: number, max: number): boolean => {
     return value >= min && value <= max;
   };
 
-  //TODO add editability for userData
-  //TODO add button to remove plant location (make it plantable)
   return (
     <div className="absolute top-0 right-0 bg-black rounded-lg border border-white p-2 m-2 text-white flex flex-col w-50 z-50">
       <Accordion className="border border-white">
@@ -47,7 +45,7 @@ export const DebugMenu = () => {
               className="bg-white w-full"
               value={newPlants.name ? newPlants.name : undefined}
               onChange={(e) => console.log({ ...newPlants, name: e.target.value })}>
-              {Object.values(Plants).map((value: string) => {
+              {Object.values(PlantSpecies).map((value: string) => {
                 return <MenuItem value={value}>{value}</MenuItem>;
               })}
             </Select>
@@ -150,7 +148,7 @@ export const DebugMenu = () => {
               className="bg-white w-full"
               value={selectedPlant.name}
               onChange={(e) => editPlant({ ...selectedPlant, name: e.target.value })}>
-              {Object.values(Plants).map((value: string) => {
+              {Object.values(PlantSpecies).map((value: string) => {
                 return <MenuItem value={value}>{value}</MenuItem>;
               })}
             </Select>
@@ -158,9 +156,8 @@ export const DebugMenu = () => {
               className="bg-white! w-full"
               onClick={() => {
                 editPlant({ ...selectedPlant, x: undefined, y: undefined });
-                setEditState('PLANT');
               }}>
-              Move plant
+              Remove plant location
             </Button>
             <Button className="bg-white! w-full" onClick={() => removePlant(selectedPlant.id)}>
               Delete plant

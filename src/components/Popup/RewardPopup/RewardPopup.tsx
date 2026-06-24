@@ -1,9 +1,8 @@
 import type { RewardPopupProps } from "."
 import { Button } from "../../Button"
-import { PlantElement } from "../../PlantElement"
+import { Plant } from "../../Plant/Plant"
 import { SeedBag } from "./SeedBag"
 
-//TODO update plant element
 export const RewardPopup = ({ reward, title = "session complete!", claim }: RewardPopupProps) => {
     return (
         <div className="text-center">
@@ -13,10 +12,10 @@ export const RewardPopup = ({ reward, title = "session complete!", claim }: Rewa
                 <SeedBag size={200} />
                 <div className="absolute max-w-3xs w-full h-full">
                     <div className="h-[27%] w-full flex items-center justify-center">
-                        <p className="text-white text-xl">{reward.toLowerCase()} seeds</p>
+                        <p className="text-white text-xl">{reward.toLowerCase()}</p>
                     </div>
                     <div className="h-[73%] w-full pb-5 flex items-center justify-center">
-                        <PlantElement stage={4} plant={reward} size={100} />
+                        <Plant name={reward} stage={4} className="w-full h-full" />
                     </div>
                 </div>
             </div>

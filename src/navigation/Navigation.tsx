@@ -1,6 +1,5 @@
 import { Popup } from '../components/Popup/Popup';
 import { Garden } from '../components/Garden/Garden';
-import { type Plant } from '../components/PlantElement/types';
 import { ScreenCard } from '../components/ScreenCard/ScreenCard';
 import { useNavigation } from '../context/Navigation';
 import { DebugMenu } from '../components/Debug/DebugMenu';

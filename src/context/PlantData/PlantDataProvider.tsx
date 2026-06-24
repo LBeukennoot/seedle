@@ -1,10 +1,10 @@
 import { useEffect, useReducer, useState } from 'react';
 import LocalStorage from '../../utils/LocalStorage';
-import { type Plant } from '../../components/PlantElement/types';
 import { useDebug } from '../Debug';
 import { COLS, ROWS, type PlantAction, type PlantDataContextType, type PlantDataProviderProps } from './types';
 import { PlantDataContext } from './PlantDataContext';
 import { useUserData } from '../UserData';
+import type { PlantData } from '../../components/Plant/types';
 
 const localStorage = new LocalStorage();
 
@@ -23,7 +23,7 @@ const generateGridPositions = (cols: number, rows: number) => {
   return positions;
 };
 
-const getFreePositions = (plants: Plant[], cols: number, rows: number) => {
+const getFreePositions = (plants: PlantData[], cols: number, rows: number) => {
   const all = generateGridPositions(cols, rows);
 
   return all.filter((pos) => !plants.some((p) => p.x === pos.x && p.y === pos.y));
@@ -33,7 +33,7 @@ const getFreePositions = (plants: Plant[], cols: number, rows: number) => {
    REDUCER
 ------------------------------ */
 
-const plantReducer = (state: Plant[], action: PlantAction): Plant[] => {
+const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
   const now = Date.now();
 
   switch (action.type) {
@@ -115,10 +115,10 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   const { debugSettings } = useDebug();
   const { userData, editState, setEditState } = useUserData();
 
-  const [plantables, setPlantables] = useState<Plant[] | undefined>(undefined);
+  const [plantables, setPlantables] = useState<PlantData[] | undefined>(undefined);
 
   const [plants, dispatch] = useReducer(plantReducer, [], () => {
-    const stored = localStorage.getValue<Plant[]>('plants');
+    const stored = localStorage.getValue<PlantData[]>('plants');
 
     // updating old data where gardenId still exists, removing the element from data
     if (stored && stored.length > 0 && (stored[0] as Record<string, unknown>).gardenId) {
@@ -128,7 +128,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
 
         return {
           ...rest
-        } as Plant;
+        } as PlantData;
       });
 
       return cleanedPlants;
@@ -146,13 +146,13 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
           ...rest,
           x: randomFreePosition.x,
           y: randomFreePosition.y
-        } as Plant;
+        } as PlantData;
       });
 
       return cleanedPlants;
     }
 
-    return (stored as Plant[]) ?? [];
+    return (stored as PlantData[]) ?? [];
   });
 
   /* -----------------------------
@@ -160,9 +160,9 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     ------------------------------ */
 
   const createPlant = (
-    data: Omit<Plant, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'stage' | 'maxStage' | 'mirrored'>
+    data: Omit<PlantData, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'stage' | 'maxStage' | 'mirrored'>
   ) => {
-    const plant: Plant = {
+    const plant: PlantData = {
       id: crypto.randomUUID(),
       x: undefined, //x,y will be set once the user plants the plant
       y: undefined,
@@ -184,7 +184,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     dispatch({ type: 'TICK', id: plantId });
   };
 
-  const editPlant = (data: Plant) => {
+  const editPlant = (data: PlantData) => {
     dispatch({ type: 'EDIT', data });
   };
 
