@@ -183,9 +183,8 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     }
 
     if (mode === Mode.FOCUS) {
-      addGrowthPoints(2);
-      //   const customEvent = new Event('sessionFocusComplete');
-      //   window.dispatchEvent(customEvent);
+      const multiplier = 0.4
+      addGrowthPoints(Math.ceil(sessionTime.focus.time * multiplier));
     }
 
     if (sessionSettings.autoAdvance) {

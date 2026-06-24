@@ -1,7 +1,13 @@
+# v3.0.0 - june 24, 2026
+- added custom plant placement functionality
+- added manual plant growth functionality
+- added desktop notifications
+- improved back-end systems for upcoming features
+
 # v2.1.0 - june 4, 2026
 - improved app layout
 - fixed several bugs
-- added QOL features for development
+- added quality of life features for development
 
 # v2.0.0 - april 19, 2026
 - added a garden, including two types of flowers: chirary and chamomile
