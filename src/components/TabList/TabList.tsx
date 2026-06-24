@@ -3,10 +3,12 @@ import { Screen } from '../../navigation/Screen';
 import type { TabListProps, TabProps } from './types';
 import { useUserData } from '../../context/UserData';
 import { usePlantData } from '../../context/PlantData';
+import { useSettings } from '../../context/Settings';
 
 const Tab = ({ screens, currentScreen, setCurrentScreen }: TabProps) => {
   const { userData } = useUserData();
   const { plantables } = usePlantData();
+  const { sessionSettings } = useSettings();
 
     // console.log(plantables && plantables.length)
 

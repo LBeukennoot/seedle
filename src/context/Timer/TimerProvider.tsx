@@ -11,6 +11,7 @@ import { Mode } from '../../features/session/sessionTypes';
 import { usePlantData } from '../PlantData';
 import { useUserData } from '../UserData';
 import { PlantSpecies } from '../../components/Plant/types';
+import { useNotifications } from '../Notifications';
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav');
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav');
@@ -28,6 +29,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession();
   const { createPlant } = usePlantData();
   const { addGrowthPoints } = useUserData();
+  const { sendNotification } = useNotifications()
   // const { debugSettings }: DebugContextType = useDebug()
   // console.log(sessionTime)
 
@@ -192,18 +194,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     }
 
     //TODO add notification provider
-    const notificationMessage = `Your ${mode} session is over!`;
-    if (!('Notification' in window)) {
-      alert('This browser does not support desktop notification');
-    } else if (Notification.permission === 'granted') {
-      new Notification(notificationMessage);
-    } else if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          new Notification(notificationMessage);
-        }
-      });
-    }
+    if (sessionSettings.timerCompleteNotification) sendNotification(`Your ${mode} session is complete!`)
   };
 
   useEffect(() => {

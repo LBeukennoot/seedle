@@ -12,6 +12,7 @@ export type SessionSettings = {
     autoStartFocus: boolean
     startEndSound: boolean
     timerCompleteNotification: boolean
+    tabNotification: boolean
 }
 
 export type SettingsProviderProps = {

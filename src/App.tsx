@@ -7,26 +7,29 @@ import { SessionProvider } from './context/Session';
 import { TimerProvider } from './context/Timer';
 import { PlantDataProvider } from './context/PlantData';
 import { UserDataProvider } from './context/UserData/UserDataProvider';
+import { NotificationsProvider } from './context/Notifications/NavigationsProvider';
 
 export default function App() {
   return (
     <>
       <DebugProvider>
-        <NavigationProvider>
-          <SettingsProvider>
-            <ModeProvider>
-              <SessionProvider>
-                <UserDataProvider>
-                  <PlantDataProvider>
-                    <TimerProvider>
-                      <Navigation />
-                    </TimerProvider>
-                  </PlantDataProvider>
-                </UserDataProvider>
-              </SessionProvider>
-            </ModeProvider>
-          </SettingsProvider>
-        </NavigationProvider>
+        <NotificationsProvider>
+          <NavigationProvider>
+            <SettingsProvider>
+              <ModeProvider>
+                <SessionProvider>
+                  <UserDataProvider>
+                    <PlantDataProvider>
+                      <TimerProvider>
+                        <Navigation />
+                      </TimerProvider>
+                    </PlantDataProvider>
+                  </UserDataProvider>
+                </SessionProvider>
+              </ModeProvider>
+            </SettingsProvider>
+          </NavigationProvider>
+        </NotificationsProvider>
       </DebugProvider>
     </>
   );

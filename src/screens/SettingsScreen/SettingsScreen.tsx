@@ -172,11 +172,16 @@ export const SettingsScreen = () => {
         <AccordionSummary>notifications</AccordionSummary>
         <AccordionDetails className="my-4 flex flex-col gap-4 mb-10">
           <div>
-            <h3 className="text-lg pb-2">notifications</h3>
+            <h3 className="text-lg pb-2">desktop notifications</h3>
             <Toggle
               checked={sessionSettings.timerCompleteNotification}
               setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: 'timerCompleteNotification' })}
             />
+            {/* <h3 className="text-lg pb-2">tab notifications</h3>
+            <Toggle
+              checked={sessionSettings.tabNotification}
+              setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: 'tabNotification' })}
+            /> */}
           </div>
         </AccordionDetails>
       </Accordion>
