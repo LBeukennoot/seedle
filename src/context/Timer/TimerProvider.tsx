@@ -27,7 +27,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const { sessionTime, sessionSettings } = useSettings();
   const { currentScreen, setPopup } = useNavigation();
   const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession();
-  const { createPlant } = usePlantData();
+  const { createPlant, growAllPlants } = usePlantData();
   const { addGrowthPoints } = useUserData();
   const { sendNotification } = useNotifications()
   // const { debugSettings }: DebugContextType = useDebug()
@@ -183,8 +183,9 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     }
 
     if (mode === Mode.FOCUS) {
-      const multiplier = 0.4
-      addGrowthPoints(Math.ceil(sessionTime.focus.time * multiplier));
+      growAllPlants()
+      // const multiplier = 0.4
+      // addGrowthPoints(Math.ceil(sessionTime.focus.time * multiplier));
     }
 
     if (sessionSettings.autoAdvance) {

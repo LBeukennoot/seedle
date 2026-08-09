@@ -58,7 +58,21 @@ const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
     case 'REMOVE':
       return state.filter((p) => p.id !== action.id);
 
-    case 'TICK':
+    case 'TICKALL':
+      return state.map((plant) => {
+        if (plant.stage < plant.maxStage) {
+          const nextStage = plant.stage + 1;
+          return {
+            ...plant,
+            stage: nextStage,
+            grownAt: nextStage === plant.maxStage ? now : plant.grownAt
+          };
+        }
+
+        return plant;
+      });
+
+    case 'TICKONE':
       return (
         state
           //searching plants that have o lower stage than maxStage
@@ -83,6 +97,7 @@ const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
             return p;
           })
       );
+
 
     default:
       return state;
@@ -162,10 +177,13 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   const createPlant = (
     data: Omit<PlantData, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'stage' | 'maxStage' | 'mirrored'>
   ) => {
+    const freePositions = getFreePositions(plants, COLS, ROWS);
+    const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)];
+
     const plant: PlantData = {
       id: crypto.randomUUID(),
-      x: undefined, //x,y will be set once the user plants the plant
-      y: undefined,
+      x: randomFreePosition.x, //x,y will be set once the user plants the plant
+      y: randomFreePosition.y,
       size: data.size,
       name: data.name,
       stage: 1,
@@ -175,13 +193,20 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
       mirrored: Math.random() < 0.5
     };
 
+
+    // console.log(randomFreePosition)
+
     dispatch({ type: 'CREATE', plant });
 
     return plant;
   };
 
   const growPlant = (plantId: string) => {
-    dispatch({ type: 'TICK', id: plantId });
+    dispatch({ type: 'TICKONE', id: plantId });
+  };
+
+  const growAllPlants = () => {
+    dispatch({ type: 'TICKALL' });
   };
 
   const editPlant = (data: PlantData) => {
@@ -204,7 +229,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
 
   useEffect(() => {
     // if (editState === 'PLANT') {
-      setPlantables(plants.filter((p) => p.x === undefined || p.y === undefined));
+    setPlantables(plants.filter((p) => p.x === undefined || p.y === undefined));
     // }
 
     // if (editState !== 'PLANT') {
@@ -213,7 +238,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   }, [plants]);
 
   useEffect(() => {
-    if(editState === 'PLANT' && plantables && plantables.length <= 0) {
+    if (editState === 'PLANT' && plantables && plantables.length <= 0) {
       setEditState('OFF');
     }
 
@@ -249,6 +274,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     removePlant,
     savePlants,
     growPlant,
+    growAllPlants,
     plantables,
     setPlantables
   };

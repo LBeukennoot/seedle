@@ -25,10 +25,10 @@ export const ScreenRegistry: Record<Screen, {
         screen: ChangelogScreen,
         icon: ChangelogIcon
     },
-    [Screen.PLANTS]: {
-        screen: PlantsScreen,
-        icon: GardenIcon
-    }
+    // [Screen.PLANTS]: {
+    //     screen: PlantsScreen,
+    //     icon: GardenIcon
+    // }
 }
 
 export const isScreen = (value: string): value is Screen => {
