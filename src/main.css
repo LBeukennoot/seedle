@@ -112,6 +112,30 @@ input[type="number"] {
     border-radius: 100px;
 }
 
+.noise {
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    mix-blend-mode: soft-light;
+    opacity: 0.25;
+
+    z-index: 200;
+}
+
+#noise {
+    width: 100%;
+    height: 100%;
+}
+
+.scene {
+    position: fixed;
+    inset: 0;
+
+    filter: url(#edgeTexture);
+}
+
 /* .animated-element {
   animation-name: myAnimation;
   animation-duration: 1s;
