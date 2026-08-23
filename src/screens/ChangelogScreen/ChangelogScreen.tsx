@@ -12,7 +12,7 @@ export const ChangelogScreen = () => {
             <h1 className="text-3xl mb-5">changelog</h1>
 
             <div className='mb-8'>
-                <Button label={"feedback"} onClick={() => window.open('https://github.com/LBeukennoot/seedle/issues', '_blank')}>give feedback</Button>
+                <Button label={"feedback"} onClick={() => window.open('https://discord.gg/vabkFQdmdh', '_blank')}>join discord</Button>
             </div>
 
             <div className='mb-8 lowercase'>
