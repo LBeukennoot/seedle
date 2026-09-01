@@ -29,7 +29,7 @@ export const PlantInGarden = ({ plant, className, x, y, onClick }: PlantProps) =
       onMouseLeave={() => {
         setIsHovering(false);
       }}>
-      <div className="absolute w-20 h-20 animate-plantmove" style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}>
+      <div className="absolute w-20 h-20 " style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}>
         <Plant
           name={plant.name}
           stage={isHovering && editState === 'GROW' ? nextStage(plant) : plant.stage}

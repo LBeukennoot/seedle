@@ -1,11 +1,9 @@
 import { Popup } from '../components/Popup/Popup';
 import { Garden } from '../components/Garden/Garden';
-import { ScreenCard } from '../components/ScreenCard/ScreenCard';
 import { useNavigation } from '../context/Navigation';
 import { DebugMenu } from '../components/Debug/DebugMenu';
 import { useDebug } from '../context/Debug';
-import { usePlantData } from '../context/PlantData';
-import { useUserData } from '../context/UserData';
+import { WateringCan } from '../components/WateringCan';
 
 // const GARDENS = ['A', 'B'];
 
@@ -30,14 +28,14 @@ import { useUserData } from '../context/UserData';
  * @created     20-04-2026
  */
 export default function Navigation() {
-  const { ScreenElement, popup } = useNavigation();
-  const { plantables } = usePlantData();
-  const { userData, editState, setEditState } = useUserData();
+  const { popup } = useNavigation();
+  // const { plantables } = usePlantData();
+  // const { userData, editState, setEditState } = useUserData();
   const { debugSettings } = useDebug();
 
   return (
-    <div className="relative min-h-screen bg-light-green overflow-hidden">
-      {editState !== 'OFF' && (
+    <div className="relative min-h-screen bg-linear-to-b from-[#A4BD6D] to-light-green overflow-hidden">
+      {/* {editState !== 'OFF' && (
         <>
           <div className="absolute w-full h-full p-1">
             <div className="w-full h-full rounded-lg border-6 border-[#FF8B72]"></div>
@@ -67,18 +65,21 @@ export default function Navigation() {
             </div>
           </div>
         </>
-      )}
+      )} */}
       {popup && <Popup> {popup} </Popup>}
 
       <div className="grid grid-rows-[1fr_16rem] h-screen">
-        <Garden/>
+        <Garden />
         <div></div>
       </div>
       <div className="absolute bottom-0 mb-4 w-full flex justify-center">
-        <ScreenCard>
+        {/* <ScreenCard>
           <ScreenElement />
-        </ScreenCard>
+        </ScreenCard> */}
+        <WateringCan />
+
       </div>
+
 
       {debugSettings.debug && <DebugMenu />}
     </div>

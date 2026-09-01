@@ -30,7 +30,7 @@ export default function App() {
             <filter id="edgeTexture" x="-10%" y="-10%" width="120%" height="120%">
               <feTurbulence
                 type="fractalNoise"
-                baseFrequency="0.1" /* Lower frequency creates larger visible ripples */
+                baseFrequency="0.3" /* Lower frequency creates larger visible ripples */
                 numOctaves="6"
                 seed="1"
                 result="noise"
