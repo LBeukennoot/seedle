@@ -14,6 +14,7 @@ export type PlantDataContextType = {
     removePlant: (id: string) => void
     savePlants: () => void
     growPlant: (id: string) => void
+    growAllPlants: () => void
     plantables: Plant[] | undefined
     setPlantables: (plantables: Plant[] | undefined) => void
 }
@@ -23,7 +24,8 @@ export type PlantAction =
   | { type: 'EDIT'; data: Plant }
   | { type: 'REMOVEALL' }
   | { type: 'REMOVE'; id: string | number }
-  | { type: 'TICK'; id: string };
+  | { type: 'TICKONE'; id: string }
+  | { type: 'TICKALL' };
 
 export const COLS = 10
 export const ROWS = 10

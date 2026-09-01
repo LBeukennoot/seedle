@@ -1,8 +1,6 @@
-# v3.0.0 - june 24, 2026
-- added custom plant placement functionality
-- added manual plant growth functionality
-- added desktop notifications
-- improved back-end systems for upcoming features
+# v2.1.1 - august 23, 2026
+- added a discord server
+- a lot of redesign preparations
 
 # v2.1.0 - june 4, 2026
 - improved app layout
