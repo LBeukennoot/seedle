@@ -71,7 +71,7 @@ export const TimerScreen = () => {
         focus
       </Button> */}
 
-      <Timer time={getDisplayTime()} className={'text-3xl xs:text-6xl'} />
+      <Timer />
 
       {!isTimerRunning && (
         <Button
