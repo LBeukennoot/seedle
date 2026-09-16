@@ -8,7 +8,7 @@ import type { WateringCanProps } from "./types"
 export const WateringCan = ({ }: WateringCanProps) => {
 
     const { mode } = useMode();
-    const { start, pause, isTimerRunning } = useTimer();
+    const { start, pause, isTimerRunning, estimatedEndTime } = useTimer();
 
     return (
         <>
@@ -19,7 +19,7 @@ export const WateringCan = ({ }: WateringCanProps) => {
                 <div className="absolute w-full h-full top-0 left-0">
                     <div className="ml-9 h-full flex flex-col items-center place-content-center text-white select-none">
                         <Timer className="text-6xl font-semibold" />
-                        <div className="text-2xl font-semibold mb-4">until 14:30</div>
+                        <div className="text-2xl font-semibold mb-4">until {String(estimatedEndTime.getHours()).padStart(2, '0')}:{String(estimatedEndTime.getMinutes()).padStart(2, '0')}</div>
 
                         {!isTimerRunning && (
                             <div

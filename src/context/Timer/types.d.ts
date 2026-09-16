@@ -4,6 +4,7 @@ export type TimerProviderProps = {
 
 export type TimerContextType = {
     time: number,
+    estimatedEndTime: Date,
     getDisplayTime: Function,
     start: Function,
     pause: Function,

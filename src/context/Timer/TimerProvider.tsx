@@ -45,6 +45,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   //TODO save time in localstorage if user closes tab unexpectedly (AND add warning when user closes tab when timer is still running)
   const [time, setTime] = useState(getDuration(mode));
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [estimatedEndTime, setEstimatedEndTime] = useState(new Date());
   const endTimeRef = useRef<number | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const pausedAtRef = useRef<number | null>(null);
@@ -143,6 +144,32 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     // setNextSession
   ]);
 
+  const handleEstimatedEndTimeChange = (time: number) => {
+    const endTime = new Date()
+    endTime.setMinutes(endTime.getMinutes() + ((time + 1) / 60))
+    setEstimatedEndTime(endTime)
+  }
+
+  useEffect(() => {
+    let intervalId: number;
+
+    if (!isTimerRunning) {
+      handleEstimatedEndTimeChange(time)
+
+      intervalId = window.setInterval(() => {
+        handleEstimatedEndTimeChange(time);
+      }, 60000);
+    }
+
+    // Cleanup function to clear the interval when the component unmounts or dependencies change
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [isTimerRunning, time]);
+
+
   const getDisplayTime = (): string => {
     // const time = getDuration(mode)
     if (typeof time !== 'number' || isNaN(time)) return '00:00';
@@ -228,6 +255,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
 
   const value: TimerContextType = {
     time,
+    estimatedEndTime,
     getDisplayTime,
     start,
     pause,

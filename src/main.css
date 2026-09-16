@@ -97,6 +97,10 @@
     }
 }
 
+body {
+    background-color: oklch(78.34% 0.0855 130.39);
+}
+
 input[type="number"] {
   -moz-appearance: textfield;
 }
