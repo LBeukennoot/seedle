@@ -15,12 +15,22 @@
     --color-champagne: oklch(93.27% 0.0403 83.13);
     --color-light-red: oklch(0.89 0.0406 41.03);
     --color-red: oklch(0.8 0.0865 41.33);
+    --color-brown: oklch(0.6604 0.0784 52.53);
+    --color-linen: oklch(0.9683 0.0143 84.58);
+    --color-yellow: oklch(0.8514 0.1116 89.55);
+    --color-dark-pink: oklch(0.7045 0.1309 348.75);
+    --color-light-pink: oklch(0.8463 0.0707 354.75);
+    --color-purple: oklch(0.7304 0.112 291);
 
     --font-lexend: "Lexend", sans-serif;
 
     --breakpoint-xs: 25rem;
 
     --breakpoint-card: 450px;
+
+    --shadow-3xl: 0 0 30px rgba(0, 0, 0, 0.25);
+    --shadow-2xl: 0 0 20px rgba(0, 0, 0, 0.20);
+    --shadow-xl: 0 0 10px rgba(0, 0, 0, 0.15);
 
     --animate-plantlabel: plantLabel 1s cubic-bezier(0,1.85,0.91,1.11) 1;
     --animate-plantmove: plantMove 10s ease-in-out infinite;

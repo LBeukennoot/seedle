@@ -4,6 +4,8 @@ import { useNavigation } from '../context/Navigation';
 import { DebugMenu } from '../components/Debug/DebugMenu';
 import { useDebug } from '../context/Debug';
 import { WateringCan } from '../components/WateringCan';
+import { Seedlings } from './Seedlings';
+import { SettingsIcon } from '../components/Icons';
 
 // const GARDENS = ['A', 'B'];
 
@@ -35,6 +37,9 @@ export default function Navigation() {
 
   return (
     <div className="relative min-h-screen bg-linear-to-b from-[#A4BD6D] to-light-green overflow-hidden">
+
+      <div className="absolute w-full h-full flex justify-center align-center bg-[url('/src/navigation/seedlings.svg')] bg-fit bg-center bg-repeat">
+      </div>
       {/* {editState !== 'OFF' && (
         <>
           <div className="absolute w-full h-full p-1">
@@ -70,14 +75,39 @@ export default function Navigation() {
 
       <div className="grid grid-rows-[1fr_16rem] h-screen">
         <Garden />
-        <div></div>
       </div>
-      <div className="absolute bottom-0 mb-4 w-full flex justify-center">
-        {/* <ScreenCard>
-          <ScreenElement />
-        </ScreenCard> */}
-        <WateringCan />
 
+      <div className="absolute bottom-0 mb-4 w-full flex justify-center">
+        <WateringCan />
+      </div>
+
+      <div className="absolute top-0 right-0 m-5 p-2.5 bg-white rounded-full hover:scale-95 cursor-pointer">
+        <SettingsIcon className='fill-light-green' size={50} />
+      </div>
+
+      <div className='absolute top-0 left-0 w-screen h-screen flex justify-center items-center'>
+        <div className='relative bg-brown w-150 h-200 rounded-3xl shadow-3xl p-5 pr-0'>
+          <div className='absolute -top-15 bg-yellow w-50 h-20'></div>
+          <div className='bg-linen w-full h-full rounded-2xl shadow-xl pl-5'>
+            <div className='relative bg-linen w-full h-full rounded-2xl shadow-xl p-5'>
+              {/* <div className='h-full w-0 border-dashed border-1 border-brown [--dash-gap:10px] [--dash-length:15px]'></div> */}
+              <svg className="absolute stroke-brown w-1 h-full top-0 right-0 mr-1" width="100%" height="100%">
+                <line
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="100%"
+                  // stroke="brown"
+                  strokeWidth="0.25rem"
+                  strokeDasharray="50 50"
+                  strokeLinecap="square"
+                />
+              </svg>
+
+              <div className='w-full h-full'>book!</div>
+            </div>
+          </div>
+        </div>
       </div>
 
 

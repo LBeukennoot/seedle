@@ -1,7 +1,7 @@
 import { useMode } from "../../context/Mode";
 import { useTimer } from "../../context/Timer";
 import { Button } from "../Button";
-import { PauseIcon, StartIcon } from "../Icons";
+import { NextIcon, PauseIcon, StartIcon } from "../Icons";
 import { Timer } from "../Timer"
 import type { WateringCanProps } from "./types"
 
@@ -21,45 +21,36 @@ export const WateringCan = ({ }: WateringCanProps) => {
                         <Timer className="text-6xl font-semibold" />
                         <div className="text-2xl font-semibold mb-4">until {String(estimatedEndTime.getHours()).padStart(2, '0')}:{String(estimatedEndTime.getMinutes()).padStart(2, '0')}</div>
 
-                        {!isTimerRunning && (
-                            <div
-                                onClick={() => {
-                                    start(mode);
-                                }}
-                            >
-                                <StartIcon className="fill-white" size={60} />
+                        <div className="flex gap-5">
+                            <div className="hover:scale-90 cursor-pointer">
+                                {!isTimerRunning && (
+                                    <div
+                                        onClick={() => {
+                                            start(mode);
+                                        }}
+                                        className=""
+                                    >
+                                        <StartIcon className="fill-white" size={60} />
+                                    </div>
+                                )}
+
+                                {isTimerRunning && (
+                                    <div
+                                        onClick={() => {
+                                            pause();
+                                        }}
+                                        className=""
+                                    >
+                                        <PauseIcon className="fill-white" size={60} />
+                                    </div>
+                                )}
                             </div>
-                            // <Button
-                            //     label={'start'}
-                            //     onClick={() => {
-                            //         start(mode);
-                            //     }}
-                            //     className={''}>
-                            //     {/* {!sessionSettings.autoAdvance && 'start'}
-                            //     {sessionSettings.autoAdvance && <StartIcon className="fill-white" />} */}
 
-                            // </Button>
-                        )}
-
-                        {isTimerRunning && (
-                            <div
-                                onClick={() => {
-                                    pause();
-                                }}
-                            >
-                                <PauseIcon className="fill-white" size={60} />
+                            <div className="hover:scale-90 cursor-pointer">
+                                <NextIcon className="fill-white" size={60} />
                             </div>
-                            // <Button
-                            //     label={'pause'}
-                            //     onClick={() => {
-                            //         pause();
-                            //     }}
-                            //     className={''}>
-                            //     {/* {!sessionSettings.autoAdvance && 'start'}
-                            //     {sessionSettings.autoAdvance && <StartIcon className="fill-white" />} */}
+                        </div>
 
-                            // </Button>
-                        )}
                     </div>
                 </div>
             </div>
