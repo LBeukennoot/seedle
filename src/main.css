@@ -147,6 +147,7 @@ input[type="number"] {
 .scene {
     position: fixed;
     inset: 0;
+    isolation: isolate;
 
     filter: url(#edgeTexture);
 }

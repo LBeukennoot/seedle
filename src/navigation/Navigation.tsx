@@ -4,9 +4,11 @@ import { useNavigation } from '../context/Navigation';
 import { DebugMenu } from '../components/Debug/DebugMenu';
 import { useDebug } from '../context/Debug';
 import { WateringCan } from '../components/WateringCan';
-import { Seedlings } from './Seedlings';
 import { GardenIcon } from '../components/Icons';
 import { Book } from '../components/Book/Book';
+import { Plant } from '../components/Plant/Plant';
+import { PlantSpecies } from '../components/Plant/types';
+import { CollectablesList } from '../components/CollectablesList/CollectablesList';
 
 // const GARDENS = ['A', 'B'];
 
@@ -36,11 +38,11 @@ export default function Navigation() {
   // const { userData, editState, setEditState } = useUserData();
   const { debugSettings } = useDebug();
 
+  const collectables = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
   return (
     <div className="relative min-h-screen bg-linear-to-b from-[#A4BD6D] to-light-green overflow-hidden">
-
-      <div className="absolute w-full h-full flex justify-center align-center bg-[url('/src/navigation/seedlings.svg')] bg-fit bg-center bg-repeat">
-      </div>
+      <div className="absolute w-full h-full flex justify-center align-center bg-[url('/src/navigation/seedlings.svg')] bg-fit bg-center bg-repeat"></div>
       {/* {editState !== 'OFF' && (
         <>
           <div className="absolute w-full h-full p-1">
@@ -83,13 +85,23 @@ export default function Navigation() {
       </div>
 
       <div className="absolute top-0 right-0 m-5 p-3.5 bg-linen rounded-full shadow-2xl hover:shadow-none hover:scale-95 cursor-pointer">
-        <GardenIcon className='fill-light-green' size={35} />
+        <GardenIcon className="fill-light-green" size={35} />
       </div>
 
       <Book>
-        <div className="h-64 w-full bg-center shadow-xl bg-[linear-gradient(to_right,#b1c6e0ff_2px,transparent_2px),linear-gradient(to_bottom,#b1c6e0ff_2px,transparent_2px)] bg-[size:34px_34px]"></div>
-      </Book>
+        <div className="flex flex-col h-full">
+          <div className="h-40 w-full bg-center shadow-xl bg-[linear-gradient(to_right,#b1c6e0ff_2px,transparent_2px),linear-gradient(to_bottom,#b1c6e0ff_2px,transparent_2px)] bg-[size:34px_34px]"></div>
 
+          {/* clipPath is added because overflow-y-scroll doesnt work on its own. */}
+          <div
+            className="grow max-h-2/3 bg-light-green w-full overflow-y-scroll isolate"
+            style={{ clipPath: 'inset(0)' }}>
+            <CollectablesList />
+          </div>
+
+          <div className="h-40 w-full bg-center shadow-xl bg-[linear-gradient(to_right,#b1c6e0ff_2px,transparent_2px),linear-gradient(to_bottom,#b1c6e0ff_2px,transparent_2px)] bg-[size:34px_34px]"></div>
+        </div>
+      </Book>
 
       {debugSettings.debug && <DebugMenu />}
     </div>

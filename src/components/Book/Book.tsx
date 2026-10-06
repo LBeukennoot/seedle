@@ -9,7 +9,7 @@ export const Book = (props: any) => {
                     <div className='bg-dark-pink'></div>
                     <div className='bg-light-pink'></div>
                     <div className='bg-purple'></div>
-                    <div className='bg-red !col-start-9 !col-end-10'></div>
+                    <div className='bg-red col-start-9! col-end-10!'></div>
                 </div>
 
                 <div className='bg-linen w-full h-full rounded-l-2xl shadow-xl pl-5'>
@@ -33,7 +33,7 @@ export const Book = (props: any) => {
                 </div>
 
                 <div className='absolute top-190 -ml-5 -mt-5 px-10 w-full grid grid-cols-9 h-14 gap-3 items-bottom [&>div]:col-span-2 [&>div]:flex [&>div]:justify-center [&>div]:items-center [&>div]:shadow-xl'>
-                    <div className='bg-red !col-start-9 !col-end-10 [clip-path:polygon(0_0,100%_0,100%_100%,50%_50%,0_100%)]'></div>
+                    <div className='bg-red col-start-9! col-end-10! [clip-path:polygon(0_0,100%_0,100%_100%,50%_50%,0_100%)]'></div>
                 </div>
 
             </div>
