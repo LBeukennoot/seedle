@@ -7,6 +7,7 @@ import { WateringCan } from '../components/WateringCan';
 import { GardenIcon } from '../components/Icons';
 import { Book } from '../components/Book/Book';
 import { CollectablesList } from '../components/CollectablesList/CollectablesList';
+import { GridPaper } from '../components/GridPaper/GridPaper';
 
 /**
  * @author      LBeukennoot for Seedle
@@ -35,21 +36,23 @@ export default function Navigation() {
 
       <Book>
         <div className="flex flex-col h-full">
-          <div className="h-40 w-full bg-center shadow-xl text-center py-3 bg-[linear-gradient(to_right,#b1c6e0ff_2px,transparent_2px),linear-gradient(to_bottom,#b1c6e0ff_2px,transparent_2px)] bg-size-[34px_34px]">
-            <h1 className='text-4xl font-bold text-green'>Journey</h1>
-            <h1 className='text-4xl font-normal text-green'>5/9</h1>
-          </div>
+          <GridPaper id={"journey"} offset={-45} className={"z-10"}>
+            <h1 className="text-4xl font-bold text-green">Journey</h1>
+            <h1 className="text-4xl font-normal text-green">5/9</h1>
+          </GridPaper>
 
           <div
-            className="grow max-h-2/3 max-w-5/6 self-center bg-light-green w-full overflow-y-scroll isolate"
-            style={{ clipPath: 'inset(0)' }}> {/* clipPath is added because overflow-y-scroll doesnt work on its own. */}
+            className="grow max-h-6/8 -my-10 max-w-5/6 self-center bg-light-green w-full overflow-y-scroll isolate"
+            style={{ clipPath: 'inset(0)' }}>
+            {' '}
+            {/* clipPath is added because overflow-y-scroll doesnt work on its own. */}
             <CollectablesList />
           </div>
 
-          <div className="h-40 w-full bg-center shadow-xl flex justify-center items-center gap-5 py-3 bg-[linear-gradient(to_right,#b1c6e0ff_2px,transparent_2px),linear-gradient(to_bottom,#b1c6e0ff_2px,transparent_2px)] bg-size-[34px_34px]">
-            <h1 className='text-4xl font-bold text-green'>Next</h1>
-            <h1 className='text-4xl font-normal text-green'>Chicory</h1>
-          </div>
+          <GridPaper id={"next"} offset={0} className={"z-10 flex"}>
+            <h1 className="text-4xl font-bold text-green">Next</h1>
+            <h1 className="text-4xl font-normal text-green">Chicory</h1>
+          </GridPaper>
         </div>
       </Book>
 

@@ -40,7 +40,7 @@ export function EnvelopeOpenIcon(props: IconProps) {
         d="M33.8656 48.4265C39.3885 48.4265 43.8656 43.9494 43.8656 38.4265V17.439H7.62259e-06V38.4265C7.62259e-06 43.9494 4.47716 48.4265 10 48.4265H33.8656Z"
         strokeWidth="0"
       />
-      <path d="M0 17.439H43.8656"  strokeWidth="2" strokeLinejoin="round" />
+      <path d="M0 17.439H43.8656" strokeWidth="2" strokeLinejoin="round" />
       <mask
         id="mask0_2319_32"
         style={{ maskType: 'alpha' }}
@@ -97,7 +97,6 @@ export function EnvelopeOpenIcon(props: IconProps) {
       <g mask="url(#mask1_2319_32)">
         <path
           d="M0 17.439L18.2956 32.0082M43.8656 17.439L25.5139 32.0082M25.5139 32.0082L43.4359 48.0421M25.5139 32.0082C23.4602 30.1707 20.3466 30.1676 18.2956 32.0082M18.2956 32.0082L0.425056 48.0451"
-          
           strokeWidth="2"
           strokeLinejoin="round"
         />
