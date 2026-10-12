@@ -15,7 +15,7 @@ import { useDebug } from "../Debug";
 export const NavigationProvider = ({ children }: NavigationProviderProps) => {
 
     const [currentScreen, setCurrentScreen] = useState<Screen>(DefaultScreen)
-    const [panelExpanded, setPanelExpanded] = useState<boolean>(false)
+    const [menuOpen, setMenuOpen] = useState<boolean>(false)
     const [popup, setPopup] = useState<Popup>()
     // const [popup, setPopup] = useState<Popup>(<RewardPopup reward={PlantSpecies.LAVENDER} title="ba" claim={() => {}} />)
 
@@ -23,11 +23,11 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
 
 
     useEffect(() => {
-        let devScreenString = debugSettings.screen?.toUpperCase()
+        const devScreenString = debugSettings.screen?.toUpperCase()
         if (!devScreenString) return
 
 
-        let devScreen = Screen[devScreenString as keyof typeof Screen]
+        const devScreen = Screen[devScreenString as keyof typeof Screen]
         if (!devScreen) return
 
         setCurrentScreen(devScreen)
@@ -55,8 +55,8 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
         popup, 
         setPopup, 
         ScreenElement,
-        panelExpanded,
-        setPanelExpanded
+        menuOpen,
+        setMenuOpen
     }
 
     return (

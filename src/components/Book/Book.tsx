@@ -1,16 +1,19 @@
+import { TabList } from "../TabList"
+
 export const Book = (props: any) => {
 
     return (
         <div className='absolute top-0 pointer-events-none left-0 w-screen h-screen flex justify-center items-center'>
             <div className='relative bg-brown pointer-events-auto w-160 max-w-screen max-h-screen h-190 rounded-3xl shadow-3xl p-5 pr-0'>
 
-                <div className='absolute bottom-190 -ml-5 -mb-5 [&>div]:rounded-t-xl px-10 w-full grid grid-cols-9 h-14 gap-3 items-bottom [&>div]:col-span-2 [&>div]:flex [&>div]:justify-center [&>div]:items-center [&>div]:shadow-xl [&>div]:hover:mt-1.5 [&>div]:cursor-pointer'>
+                <TabList /> 
+                {/* <div className='absolute bottom-190 -ml-5 -mb-5 [&>div]:rounded-t-xl px-10 w-full grid grid-cols-9 h-14 gap-3 items-bottom [&>div]:col-span-2 [&>div]:flex [&>div]:justify-center [&>div]:items-center [&>div]:shadow-xl [&>div]:hover:mt-1.5 [&>div]:cursor-pointer'>
                     <div className='bg-yellow'></div>
                     <div className='bg-dark-pink'></div>
                     <div className='bg-light-pink'></div>
                     <div className='bg-purple'></div>
                     <div className='bg-red col-start-9! col-end-10!'></div>
-                </div>
+                </div> */}
 
                 <div className='bg-linen w-full h-full rounded-l-2xl shadow-xl pl-5'>
                     <div className='relative bg-linen w-full h-full rounded-l-2xl shadow-xl p-5'>

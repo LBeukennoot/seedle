@@ -40,7 +40,7 @@ export const CollectablesList = () => {
   return (
     <DragScroll>
       <div
-        className="flex flex-col items-center w-full py-40 gap-10 bg-linear-to-b from-[#A4BD6D] to-light-green"
+        className="flex flex-col items-center w-full py-40 gap-10"
         ref={containerRef}>
         {collectables.map((collectable) => {
           const unlockedItems = collectables.filter((item) => item.unlocked === 1);
