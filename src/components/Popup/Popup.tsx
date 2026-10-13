@@ -8,9 +8,9 @@ export const Popup = ({ children }: PopupProps) => {
         <div className="absolute w-screen h-screen bg-green opacity-50"></div>
 
         <div className="absolute w-screen h-screen flex items-center justify-center font-lexend text-dark-blue">
-          <div className="bg-white mx-auto w-full max-w-xl rounded-[3.5rem] max-h-120 px-10 py-6">
+          {/* <div className="bg-white mx-auto w-full max-w-xl rounded-[3.5rem] max-h-120 px-10 py-6"> */}
             {children}
-          </div>
+          {/* </div> */}
         </div>
       </div>
     </div>

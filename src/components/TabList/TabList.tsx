@@ -5,6 +5,8 @@ import type { TabProps } from './types';
 // import { usePlantData } from '../../context/PlantData';
 // import { useSettings } from '../../context/Settings';
 import { useNavigation } from '../../context/Navigation';
+import { PauseIcon } from '../Icons';
+import { CrossIcon } from '../Icons/CrossIcon';
 
 const Tab = ({ screens }: TabProps) => {
   // const { userData } = useUserData();
@@ -37,10 +39,15 @@ const Tab = ({ screens }: TabProps) => {
 };
 
 export const TabList = () => {
+  const { toggleMenuOpen } = useNavigation();
+
   return (
-    <div className={'absolute bottom-190 -ml-5 -mb-5 [&>div]:rounded-t-xl px-10 w-full grid grid-cols-9 h-14 gap-3 items-bottom [&>div]:col-span-2 [&>div]:flex [&>div]:justify-center [&>div]:items-center [&>div]:shadow-xl [&>div]:hover:mt-1.5 [&>div]:active:mt-2.5 [&>div]:active:shadow-lg [&>div]:cursor-pointer'}>
+    <div
+      className={
+        'absolute bottom-190 -ml-5 -mb-5 [&>div]:rounded-t-xl px-10 w-full grid grid-cols-9 h-14 gap-3 items-bottom [&>div]:col-span-2 [&>div]:flex [&>div]:justify-center [&>div]:items-center [&>div]:shadow-xl [&>div]:hover:mt-1.5 [&>div]:active:mt-2.5 [&>div]:active:shadow-lg [&>div]:cursor-pointer'
+      }>
       <Tab screens={ScreenRegistry} />
-      <div className='bg-red col-start-9! col-end-10!'></div>
+      <div onClick={() => toggleMenuOpen()} className="bg-red col-start-9! col-end-10!"><CrossIcon className='stroke-white'/></div>
     </div>
   );
 };

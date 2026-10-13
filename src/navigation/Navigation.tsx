@@ -17,7 +17,7 @@ import { ScreenCard } from '../components/ScreenCard';
  * @created     20-04-2026
  */
 export default function Navigation() {
-  const { popup, ScreenElement, menuOpen, setMenuOpen } = useNavigation();
+  const { popup, ScreenElement, menuOpen, toggleMenuOpen } = useNavigation();
   const { debugSettings } = useDebug();
 
   return (
@@ -33,7 +33,7 @@ export default function Navigation() {
         <WateringCan />
       </div>
 
-      <div onClick={() => setMenuOpen(!menuOpen)} className="absolute top-0 right-0 m-5 p-3.5 bg-linen rounded-full shadow-2xl hover:shadow-lg hover:scale-95 active:shadow-none active:scale-90 cursor-pointer">
+      <div onClick={() => toggleMenuOpen()} className="absolute top-0 right-0 m-5 p-3.5 bg-linen rounded-full shadow-2xl hover:shadow-lg hover:scale-95 active:shadow-none active:scale-90 cursor-pointer">
         <GardenIcon className="fill-light-green" size={35} />
       </div>
 

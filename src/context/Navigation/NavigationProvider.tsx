@@ -5,6 +5,8 @@ import type { Popup } from "../../components/Popup/types";
 import { DefaultScreen, isScreen, ScreenRegistry } from "../../navigation/ScreenRegistry";
 import { Screen } from "../../navigation/Screen";
 import { useDebug } from "../Debug";
+import { RewardPopup } from "../../components/Popup/RewardPopup";
+import { PlantSpecies } from "../../components/Plant/types";
 
 /**
  * Providing currentScreen to all screen components
@@ -16,8 +18,8 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
 
     const [currentScreen, setCurrentScreen] = useState<Screen>(DefaultScreen)
     const [menuOpen, setMenuOpen] = useState<boolean>(false)
-    const [popup, setPopup] = useState<Popup>()
-    // const [popup, setPopup] = useState<Popup>(<RewardPopup reward={PlantSpecies.LAVENDER} title="ba" claim={() => {}} />)
+    // const [popup, setPopup] = useState<Popup>()
+    const [popup, setPopup] = useState<Popup>(<RewardPopup reward={PlantSpecies.LAVENDER} title="ba" claim={() => {}} />)
 
     const { debugSettings } = useDebug()
 
@@ -33,6 +35,9 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
         setCurrentScreen(devScreen)
     }, [debugSettings])
 
+    const toggleMenuOpen = () => {
+        setMenuOpen(!menuOpen)
+    }
 
     const ScreenElement = () => {
 
@@ -56,7 +61,7 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
         setPopup, 
         ScreenElement,
         menuOpen,
-        setMenuOpen
+        toggleMenuOpen
     }
 
     return (

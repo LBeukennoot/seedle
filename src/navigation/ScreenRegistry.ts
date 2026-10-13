@@ -8,6 +8,7 @@ import { Screen } from './Screen'
 import { JourneyScreen } from '../screens/Journey/JourneyScreen'
 import { StatisticsScreen } from '../screens/Statistics/StatisticsScreen'
 import { SettingsScreen } from '../screens/SettingsScreen'
+import { StatisticsIcon } from '../components/Icons/StatisticsIcon'
 
 
 export const DefaultScreen: Screen = Screen.JOURNEY
@@ -24,7 +25,7 @@ export const ScreenRegistry: Record<Screen, {
     },
     [Screen.STATISTICS]: {
         screen: StatisticsScreen,
-        icon: TimerIcon, //TODO
+        icon: StatisticsIcon, //TODO
         background: "bg-purple"
     },
     [Screen.SETTINGS]: {

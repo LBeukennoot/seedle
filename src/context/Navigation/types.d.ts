@@ -12,5 +12,5 @@ export type NavigationContextType = {
     setPopup: (popup: Popup) => void
     ScreenElement: () => JSX.Element
     menuOpen: boolean
-    setMenuOpen: (panelExpanded: boolean) => void
+    toggleMenuOpen: () => void
 }
