@@ -10,6 +10,8 @@ import { Book } from '../components/Book/Book';
 // import { GridPaper } from '../components/GridPaper/GridPaper';
 // import { TabList } from '../components/TabList';
 import { ScreenCard } from '../components/ScreenCard';
+import { PictureInPictureProvider } from '../context/PictureInPicture/PictureInPictureProvider';
+import { usePictureInPicture } from '../context/PictureInPicture';
 // import { ScreenRegistry } from './ScreenRegistry';
 
 /**
@@ -30,10 +32,14 @@ export default function Navigation() {
       </div>
 
       <div className="absolute bottom-0 mb-4 w-full flex justify-center">
-        <WateringCan />
+        <PictureInPictureProvider>
+          <WateringCan />
+        </PictureInPictureProvider>
       </div>
 
-      <div onClick={() => toggleMenuOpen()} className="absolute top-0 right-0 m-5 p-3.5 bg-linen rounded-full shadow-2xl hover:shadow-lg hover:scale-95 active:shadow-none active:scale-90 cursor-pointer">
+      <div
+        onClick={() => toggleMenuOpen()}
+        className="absolute top-0 right-0 m-5 p-3.5 bg-linen rounded-full shadow-2xl hover:shadow-lg hover:scale-95 active:shadow-none active:scale-90 cursor-pointer">
         <GardenIcon className="fill-light-green" size={35} />
       </div>
 

@@ -17,10 +17,12 @@ export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProp
 
   return (
     <Select
-      className={"bg-white border-6 border-blue rounded-full! px-4 text-xl! text-blue! " + (!disabled && "hover:cursor-pointer!")}
-      IconComponent={() => <ArrowDownIcon width="30" className="stroke-blue" />}
+      className={"bg-[#F1E6CF] px-4 text-xl! font-semibold text-green! " + (!disabled && "hover:cursor-pointer!")}
+      IconComponent={() => <ArrowDownIcon width="30" className="stroke-green" />}
       sx={{
         boxShadow: 'none',
+        borderRadius: '0.7rem',
+        height: '3rem',
         '.MuiOutlinedInput-notchedOutline': {
           border: 'none'
         },
@@ -36,9 +38,9 @@ export const Dropdown = ({ selected, options, onSelect, disabled }: DropdownProp
       MenuProps={{
         sx: {
           '.MuiPaper-root': {
-            backgroundColor: 'var(--color-blue)',
-            color: 'white',
-            borderRadius: '2rem'
+            backgroundColor: 'var(--color-linen)',
+            color: 'var(--color-green)',
+            borderRadius: '0rem'
           }
         }
       }}

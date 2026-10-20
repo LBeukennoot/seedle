@@ -11,7 +11,7 @@ export const JourneyScreen = () => {
           </GridPaper>
 
           <div
-            className="grow max-h-6/8 -my-10 max-w-5/6 overflow-hidden self-center bg-linear-to-b from-[#A4BD6D] to-light-green w-full overflow-y-scroll isolate"
+            className="grow max-h-6/8 -my-10 max-w-5/6 self-center bg-linear-to-b from-[#A4BD6D] to-light-green w-full isolate"
             style={{ clipPath: 'inset(0)' }}>
             {' '}
             {/* clipPath is added because overflow-y-scroll doesnt work on its own. */}

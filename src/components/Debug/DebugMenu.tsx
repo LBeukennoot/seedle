@@ -5,12 +5,14 @@ import { usePlantData } from '../../context/PlantData';
 import { useUserData } from '../../context/UserData';
 import { useState } from 'react';
 import { PlantSpecies, type PlantData } from '../Plant/types';
+import { useFPS } from '../../utils/useFPS';
 
 export const DebugMenu = () => {
   const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants } = usePlantData();
   const { userData, setEditState, addGrowthPoints, removeGrowthPoints, addExperience, removeExperience } = useUserData();
   const { getParam } = useURLParams();
   const selectedPlantID = getParam('plant');
+  const fps = useFPS();
 
   const [newPlants, setNewPlants] = useState({
     amount: 1,
@@ -24,7 +26,8 @@ export const DebugMenu = () => {
   };
 
   return (
-    <div className="absolute top-0 right-0 bg-black rounded-lg border border-white p-2 m-2 text-white flex flex-col w-50 z-50">
+    <div className="absolute bottom-0 left-0 bg-black rounded-lg border border-white p-2 m-2 text-white flex flex-col w-50 z-50">
+        fps: {fps}
       <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           {plants.length} Total Plants

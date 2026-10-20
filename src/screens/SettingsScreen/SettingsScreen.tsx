@@ -1,10 +1,12 @@
-import { AccordionDetails } from '@mui/material';
+import { AccordionDetails, Popover } from '@mui/material';
 import { Accordion } from '../../components/Accordion';
 import { Slider } from '../../components/Slider';
 import { Toggle } from '../../components/Toggle';
 import { useSettings } from '../../context/Settings';
 import { AccordionSummary } from '../../components/Accordion/AccordionSummary';
 import type { SessionData } from '../../features/session/sessionTypes';
+import { SwitchButton } from '../../components/SwitchButton';
+import { Dropdown } from '../../components/Dropdown';
 
 /**
  * @author      LBeukennoot for Seedle
@@ -32,11 +34,33 @@ export const SettingsScreen = () => {
 
   //TODO change categories
   //TODO add setting descriptions
+  // TODO this
   return (
-    <div className="overflow-y-auto max-h-full pt-10 rounded-b-[2.3rem] md:rounded-b-[1.4rem] text-blue font-lexend">
-      <h1 className="text-3xl mb-3">settings</h1>
+    <div className="flex flex-col h-full overflow-y-scroll pr-5" style={{ clipPath: 'inset(0)' }}>
+      <h1 className="text-4xl font-bold text-green mb-5">Settings</h1>
 
-      <Accordion>
+      <h2 className="text-2xl font-bold text-green">graphics</h2>
+      <div className="w-full flex justify-between items-center">
+        <div className="flex items-end gap-3">
+          <h2 className="text-xl font-semibold text-green">turbulence filter</h2>
+          <div className='font-mono text-md font-bold text-green text-center border-2 border-green w-5 h-5 rounded-full mb-0.5 cursor-pointer'>
+            <div className='-mt-1'>i</div>
+          </div>
+          {/* <Popover open>ba</Popover> */}
+        </div>
+        {/* <SwitchButton options={["on", "off"]} selected={"off"} onSelect={() => {}} /> */}
+        {/* <Toggle setValue={() => {}}checked /> */}
+        <Dropdown
+          options={[
+            { id: 'on', label: 'on' },
+            { id: 'off', label: 'off' }
+          ]}
+          selected={'off'}
+          onSelect={() => {}}
+        />
+      </div>
+
+      {/* <Accordion>
         <AccordionSummary>time</AccordionSummary>
         <AccordionDetails className="my-4 flex flex-col gap-4 mb-10">
           <div>
@@ -62,45 +86,10 @@ export const SettingsScreen = () => {
             })}
           </div>
 
-          {/* <div>
-            <h3 className="text-lg">rest</h3>
-            <Slider
-              min={5}
-              max={120}
-              safeZone={{
-                min: sessionTime.rest.min,
-                max: sessionTime.rest.max
-              }}
-              invert={true}
-              value={sessionTime.rest.time}
-              setValue={(newValue: number) => handleSessionTimeChange({ newValue, mode: 'rest' })}
-              name={sessionTime.rest.id}
-            />
-          </div>
-
-          <div>
-            <h3 className="text-lg">long rest</h3>
-            <Slider
-              min={5}
-              max={120}
-              safeZone={{
-                min: sessionTime.long_rest.min,
-                max: sessionTime.long_rest.max
-              }}
-              invert={true}
-              value={sessionTime.long_rest.time}
-              setValue={(newValue: number) => handleSessionTimeChange({ newValue, mode: 'long_rest' })}
-              name={sessionTime.long_rest.id}
-            />
-          </div> */}
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
 
-      {/* <hr className="border rounded-full text-light-blue"></hr>
-                <h2 className="text-lg my-3 font-bold">time</h2>
-                <hr className="border rounded-full text-light-blue"></hr> */}
-
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary>sessions</AccordionSummary>
         <AccordionDetails className="my-4 flex flex-col gap-4 mb-10">
           <div>
@@ -111,12 +100,9 @@ export const SettingsScreen = () => {
             />
           </div>
 
-          {/* <div className={"h-10 overflow-y-hidden pb-2 transition-all bg-blue w-full duration-300 " + (!sessionSettings.autoAdvance ? "!h-0 !pb-0" : "")}>
-                    </div> */}
-
           <div
             className={
-              'h-[13rem] overflow-y-hidden transition-all duration-500 ' + (!sessionSettings.autoAdvance ? '!h-0' : '')
+              'h-52 overflow-y-hidden transition-all duration-500 ' + (!sessionSettings.autoAdvance ? '!h-0' : '')
             }>
             <div>
               <h3 className="text-lg pb-2">sessions</h3>
@@ -154,9 +140,9 @@ export const SettingsScreen = () => {
             </div>
           </div>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
 
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary>sound</AccordionSummary>
         <AccordionDetails className="my-4 flex flex-col gap-4 mb-10">
           <div>
@@ -177,14 +163,9 @@ export const SettingsScreen = () => {
               checked={sessionSettings.timerCompleteNotification}
               setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: 'timerCompleteNotification' })}
             />
-            {/* <h3 className="text-lg pb-2">tab notifications</h3>
-            <Toggle
-              checked={sessionSettings.tabNotification}
-              setValue={(newValue: boolean) => handleSessionChange({ newValue, setting: 'tabNotification' })}
-            /> */}
           </div>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
 
       {/* <hr className="border-1 mb-3 rounded-full text-light-blue"></hr> */}
     </div>

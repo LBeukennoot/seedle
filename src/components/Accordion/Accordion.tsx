@@ -5,7 +5,7 @@ import { Accordion as MUIAccordion } from "@mui/material"
 export const Accordion = ({children}: AccordionProps) => {
 
     return (
-        <MUIAccordion className="text-blue! text-xl shadow-none! border-t-2 border-light-blue">
+        <MUIAccordion className="text-green! bg-transparent! text-xl shadow-none! border-t-2 border-green">
             {children}
         </MUIAccordion>
     )

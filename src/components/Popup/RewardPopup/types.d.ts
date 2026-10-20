@@ -1,7 +1,7 @@
-import type { Plants } from "../../PlantElement/types"
+import type { PlantSpecies } from "../../Plant/types"
 
 export type RewardPopupProps = {
-    reward: Plants,
+    reward: PlantSpecies,
     title: string,
     claim: () => void
 }

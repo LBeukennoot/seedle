@@ -109,5 +109,5 @@ export default function NoiseCanvas() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute pointer-events-none mix-blend-soft-light opacity-25 z-1000" />;
+  return <canvas ref={canvasRef} className="absolute w-screen h-screen pointer-events-none mix-blend-soft-light opacity-25 z-1000" />;
 }

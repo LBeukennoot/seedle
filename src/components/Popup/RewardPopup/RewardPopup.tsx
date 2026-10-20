@@ -1,36 +1,33 @@
 import { useState } from 'react';
 import type { RewardPopupProps } from '.';
-import { Button } from '../../Button';
 import { Plant } from '../../Plant/Plant';
-import { PlantInGarden } from '../../Plant/PlantInGarden';
-import { PlantSpecies } from '../../Plant/types';
 import { EnvelopeClosed } from './Envelope/EnvelopeClosed';
 import { EnvelopeOpenBack } from './Envelope/EnvelopeOpenBack';
 import { EnvelopeOpenFront } from './Envelope/EnvelopeOpenFront';
 import { EnvelopeStamp } from './Envelope/EnvelopeStamp';
 import { EnvelopeWiggle } from './Envelope/EnvelopeWiggle';
 import { PlantCard } from './Envelope/PlantCard';
-import { SeedBag } from './SeedBag';
 
 export const RewardPopup = ({ reward, title = 'session complete!', claim }: RewardPopupProps) => {
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
 
   const toggleEvelopeOpen = () => {
     setEnvelopeOpen(!envelopeOpen);
+    setTimeout(() => {claim()}, 2000)
   };
 
   return (
     <div onClick={() => toggleEvelopeOpen()} className="relative w-full h-full flex justify-center items-center">
-      {envelopeOpen && <EnvelopeClosed size={455} className="absolute" />}
+      {!envelopeOpen && <EnvelopeClosed size={455} className="absolute" />}
 
-      {!envelopeOpen && (
+      {envelopeOpen && (
         <>
           <div className="relative w-full h-full flex justify-center items-center -mt-45">
             <EnvelopeOpenBack size={500} className="absolute" />
             <div className="absolute rotate-7">
               <div className="relative flex justify-center items-center">
                 <PlantCard size={300} className="absolute" />
-                <Plant name={PlantSpecies.CHAMOMILE} stage={4} className={'absolute w-30 h-30 z-40'} />
+                <Plant name={reward} stage={4} className={'absolute w-30 h-30 z-40'} />
               </div>
             </div>
             <EnvelopeOpenFront size={455} className="absolute -mb-45" />

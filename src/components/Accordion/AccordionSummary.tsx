@@ -5,7 +5,7 @@ import { ArrowDownIcon } from "../Icons"
 export const AccordionSummary = ({children}: AccordionProps) => {
 
     return (
-        <MUIAccordionSummary className="border-b-2 border-blue" expandIcon={<ArrowDownIcon className="stroke-blue" />}>
+        <MUIAccordionSummary className="border-b-2 border-blue" expandIcon={<ArrowDownIcon className="stroke-green" />}>
             {children}
         </MUIAccordionSummary>
     )

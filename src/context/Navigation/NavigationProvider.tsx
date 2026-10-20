@@ -18,8 +18,8 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
 
     const [currentScreen, setCurrentScreen] = useState<Screen>(DefaultScreen)
     const [menuOpen, setMenuOpen] = useState<boolean>(false)
-    // const [popup, setPopup] = useState<Popup>()
-    const [popup, setPopup] = useState<Popup>(<RewardPopup reward={PlantSpecies.LAVENDER} title="ba" claim={() => {}} />)
+    const [popup, setPopup] = useState<Popup>()
+    // const [popup, setPopup] = useState<Popup>(<RewardPopup reward={PlantSpecies.LAVENDER} title="ba" claim={() => {}} />)
 
     const { debugSettings } = useDebug()
 

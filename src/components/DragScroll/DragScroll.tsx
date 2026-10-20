@@ -1,53 +1,84 @@
-import React, { useRef, useState } from "react";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
+import { useRef, useState, useEffect } from "react";
 
-const DragScroll = ({ children }: { children: React.ReactNode }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [startY, setStartY] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [scrollTop, setScrollTop] = useState(0);
+export const DragScroll = ({ children }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    setIsDragging(true);
-    setStartX(e.pageX - (scrollRef.current?.offsetLeft || 0));
-    setStartY(e.pageY - (scrollRef.current?.offsetTop || 0));
-    setScrollLeft(scrollRef.current?.scrollLeft || 0);
-    setScrollTop(scrollRef.current?.scrollTop || 0);
-    scrollRef.current?.style.setProperty("cursor", "grabbing", "important");
-  };
+  // Motion values for drag and scroll
+  const y = useMotionValue(0);
 
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-    scrollRef.current?.style.setProperty("cursor", "grab", "important");
-  };
+  // Calculate scroll limits
+  const maxScroll = Math.max(0, contentHeight - containerHeight);
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    scrollRef.current?.style.setProperty("cursor", "grab", "important");
-  };
+  // Physics-based spring animation for momentum
+  const scrollY = useSpring(y, {
+    stiffness: 300,
+    damping: 30,
+    restDelta: 0.5,
+  });
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDragging || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - (scrollRef.current.offsetLeft + startX);
-    const y = e.pageY - (scrollRef.current.offsetTop + startY);
-    scrollRef.current.scrollLeft = scrollLeft - x;
-    scrollRef.current.scrollTop = scrollTop - y;
-  };
+  // Update container and content heights
+  useEffect(() => {
+    if (containerRef.current) {
+      setContainerHeight(containerRef.current.offsetHeight);
+    }
+    if (contentRef.current) {
+      setContentHeight(contentRef.current.scrollHeight);
+    }
+  }, []);
+
+  // Sync scroll position with native scroll
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = scrollY.get();
+    }
+  }, [scrollY]);
 
   return (
-    <div
-      ref={scrollRef}
-      className="overflow-auto cursor-grab active:cursor-grabbing"
-      onMouseDown={handleMouseDown}
-      onMouseLeave={handleMouseLeave}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
+    <motion.div
+      ref={containerRef}
+      style={{
+        height: "100%",
+        overflow: "hidden",
+        position: "relative",
+        touchAction: "pan-y",
+      }}
     >
-      {children}
-    </div>
+      {/* Scrollable content */}
+      <motion.div
+        ref={contentRef}
+        drag="y"
+        dragConstraints={{
+          top: 0,
+          bottom: maxScroll > 0 ? -maxScroll : 0,
+        }}
+        dragElastic={0.1}
+        dragMomentum={true}
+        style={{
+          y,
+          height: "fit-content",
+          willChange: "transform",
+        }}
+        onDragEnd={(e, info) => {
+          // Optional: Add additional momentum based on velocity
+          if (info.velocity.y !== 0) {
+            scrollY.set(
+              Math.min(
+                Math.max(y.get() + info.velocity.y * 50, -maxScroll),
+                0
+              )
+            );
+          }
+        }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
   );
-};
+}
 
-export default DragScroll;
+
+

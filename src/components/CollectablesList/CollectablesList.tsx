@@ -1,15 +1,17 @@
-import { useEffect, useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useMotionValue, useTransform } from 'motion/react';
 import { PlantSpecies } from '../Plant/types';
-import { BentLineIcon } from '../Icons/BentLineIcon';
-import { EnvelopeClosedIcon } from '../Icons/EnvelopeClosedIcon';
 import { EnvelopeOpenIcon } from '../Icons/EnvelopeOpenIcon';
+import { EnvelopeClosedIcon } from '../Icons/EnvelopeClosedIcon';
 import { StarIcon } from '../Icons/StarIcon';
-import DragScroll from '../DragScroll/DragScroll';
+import { BentLineIcon } from '../Icons/BentLineIcon';
 
 export const CollectablesList = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef(null);
+  const contentRef = useRef(null);
+  const y = useMotionValue(0);
+  const [dragConstraints, setDragConstraints] = useState({ top: 0, bottom: 0 });
 
-  // Updated collectables array with the new format
   const collectables = [
     { id: 1, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-red stroke-red', unlocked: 1 },
     { id: 2, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-blue stroke-blue', unlocked: 1 },
@@ -22,26 +24,48 @@ export const CollectablesList = () => {
     { id: 9, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 0 }
   ];
 
-  // Example: Scroll to the item with the specified id
-  const scrollToItem = (id: number) => {
-    if (containerRef.current) {
-      const items = containerRef.current.children;
-      const itemIndex = collectables.findIndex((item) => item.id === id);
-      if (itemIndex !== -1 && items[itemIndex]) {
-        items[itemIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  };
-
+  // Calculate top boundary so you can't drag past the bottom of the content
   useEffect(() => {
-    scrollToItem(5); // Scroll to the item with id 5
+    const calculateBounds = () => {
+      if (containerRef.current && contentRef.current) {
+        const containerHeight = containerRef.current.offsetHeight;
+        const contentHeight = contentRef.current.scrollHeight;
+
+        const maxScroll = containerHeight - contentHeight;
+        setDragConstraints({ top: maxScroll < 0 ? maxScroll : 0, bottom: 0 });
+      }
+    };
+
+    calculateBounds();
+    window.addEventListener('resize', calculateBounds);
+    return () => window.removeEventListener('resize', calculateBounds);
   }, []);
 
+  const yClamped = useTransform(y, (latest) => {
+    return Math.max(dragConstraints.top, Math.min(dragConstraints.bottom, latest));
+  });
+
+  // Handle wheel scrolling
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const deltaY = e.deltaY;
+    y.set(y.get() - deltaY);
+  };
+
   return (
-    <DragScroll>
-      <div
-        className="flex flex-col items-center w-full py-40 gap-10"
-        ref={containerRef}>
+    <div ref={containerRef} className="h-full w-full overflow-hidden cursor-grab select-none" onWheel={handleWheel}>
+      <motion.div
+        ref={contentRef}
+        // onScroll={handleScroll}
+        drag="y"
+        // onWheel={handleWheel}
+        // onDrag={handleDrag}
+        dragConstraints={dragConstraints}
+        dragElastic={0.1} // Bouncy rubber-band effect when pulled past limits
+        dragMomentum={true} // Enables momentum physics (flick to scroll)
+        whileTap={{ cursor: 'grabbing' }}
+        style={{ y: yClamped }}
+        className="flex flex-col items-center py-20 gap-10 h-full w-full">
         {collectables.map((collectable) => {
           const unlockedItems = collectables.filter((item) => item.unlocked === 1);
           const isLastUnlockedItem =
@@ -61,10 +85,6 @@ export const CollectablesList = () => {
                   </>
                 )}
               </div>
-              {/* <div
-              className={`bg-linen w-30 h-30 rounded-full p-5 border-8 ${collectable.plantLevel} ${isEven ? 'ml-10' : '-ml-10'} ${collectable.unlocked ? '' : 'grayscale-100'}`}>
-              <Plant name={collectable.plant} stage={4} className="w-16 h-16" />
-            </div> */}
 
               {isLastUnlockedItem && (
                 <div className={`w-35 h-35 absolute top-0 left-0 flex flex-col ${isEven ? 'ml-10' : '-ml-10'}`}>
@@ -85,7 +105,7 @@ export const CollectablesList = () => {
             </div>
           );
         })}
-      </div>
-    </DragScroll>
+      </motion.div>
+    </div>
   );
 };
