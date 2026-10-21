@@ -9,8 +9,11 @@ import { BentLineIcon } from '../Icons/BentLineIcon';
 export const CollectablesList = () => {
   const containerRef = useRef(null);
   const contentRef = useRef(null);
+  const targetItemRef = useRef<HTMLDivElement>(null);
   const y = useMotionValue(0);
   const [dragConstraints, setDragConstraints] = useState({ top: 0, bottom: 0 });
+
+  const scrollToIndex = 4;
 
   const collectables = [
     { id: 1, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-red stroke-red', unlocked: 1 },
@@ -41,6 +44,19 @@ export const CollectablesList = () => {
     return () => window.removeEventListener('resize', calculateBounds);
   }, []);
 
+  useEffect(() => {
+    if (targetItemRef.current && containerRef.current) {
+      const targetItem = targetItemRef.current;
+      const containerHeight = containerRef.current.offsetHeight;
+      const targetPosition = -(targetItem.offsetTop - containerHeight / 2 + targetItem.offsetHeight / 2);
+
+      console.log('Target Position:', targetPosition);
+      console.log('Drag Constraints:', dragConstraints);
+
+      y.set(targetPosition);
+    }
+  }, [dragConstraints]);
+
   const yClamped = useTransform(y, (latest) => {
     return Math.max(dragConstraints.top, Math.min(dragConstraints.bottom, latest));
   });
@@ -66,14 +82,18 @@ export const CollectablesList = () => {
         whileTap={{ cursor: 'grabbing' }}
         style={{ y: yClamped }}
         className="flex flex-col items-center py-20 gap-10 h-full w-full">
-        {collectables.map((collectable) => {
+        {collectables.map((collectable, index) => {
           const unlockedItems = collectables.filter((item) => item.unlocked === 1);
           const isLastUnlockedItem =
             unlockedItems.findIndex((item) => item.id === collectable.id) === unlockedItems.length - 1;
           const isEven = collectable.id % 2 === 0;
 
           return (
-            <div key={collectable.id} id={`item-${collectable.id}`} className={'flex flex-col relative z-10'}>
+            <div
+              key={collectable.id}
+              ref={index === scrollToIndex ? targetItemRef : null}
+              id={`item-${collectable.id}`}
+              className={'flex flex-col relative z-10'}>
               <div className={`w-30 h-30 ${collectable.plantLevel} ${isEven ? 'ml-10' : '-ml-10'}`}>
                 {collectable.unlocked ? (
                   <>
