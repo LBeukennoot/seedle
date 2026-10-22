@@ -23,13 +23,14 @@ export const getSessionsArray = (focusSessions: number = 4): Mode[] => {
  */
 export const SessionProvider = ({ children }: SessionProviderProps) => {
 
-    const { sessionSettings }: SettingsContextType = useSettings()
+    const { settings }: SettingsContextType = useSettings()
     const { setMode }: ModeContextType = useMode()
     const [currentSession, setCurrentSession] = useState<number>(0)
     const [nextSession, setNextSession] = useState<Mode>(Mode.REST)
 
 
-    const sessionsArray = getSessionsArray(sessionSettings.focusSessions)
+    const sessionsArray = getSessionsArray(4)
+    // const sessionsArray = getSessionsArray(sessionSettings.focusSessions)
 
     const toNextSession = () => {
         if (currentSession < sessionsArray.length - 1) {
@@ -48,7 +49,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         currentSession,
         setCurrentSession,
         toNextSession,
-        sessionCount: sessionSettings.focusSessions,
+        sessionCount: 4,
         sessionsArray,
         nextSession,
         setNextSession

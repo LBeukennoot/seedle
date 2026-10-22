@@ -8,6 +8,18 @@ import { Timer } from '../Timer';
 import { TurbulenceFilter } from '../TurbulenceFilter/TurbulenceFilter';
 import type { WateringCanProps } from './types';
 
+/**
+ * this ui component should include in the style:
+ * - time left
+ * - estimated end time
+ * - start/pause/stop buttons
+ * - skip to next session
+ * - current session
+ * - dropdown to select a session
+ * - indication that next session will start automatically (depending on setting)
+ * - button for pip
+ */
+
 export const WateringCan = ({}: WateringCanProps) => {
   const { mode } = useMode();
   const { start, pause, isTimerRunning, estimatedEndTime } = useTimer();

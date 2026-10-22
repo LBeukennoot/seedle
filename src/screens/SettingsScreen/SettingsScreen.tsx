@@ -13,7 +13,7 @@ import { Dropdown } from '../../components/Dropdown';
  * @created     20-04-2026
  */
 export const SettingsScreen = () => {
-  const { sessionTime, setSessionTime, sessionSettings, setSessionSettings } = useSettings();
+  const { sessionTime, setSessionTime, settings, setSettings } = useSettings();
 
   const handleSessionTimeChange = ({ newValue, mode }: { newValue: number; mode: string }) => {
     setSessionTime({
@@ -25,10 +25,10 @@ export const SettingsScreen = () => {
     });
   };
 
-  const handleSessionChange = ({ newValue, setting }: any) => {
-    setSessionSettings({
-      ...sessionSettings,
-      [setting]: newValue
+  const handleSessionChange = ({ newValue, category, setting }: any) => {
+    setSettings({
+      ...settings,
+      [category]: { ...[category], [setting]: newValue }
     });
   };
 
@@ -43,8 +43,8 @@ export const SettingsScreen = () => {
       <div className="w-full flex justify-between items-center">
         <div className="flex items-end gap-3">
           <h2 className="text-xl font-semibold text-green">turbulence filter</h2>
-          <div className='font-mono text-md font-bold text-green text-center border-2 border-green w-5 h-5 rounded-full mb-0.5 cursor-pointer'>
-            <div className='-mt-1'>i</div>
+          <div className="font-mono text-md font-bold text-green text-center border-2 border-green w-5 h-5 rounded-full mb-0.5 cursor-pointer">
+            <div className="-mt-1">i</div>
           </div>
           {/* <Popover open>ba</Popover> */}
         </div>
@@ -56,7 +56,9 @@ export const SettingsScreen = () => {
             { id: 'off', label: 'off' }
           ]}
           selected={'off'}
-          onSelect={() => {}}
+          onSelect={(selected) =>
+            handleSessionChange({ newValue: selected, category: 'graphics', setting: 'turbulenceFilter' })
+          }
         />
       </div>
 

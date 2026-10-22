@@ -2,53 +2,58 @@ import { useEffect, useState } from 'react';
 import {
   Experience,
   Tiers,
-  type EditState,
-  type UserData,
+  // type EditState,
   type UserDataContextType,
-  type UserDataProviderProps
+  type UserDataProviderProps,
+  type UserStatistics
 } from './types';
 import { UserDataContext } from './UserDataContext';
 import LocalStorage from '../../utils/LocalStorage';
+import { initialUserStatistics } from './constants';
 
 const localStorage = new LocalStorage();
 
 export const UserDataProvider = ({ children }: UserDataProviderProps) => {
-  const [editState, setEditState] = useState<EditState>('OFF');
-  const [userData, setUserData] = useState<UserData>({
-    growthPoints: 0,
-    experience: 0
+  // const [editState, setEditState] = useState<EditState>('OFF');
+  const [userStatistics, setUserStatistics] = useState<UserStatistics>(():UserStatistics => {
+    const stored = localStorage.getValue('userStatistics');
+    return stored ? stored as UserStatistics : initialUserStatistics;
   });
 
-  // useEffect(() => {
-  //   if (userData.growthPoints <= 0) setEditState('OFF');
-  // }, [editState, userData.growthPoints]);
-
   useEffect(() => {
-    const stored = localStorage.getValue('userData');
+    localStorage.setValue('userStatistics', userStatistics);
+  }, [userStatistics]);
 
-    //TODO also save data when its being changed
-    if (stored) {
-      setUserData(stored as UserData);
-    } else {
-      localStorage.setValue('userData', userData);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const stored = localStorage.getValue('userStatistics');
 
-  const addGrowthPoints = (amount: number = 1) => {
-    setUserData({ ...userData, growthPoints: userData.growthPoints + amount });
+  //   //TODO also save data when its being changed
+  //   if (stored) {
+  //     setUserStatistics(stored as UserStatistics);
+  //   } else {
+  //     localStorage.setValue('userStatistics', userStatistics);
+  //   }
+  // }, []);
+
+  // const add = ({stat, amount}: {stat: Omit<UserStatistics>, amount: number}) => {
+  //   setUserStatistics({ ...userStatistics, totalPlants: userStatistics[stat] + amount });
+  // }
+
+  const addTotalPlants = (amount: number = 1) => {
+    setUserStatistics({ ...userStatistics, totalPlants: userStatistics.totalPlants + amount });
   };
 
-  const removeGrowthPoints = (amount: number = 1) => {
-    if (userData.growthPoints > 0) setUserData({ ...userData, growthPoints: userData.growthPoints - amount });
+  // const removeGrowthPoints = (amount: number = 1) => {
+  //   if (userData.growthPoints > 0) setUserData({ ...userStatistics, growthPoints: userStatistics.growthPoints - amount });
+  // };
+
+  const addTotalFocusSessions = (amount: number = 1) => {
+    setUserStatistics({ ...userStatistics, totalFocusSessions: userStatistics.totalFocusSessions + amount });
   };
 
-  const addExperience = (amount: number = 1) => {
-    setUserData({ ...userData, experience: userData.experience + amount });
-  };
-
-  const removeExperience = (amount: number = 1) => {
-    setUserData({ ...userData, experience: userData.experience - amount });
-  };
+  // const removeExperience = (amount: number = 1) => {
+  //   setUserData({ ...userStatistics, experience: userStatistics.experience - amount });
+  // };
   //TODO save data immediately, even before user actions
 
   // common, rare, unique, blessed, divine
@@ -68,25 +73,25 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
   //   };
   // }, []);
 
-  function getExperienceTier(xp: number) {
-    // const tiers = Object.entries(Tiers).find(([key, value]) => value.experienceThreshold >= xp)
-    // console.log(tiers)
-    // const Tiers = Object.entries(Experience)
-    //   .filter(([key, value]) => typeof value === 'number') as [string, number][];
+  // function getExperienceTier(xp: number) {
+  // const tiers = Object.entries(Tiers).find(([key, value]) => value.experienceThreshold >= xp)
+  // console.log(tiers)
+  // const Tiers = Object.entries(Experience)
+  //   .filter(([key, value]) => typeof value === 'number') as [string, number][];
 
-    // // Sort tiers from highest XP to lowest XP
-    // Tiers.sort((a, b) => b[1] - a[1]);
+  // // Sort tiers from highest XP to lowest XP
+  // Tiers.sort((a, b) => b[1] - a[1]);
 
-    // // Find the first tier where the player's XP is >= the threshold
-    // const matchedTier = Tiers.find(([key, value]) => xp >= value);
+  // // Find the first tier where the player's XP is >= the threshold
+  // const matchedTier = Tiers.find(([key, value]) => xp >= value);
 
-    // if (matchedTier) {
-    //   // Return the string key (e.g., "RARE")
-    //   return matchedTier[0] as keyof typeof Experience;
-    // }
+  // if (matchedTier) {
+  //   // Return the string key (e.g., "RARE")
+  //   return matchedTier[0] as keyof typeof Experience;
+  // }
 
-    return 'COMMON';
-  }
+  //   return 'COMMON';
+  // }
 
   //   console.log(getExperienceTier(41));
   // chirary: common
@@ -95,15 +100,14 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
   // lavender: rare
 
   const value: UserDataContextType = {
-    userData,
-    setUserData,
-    addGrowthPoints,
-    removeGrowthPoints,
-    addExperience,
-    removeExperience,
-    getExperienceTier,
-    editState,
-    setEditState
+    userStatistics,
+    addTotalPlants,
+    // removeGrowthPoints,
+    addTotalFocusSessions,
+    // removeExperience,
+    // getExperienceTier,
+    // editState,
+    // setEditState
     // time,
     // getDisplayTime,
     // start,

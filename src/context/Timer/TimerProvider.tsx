@@ -24,11 +24,10 @@ const soundStart = new Audio('../../assets/sounds/begin_sound.wav');
  */
 export const TimerProvider = ({ children }: TimerProviderProps) => {
   const { mode, setMode } = useMode();
-  const { sessionTime, sessionSettings } = useSettings();
+  const { sessionTime, settings } = useSettings();
   const { currentScreen, setPopup } = useNavigation();
   const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession();
   const { createPlant, growAllPlants } = usePlantData();
-  const { addGrowthPoints } = useUserData();
   const { sendNotification } = useNotifications()
   // const { debugSettings }: DebugContextType = useDebug()
   // console.log(sessionTime)
@@ -52,7 +51,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const isAutoAdvanceRef = useRef(false);
 
   const start = (mode: Mode) => {
-    if (sessionSettings.startEndSound) {
+    if (settings.sounds.startEndSound) {
       soundStart.play();
       soundEnd.pause();
       soundEnd.currentTime = 0;
@@ -90,7 +89,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     if (!isTimerRunning && time >= getDuration(mode)) {
       setTime(getDuration(mode));
     }
-  }, [currentScreen, sessionSettings]);
+  }, [currentScreen, settings]);
 
   useEffect(() => {
     if (isTimerRunning) {
@@ -124,8 +123,8 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
 
       // Delay start until state updates are done
       const timeout = setTimeout(() => {
-        if (sessionSettings.autoStartFocus && newMode === Mode.FOCUS) start(newMode);
-        if (sessionSettings.autoStartRest && (newMode === Mode.REST || newMode === Mode.LONG_REST)) start(newMode);
+        if (settings.sessions.autoAdvance && newMode === Mode.FOCUS) start(newMode);
+        if (settings.sessions.autoAdvance && (newMode === Mode.REST || newMode === Mode.LONG_REST)) start(newMode);
       }, 100); // small delay to let state settle
       isAutoAdvanceRef.current = false;
       return () => clearTimeout(timeout);
@@ -215,13 +214,13 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
       // addGrowthPoints(Math.ceil(sessionTime.focus.time * multiplier));
     }
 
-    if (sessionSettings.autoAdvance) {
+    if (settings.sessions.autoAdvance) {
       isAutoAdvanceRef.current = true;
       toNextSession();
     }
 
     //TODO add notification provider
-    if (sessionSettings.timerCompleteNotification) sendNotification(`Your ${mode} session is complete!`)
+    if (settings.notifications.timerCompleteNotification) sendNotification(`Your ${mode} session is complete!`)
   };
 
   useEffect(() => {
@@ -238,7 +237,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
       }
 
       if (diff <= 4) {
-        if (sessionSettings.startEndSound) {
+        if (settings.sounds.startEndSound) {
           soundEnd.play();
         }
       }
@@ -251,7 +250,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isTimerRunning, sessionSettings.startEndSound]);
+  }, [isTimerRunning, settings.sounds.startEndSound]);
 
   const value: TimerContextType = {
     time,

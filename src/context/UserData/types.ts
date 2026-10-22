@@ -50,21 +50,26 @@ export const Tiers: TiersType = {
   }
 };
 
-export type UserData = {
-  growthPoints: number;
-  experience: number;
+export type UserStatistics = {
+  total: {
+    plants: number;
+    focusSessions: number;
+    restSessions: number;
+    longRestSessions: number;
+  };
+  monthly: Record<string, { focus: number; rest: number; long_rest: number }>;
 };
 
-export type EditState = 'OFF' | 'GROW' | 'PLANT';
+// export type EditState = 'OFF' | 'GROW' | 'PLANT';
 
 export type UserDataContextType = {
-  userData: UserData;
-  setUserData: (data: UserData) => void;
-  addGrowthPoints: (amount: number) => void;
-  removeGrowthPoints: (amount: number) => void;
-  addExperience: (amount: number) => void;
-  removeExperience: (amount: number) => void;
-  getExperienceTier: (xp: number) => string;
-  editState: EditState;
-  setEditState: (state: EditState) => void;
+  userStatistics: UserStatistics;
+  // setUserStatistics: (data: UserStatistics) => void;
+  addTotalPlants: (amount: number) => void;
+  // removeGrowthPoints: (amount: number) => void;
+  addTotalFocusSessions: (amount: number) => void;
+  // removeExperience: (amount: number) => void;
+  // getExperienceTier: (xp: number) => string;
+  // editState: EditState;
+  // setEditState: (state: EditState) => void;
 };

@@ -12,7 +12,7 @@ export const NotificationsProvider = ({ children }: NotificationsProviderProps) 
 
     const sendNotification = (message: string) => {
         requestNotificationAccess()
-        if (Notification.permission !== 'granted') new Notification(message);
+        if (Notification.permission === 'granted') new Notification(message);
     }
 
 
