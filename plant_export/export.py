@@ -49,33 +49,68 @@ def sort_stage(stage):
     return [int(x) for x in stage.split("_")]
 
 
-def get_parent(stage: str) -> str | None:
-    parts = stage.split("_")
+def get_parent(stage:str, all_stages: set[str]) -> str | None:
+    parts = stage.split("_");
 
     stage_num = int(parts[0])
 
-    # root
     if stage_num == 1:
         return None
 
-    # 2 -> 1
-    if len(parts) == 1:
-        return str(stage_num - 1)
+    branches = parts[1:]
 
-    # 3_1 -> 2
-    # 3_2 -> 2
-    if stage_num == 3 and len(parts) == 2:
-        return "2"
+    candidates = []
 
-    # 4_1 -> 3_1
-    # 4_2 -> 3_2
-    if len(parts) == 2:
-        return f"{stage_num - 1}_{parts[1]}"
+    for i in range(len(branches) -1, 0, -1):
+        candidates.append(
+            f"{stage_num}_{'_'.join(branches[:i])}"
+        )
 
-    # 4_1_1 -> 4_1
-    # 4_1_2 -> 4_1
-    # 5_1_2 -> 4_1_2
-    return "_".join(parts[:-1])
+    if branches:
+        candidates.append(
+            f"{stage_num - 1}_{'_'.join(branches)}"
+        )
+
+    for i in range(len(branches) - 1, 0, -1):
+        candidates.append(
+            f"{stage_num - 1}_{'_'.join(branches[:i])}"
+        )
+
+    candidates.append(
+        str(stage_num - 1))
+
+    for candidate in candidates:
+        if candidate in all_stages:
+            return candidate
+
+    return None
+# def get_parent(stage: str) -> str | None:
+#     parts = stage.split("_")
+
+#     stage_num = int(parts[0])
+
+#     # root
+#     if stage_num == 1:
+#         return None
+
+#     # 2 -> 1
+#     if len(parts) == 1:
+#         return str(stage_num - 1)
+
+#     # 3_1 -> 2
+#     # 3_2 -> 2
+#     if stage_num == 3 and len(parts) == 2:
+#         return "2"
+
+#     # 4_1 -> 3_1
+#     # 4_2 -> 3_2
+#     if len(parts) == 2:
+#         return f"{stage_num - 1}_{parts[1]}"
+
+#     # 4_1_1 -> 4_1
+#     # 4_1_2 -> 4_1
+#     # 5_1_2 -> 4_1_2
+#     return "_".join(parts[:-1])
 
 
 plants_json = {}
@@ -193,23 +228,23 @@ for plant_dir in ROOT_DIR.iterdir():
 
                     upper = value.upper()
 
-                    if upper.startswith("#"):
+                    # if upper.startswith("#"):
 
-                        if upper not in slots:
-                            errors.append(
-                                f"{svg_file.name}: unknown color {upper}"
-                            )
-                            continue
-
-                        slot = slots[upper]
-
-                        used_slot_colors.add(upper)
-
-                        attrs.append(
-                            f'{react_key}={{colors.{slot}}}'
+                    if upper not in slots:
+                        errors.append(
+                            f"{svg_file.name}: unknown color {upper}"
                         )
-
                         continue
+
+                    slot = slots[upper]
+
+                    used_slot_colors.add(upper)
+
+                    attrs.append(
+                        f'{react_key}={{colors.{slot}}}'
+                    )
+
+                    continue
 
                 attrs.append(
                     f'{react_key}="{value}"'
@@ -237,7 +272,10 @@ for plant_dir in ROOT_DIR.iterdir():
 
     for stage in stages:
 
-        parent = get_parent(stage)
+        parent = get_parent(
+            stage,
+            set(stages.keys())
+            )
 
         if (
             parent
@@ -345,7 +383,7 @@ for plant_dir in ROOT_DIR.iterdir():
 f'''
   "{stage}": {{
     viewBox: "{stage_data["viewBox"]}",
-    render: (colors) => (
+    render: (colors: Record<string, string>) => (
       <>
       {stage_data["tsx"]}
       </>
