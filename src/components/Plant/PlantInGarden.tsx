@@ -33,6 +33,7 @@ export const PlantInGarden = ({ plant, className, x, y, onClick }: PlantProps) =
         <Plant
           name={plant.name}
           stage={isHovering && editState === 'GROW' ? nextStage(plant) : plant.stage}
+          path={plant.path}
           className={'w-full h-full'}
         />
       </div>

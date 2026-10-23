@@ -1,6 +1,8 @@
 import type { JSX } from 'react';
+import type { PlantGrowthNode } from './plantCatalog';
 
 export enum PlantSpecies {
+  CHICORY = 'CHICORY',
   CHIRARY = 'CHIRARY',
   CHAMOMILE = 'CHAMOMILE',
   FIREWEED = 'FIREWEED',
@@ -12,7 +14,7 @@ export type PlantData = {
   // gardenId: string;
   x: number | undefined; // 0–1
   y: number | undefined; // 0–1 //TODO change this to position: {x,y}
-  size: number; // 0–1F
+  size: number; // 0–1
   name: PlantSpecies;
   stage: number;
   maxStage: number;
@@ -20,7 +22,7 @@ export type PlantData = {
   grownAt?: number | null;
   maxAge: number | undefined; //in days
   mirrored: boolean;
-
+  path?: PlantGrowthNode[];
 };
 
 export type PlantProps = {

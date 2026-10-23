@@ -22,3 +22,9 @@ it's very easy to start using seedle:
 
 # changelog
 read the changelog [here](changelog.md)
+
+# plant data
+`PlantDataProvider` stores the player's plant instances. Plant species metadata and
+the generated growth graphs are kept in `src/components/Plant/plantCatalog.ts`;
+the graphs are read from `plant_export/generated/plants.json`, produced by running
+`python export.py` from the `plant_export` directory.

@@ -27,7 +27,7 @@ export const Garden = () => {
           const plant: PlantData | undefined = plants.find((p) => p.x === x && p.y === y);
 
           return (
-            <>
+            <div key={`${x},${y}`}>
               {plant && (
                 <PlantInGarden
                   x={x}
@@ -35,10 +35,10 @@ export const Garden = () => {
                   plant={plant}
                   className="relative max-h-fit h-full flex justify-center"
                   onClick={() => {
-                    if (userData.growthPoints > 0 && editState === 'GROW' && plant.stage < plant.maxStage) {
-                      growPlant(plant.id);
-                      removeGrowthPoints(1);
-                    }
+                    // if (userData.growthPoints > 0 && editState === 'GROW' && plant.stage < plant.maxStage) {
+                    //   growPlant(plant.id);
+                    //   removeGrowthPoints(1);
+                    // }
 
                     if (debugSettings.debug) {
                       const param = getParam('plant');
@@ -57,10 +57,9 @@ export const Garden = () => {
                 />
               )}
 
-              {!plant && (
+              {/* {!plant && (
                 <>
                   <div
-                    key={`${x},${y}`}
                     className="w-full h-full opacity-0 hover:opacity-50"
                     onClick={() => {
                       if (editState === 'PLANT' && plantables) {
@@ -79,8 +78,8 @@ export const Garden = () => {
                     )}
                   </div>
                 </>
-              )}
-            </>
+              )} */}
+            </div>
           );
         });
       })}

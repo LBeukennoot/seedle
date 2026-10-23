@@ -12,6 +12,7 @@ import { usePlantData } from '../PlantData';
 import { useUserData } from '../UserData';
 import { PlantSpecies } from '../../components/Plant/types';
 import { useNotifications } from '../Notifications';
+import { PLANT_CATALOG } from '../../components/Plant/plantCatalog';
 
 const soundEnd = new Audio('../../assets/sounds/timer_end_extended_v3.wav');
 const soundStart = new Audio('../../assets/sounds/begin_sound.wav');
@@ -189,8 +190,10 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     setIsTimerRunning(false);
 
     if (mode !== Mode.REST) {
-      const plantValues = Object.values(PlantSpecies);
+      const plantValues = Object.values(PLANT_CATALOG);
+      // const plantValues = Object.values(PlantSpecies);
       const randomPlant = plantValues[Math.floor(Math.random() * plantValues.length)];
+      console.log(randomPlant)
 
       createPlant({
         size: 0.05,

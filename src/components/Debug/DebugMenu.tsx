@@ -9,7 +9,7 @@ import { useFPS } from '../../utils/useFPS';
 
 export const DebugMenu = () => {
   const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants } = usePlantData();
-  const { userData, setEditState, addGrowthPoints, removeGrowthPoints, addExperience, removeExperience } = useUserData();
+  // const { userData, setEditState, addGrowthPoints, removeGrowthPoints, addExperience, removeExperience } = useUserData();
   const { getParam } = useURLParams();
   const selectedPlantID = getParam('plant');
   const fps = useFPS();
@@ -78,7 +78,7 @@ export const DebugMenu = () => {
           </Button>
         </AccordionDetails>
       </Accordion>
-      <Accordion className="border border-white">
+      {/* <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           UserData
         </AccordionSummary>
@@ -120,7 +120,7 @@ export const DebugMenu = () => {
             </Button>
           </div>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
 
       <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>

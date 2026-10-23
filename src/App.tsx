@@ -14,13 +14,13 @@ import { TurbulenceFilter } from './components/TurbulenceFilter/TurbulenceFilter
 export default function App() {
   return (
     <>
-      <TurbulenceFilter />
+      {/* <TurbulenceFilter /> */}
 
       <div className="scene">
         {/* <div className='scene'> */}
         {/* SVG Filter Definition Container */}
 
-        <NoiseCanvas />
+        {/* <NoiseCanvas /> */}
 
         <DebugProvider>
           <NotificationsProvider>

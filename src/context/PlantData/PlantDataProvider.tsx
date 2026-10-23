@@ -3,8 +3,9 @@ import LocalStorage from '../../utils/LocalStorage';
 import { useDebug } from '../Debug';
 import { COLS, ROWS, type PlantAction, type PlantDataContextType, type PlantDataProviderProps } from './types';
 import { PlantDataContext } from './PlantDataContext';
-import { useUserData } from '../UserData';
-import type { PlantData } from '../../components/Plant/types';
+// import { useUserData } from '../UserData';
+import { type PlantData } from '../../components/Plant/types';
+import { createRandomGrowthPath, getPlantMaxStage } from '../../components/Plant/plantCatalog';
 
 const localStorage = new LocalStorage();
 
@@ -98,7 +99,6 @@ const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
           })
       );
 
-
     default:
       return state;
   }
@@ -128,9 +128,8 @@ const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
 export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   // const [nextId, setNextId] = useLocalStorageState<number>("nextId", 0)
   const { debugSettings } = useDebug();
-  const { userData, editState, setEditState } = useUserData();
-
-  const [plantables, setPlantables] = useState<PlantData[] | undefined>(undefined);
+  // const { userData, editState, setEditState } = useUserData();
+  // const [plantables, setPlantables] = useState<PlantData[] | undefined>(undefined);
 
   const [plants, dispatch] = useReducer(plantReducer, [], () => {
     const stored = localStorage.getValue<PlantData[]>('plants');
@@ -167,6 +166,20 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
       return cleanedPlants;
     }
 
+    if (stored && stored.length > 0 && !stored[0].path) {
+      const cleanedPlants = stored.map((p) => {
+        const { ...rest } = p as Record<string, unknown>;
+        const path = createRandomGrowthPath(p.name)
+
+        return {
+          ...rest,
+          path: path
+        } as PlantData
+      })
+
+      return cleanedPlants
+    }
+
     return (stored as PlantData[]) ?? [];
   });
 
@@ -179,6 +192,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   ) => {
     const freePositions = getFreePositions(plants, COLS, ROWS);
     const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)];
+    const path = createRandomGrowthPath(data.name);
 
     const plant: PlantData = {
       id: crypto.randomUUID(),
@@ -187,12 +201,12 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
       size: data.size,
       name: data.name,
       stage: 1,
-      maxStage: 4,
+      maxStage: getPlantMaxStage(data.name, path),
       createdAt: Date.now(),
       maxAge: undefined,
-      mirrored: Math.random() < 0.5
+      mirrored: Math.random() < 0.5,
+      ...(path ? { path } : {})
     };
-
 
     // console.log(randomFreePosition)
 
@@ -229,7 +243,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
 
   useEffect(() => {
     // if (editState === 'PLANT') {
-    setPlantables(plants.filter((p) => p.x === undefined || p.y === undefined));
+    // setPlantables(plants.filter((p) => p.x === undefined || p.y === undefined));
     // }
 
     // if (editState !== 'PLANT') {
@@ -237,19 +251,19 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     // }
   }, [plants]);
 
-  useEffect(() => {
-    if (editState === 'PLANT' && plantables && plantables.length <= 0) {
-      setEditState('OFF');
-    }
+  // useEffect(() => {
+  //   if (editState === 'PLANT' && plantables && plantables.length <= 0) {
+  //     setEditState('OFF');
+  //   }
 
-    if (editState === 'GROW' && userData.growthPoints <= 0) {
-      setEditState('OFF');
-    }
-    // if (plantables && plantables.length <= 0) {
-    // if (plantables && plantables[0] === undefined) {
-    //   setEditState('OFF');
-    // }
-  }, [plantables]);
+  //   if (editState === 'GROW' && userData.growthPoints <= 0) {
+  //     setEditState('OFF');
+  //   }
+  //   // if (plantables && plantables.length <= 0) {
+  //   // if (plantables && plantables[0] === undefined) {
+  //   //   setEditState('OFF');
+  //   // }
+  // }, [plantables]);
 
   // useEffect(() => {
   //   function handleEventListener(e) {
@@ -275,8 +289,8 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     savePlants,
     growPlant,
     growAllPlants,
-    plantables,
-    setPlantables
+    // plantables,
+    // setPlantables
   };
 
   return <PlantDataContext.Provider value={value}>{children}</PlantDataContext.Provider>;

@@ -15,8 +15,8 @@ export type PlantDataContextType = {
     savePlants: () => void
     growPlant: (id: string) => void
     growAllPlants: () => void
-    plantables: Plant[] | undefined
-    setPlantables: (plantables: Plant[] | undefined) => void
+    // plantables: Plant[] | undefined
+    // setPlantables: (plantables: Plant[] | undefined) => void
 }
 
 export type PlantAction =

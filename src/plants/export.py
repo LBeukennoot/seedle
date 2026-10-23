@@ -5,10 +5,7 @@ import json
 import re
 import sys
 
-# besides this file needed:
-# assets/<flower-name>/...svg and slots.json
-
-# slots.json:
+# slots.json structure:
 # {
 #     "#7F7BE6": "outerPetals",
 #     "#9D97F5": "innerPetals",
@@ -45,23 +42,21 @@ def pascal_case(name: str):
     )
 
 
-def sort_stage(stage):
+def sort_stage(stage: str):
     return [int(x) for x in stage.split("_")]
 
 
-def get_parent(stage:str, all_stages: set[str]) -> str | None:
-    parts = stage.split("_");
-
+def get_parent(stage: str, all_stages: set[str]) -> str | None:
+    parts = stage.split("_")
     stage_num = int(parts[0])
 
     if stage_num == 1:
         return None
 
     branches = parts[1:]
-
     candidates = []
 
-    for i in range(len(branches) -1, 0, -1):
+    for i in range(len(branches) - 1, 0, -1):
         candidates.append(
             f"{stage_num}_{'_'.join(branches[:i])}"
         )
@@ -76,46 +71,18 @@ def get_parent(stage:str, all_stages: set[str]) -> str | None:
             f"{stage_num - 1}_{'_'.join(branches[:i])}"
         )
 
-    candidates.append(
-        str(stage_num - 1))
+    candidates.append(str(stage_num - 1))
 
     for candidate in candidates:
         if candidate in all_stages:
             return candidate
 
     return None
-# def get_parent(stage: str) -> str | None:
-#     parts = stage.split("_")
 
-#     stage_num = int(parts[0])
-
-#     # root
-#     if stage_num == 1:
-#         return None
-
-#     # 2 -> 1
-#     if len(parts) == 1:
-#         return str(stage_num - 1)
-
-#     # 3_1 -> 2
-#     # 3_2 -> 2
-#     if stage_num == 3 and len(parts) == 2:
-#         return "2"
-
-#     # 4_1 -> 3_1
-#     # 4_2 -> 3_2
-#     if len(parts) == 2:
-#         return f"{stage_num - 1}_{parts[1]}"
-
-#     # 4_1_1 -> 4_1
-#     # 4_1_2 -> 4_1
-#     # 5_1_2 -> 4_1_2
-#     return "_".join(parts[:-1])
-
-
-plants_json = {}
 
 total_svgs = 0
+processed_plants_count = 0
+generated_plants = []
 
 for plant_dir in ROOT_DIR.iterdir():
 
@@ -123,7 +90,6 @@ for plant_dir in ROOT_DIR.iterdir():
         continue
 
     plant_name = plant_dir.name
-
     print(f"Processing {plant_name}")
 
     slots_file = plant_dir / "slots.json"
@@ -146,7 +112,6 @@ for plant_dir in ROOT_DIR.iterdir():
     }
 
     used_slot_colors = set()
-
     stages = {}
     graph = defaultdict(list)
 
@@ -214,7 +179,6 @@ for plant_dir in ROOT_DIR.iterdir():
         for child in root:
 
             tag = child.tag.split("}")[-1]
-
             attrs = []
 
             for key, value in child.attrib.items():
@@ -228,8 +192,6 @@ for plant_dir in ROOT_DIR.iterdir():
 
                     upper = value.upper()
 
-                    # if upper.startswith("#"):
-
                     if upper not in slots:
                         errors.append(
                             f"{svg_file.name}: unknown color {upper}"
@@ -237,13 +199,11 @@ for plant_dir in ROOT_DIR.iterdir():
                         continue
 
                     slot = slots[upper]
-
                     used_slot_colors.add(upper)
 
                     attrs.append(
                         f'{react_key}={{colors.{slot}}}'
                     )
-
                     continue
 
                 attrs.append(
@@ -256,9 +216,7 @@ for plant_dir in ROOT_DIR.iterdir():
 
         stages[stage] = {
             "viewBox": viewbox,
-            "tsx": "\n      ".join(
-                tsx_elements
-            )
+            "tsx": "\n        ".join(tsx_elements)
         }
 
     # --------------------
@@ -270,24 +228,21 @@ for plant_dir in ROOT_DIR.iterdir():
             f"{plant_name}: missing stage 1"
         )
 
+    all_stage_keys = set(stages.keys())
+
     for stage in stages:
 
         parent = get_parent(
             stage,
-            set(stages.keys())
-            )
+            all_stage_keys
+        )
 
-        if (
-            parent
-            and parent not in stages
-        ):
+        if parent and parent not in stages:
             errors.append(
                 f"{plant_name}: {stage} has missing parent {parent}"
             )
         elif parent:
-            graph[parent].append(
-                stage
-            )
+            graph[parent].append(stage)
 
     # --------------------
     # Reachability
@@ -297,7 +252,6 @@ for plant_dir in ROOT_DIR.iterdir():
     queue = deque(["1"])
 
     while queue:
-
         current = queue.popleft()
 
         if current in visited:
@@ -305,15 +259,10 @@ for plant_dir in ROOT_DIR.iterdir():
 
         visited.add(current)
 
-        for nxt in graph.get(
-            current,
-            []
-        ):
+        for nxt in graph.get(current, []):
             queue.append(nxt)
 
-    unreachable = (
-        set(stages) - visited
-    )
+    unreachable = set(stages) - visited
 
     for stage in unreachable:
         errors.append(
@@ -325,122 +274,85 @@ for plant_dir in ROOT_DIR.iterdir():
     # --------------------
 
     for color, slot in slots.items():
-
         if color not in used_slot_colors:
-
             warnings.append(
                 f"{plant_name}: slot color {color} ({slot}) never used"
             )
 
     # --------------------
-    # plants.json
-    # --------------------
-
-    plant_graph = {}
-
-    for stage in stages:
-
-        plant_graph[stage] = []
-
-    for parent, children in graph.items():
-
-        plant_graph[parent] = sorted(
-            children,
-            key=sort_stage
-        )
-
-    plants_json[
-        plant_name
-    ] = dict(
-        sorted(
-            plant_graph.items(),
-            key=lambda x: sort_stage(
-                x[0]
-            )
-        )
-    )
-
-    # --------------------
     # TSX Export
     # --------------------
 
-    component_name = pascal_case(
-        plant_name
-    )
-
+    component_name = pascal_case(plant_name)
     stage_entries = []
 
-    for stage in sorted(
-        stages,
-        key=sort_stage
-    ):
-
-        stage_data = stages[
-            stage
-        ]
+    for stage in sorted(stages, key=sort_stage):
+        stage_data = stages[stage]
+        next_stages = sorted(graph.get(stage, []), key=sort_stage)
+        next_stages_json = json.dumps(next_stages)
 
         stage_entries.append(
-f'''
-  "{stage}": {{
-    viewBox: "{stage_data["viewBox"]}",
-    render: (colors: Record<string, string>) => (
-      <>
-      {stage_data["tsx"]}
-      </>
-    )
-  }}
-'''
+f'''  "{stage}": {{
+    stage: "{stage}",
+    nextStages: {next_stages_json},
+    asset: {{
+      viewBox: "{stage_data["viewBox"]}",
+      render: (colors: {component_name}Colors) => (
+        <>
+          {stage_data["tsx"]}
+        </>
+      ),
+    }},
+  }}'''
         )
 
-    output = f'''import type {{
-  PlantStageAsset
-}} from "../types";
+    output = f'''import type {{ PlantStageAsset }} from "../types";
 
 export interface {component_name}Colors {{
 '''
 
-    slot_names = sorted(
-        set(slots.values())
-    )
+    slot_names = sorted(set(slots.values()))
 
     for slot in slot_names:
         output += f"  {slot}: string;\n"
 
     output += "}\n\n"
+    output += f'export const {component_name}Stages = {{\n'
+    output += ",\n".join(stage_entries)
+    output += "\n};\n"
 
-    output += (
-        f'export const {component_name}: '
-        f'Record<string, PlantStageAsset<{component_name}Colors>> = {{\n'
-    )
-
-    output += ",".join(
-        stage_entries
-    )
-
-    output += "\n};"
-
-    (
-        OUTPUT_DIR /
-        f"{plant_name}.tsx"
-    ).write_text(
+    (OUTPUT_DIR / f"{plant_name.capitalize()}.tsx").write_text(
         output,
         encoding="utf-8"
     )
 
     total_svgs += len(stages)
+    processed_plants_count += 1
+    generated_plants.append(plant_name)
 
-# --------------------
-# Export plants.json
-# --------------------
+index_imports = []
+index_reexports = []
+plant_dict_entries = []
 
-(
-    OUTPUT_DIR /
-    "plants.json"
-).write_text(
-    json.dumps(
-        plants_json,
-        indent=2
-    ),
+for plant in sorted(generated_plants):
+    comp_name = pascal_case(plant)
+    capitalized_plant = plant.capitalize()
+    index_imports.append(f'import {{ {comp_name}Stages }} from "./{capitalized_plant}"')
+    index_reexports.append(f'export * from "./{capitalized_plant}"')
+    plant_dict_entries.append(f'  "{capitalized_plant}": {comp_name}Stages,')
+
+index_content = "\n".join(index_imports) + "\n\n"
+index_content += "\n".join(index_reexports) + "\n\n"
+index_content += "export const plants: Record<string, any> = {\n"
+index_content += "\n".join(plant_dict_entries) + "\n"
+index_content += "};\n"
+
+# index_lines = []
+# for plant in sorted(generated_plants):
+#     index_lines.append(f'export * from "./{plant.capitalize()}";')
+
+(OUTPUT_DIR / "index.ts").write_text(
+    index_content,
     encoding="utf-8"
 )
 
@@ -454,21 +366,12 @@ if warnings:
         print("⚠", warning)
 
 if errors:
-
     print("\nErrors:")
-
     for error in errors:
         print("❌", error)
-
     sys.exit(1)
 
 print("\n✓ Export succeeded")
-print(
-    f"✓ {len(plants_json)} plants"
-)
-print(
-    f"✓ {total_svgs} stages"
-)
-print(
-    "✓ plants.json generated"
-)
+print(f"✓ {processed_plants_count} plants")
+print(f"✓ {total_svgs} stages")
+print("✓ TSX files generated with stage graph structures")

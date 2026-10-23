@@ -3,7 +3,8 @@ import { Mode, type SessionDataMap } from "./sessionTypes"
 export const DefaultMode: Mode = Mode.FOCUS
 export const Modes: SessionDataMap = {
     [Mode.FOCUS]: {
-        time: 25,
+        time: 0.06,
+        // time: 25,
         min: 19,
         max: 91
     },
