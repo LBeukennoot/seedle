@@ -1,9 +1,10 @@
-import plantGraphs from '../../../plant_export/generated/plants.json';
+// import plantGraphs from '../../../plant_export/generated/plants.json';
+import { plants } from '../../plants/generated/index';
 import { PlantSpecies } from './types';
 
-export type PlantGrowthTree = keyof typeof plantGraphs;
+export type PlantGrowthTree = keyof typeof plants;
 export type PlantGrowthNode = {
-  [Tree in PlantGrowthTree]: keyof (typeof plantGraphs)[Tree] & string;
+  [Tree in PlantGrowthTree]: keyof (typeof plants)[Tree] & string;
 }[PlantGrowthTree];
 
 type PlantDefinition = {
@@ -39,7 +40,7 @@ export const createRandomGrowthPath = (species: PlantSpecies): PlantGrowthNode[]
   const treeName = PLANT_CATALOG[species].growthTree;
   if (!treeName) return undefined;
 
-  const tree = plantGraphs[treeName] as Record<string, string[]>;
+  const tree = plants[treeName] as Record<string, string[]>;
   if (!Object.hasOwn(tree, '1')) {
     throw new Error(`Growth tree "${treeName}" is missing its stage 1 root.`);
   }
