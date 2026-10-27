@@ -1,16 +1,15 @@
-import type { PlantStageAsset } from "../types";
+import type { Plant, PlantColorSlots } from './types';
 
-export interface LantanaColors {
+export interface LantanaColors extends PlantColorSlots {
   darkPetals: string;
   lightPetals: string;
   mediumPetals: string;
   stem: string;
 }
 
-export const LantanaStages = {
+export const LantanaStages: Plant<LantanaColors> = {
   "1": {
     stage: "1",
-    nextStages: ["2"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: LantanaColors) => (
@@ -23,7 +22,6 @@ export const LantanaStages = {
   },
   "2": {
     stage: "2",
-    nextStages: ["3"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: LantanaColors) => (
@@ -45,7 +43,6 @@ export const LantanaStages = {
   },
   "3": {
     stage: "3",
-    nextStages: ["4"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: LantanaColors) => (
@@ -85,7 +82,6 @@ export const LantanaStages = {
   },
   "4": {
     stage: "4",
-    nextStages: [],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: LantanaColors) => (

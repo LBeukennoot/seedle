@@ -1,16 +1,15 @@
-import type { PlantStageAsset } from "../types";
+import type { Plant, PlantColorSlots } from './types';
 
-export interface LavenderColors {
+export interface LavenderColors extends PlantColorSlots {
   background: string;
   innerPetals: string;
   outerPetals: string;
   stem: string;
 }
 
-export const LavenderStages = {
+export const LavenderStages: Plant<LavenderColors> = {
   "1": {
     stage: "1",
-    nextStages: ["2"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: LavenderColors) => (
@@ -32,7 +31,6 @@ export const LavenderStages = {
   },
   "2": {
     stage: "2",
-    nextStages: ["3"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: LavenderColors) => (
@@ -58,7 +56,6 @@ export const LavenderStages = {
   },
   "3": {
     stage: "3",
-    nextStages: ["4"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: LavenderColors) => (
@@ -105,7 +102,6 @@ export const LavenderStages = {
   },
   "4": {
     stage: "4",
-    nextStages: [],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: LavenderColors) => (

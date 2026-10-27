@@ -9,9 +9,9 @@ import { Book } from '../components/Book/Book';
 // import { CollectablesList } from '../components/CollectablesList/CollectablesList';
 // import { GridPaper } from '../components/GridPaper/GridPaper';
 // import { TabList } from '../components/TabList';
-import { ScreenCard } from '../components/ScreenCard';
+// import { ScreenCard } from '../components/ScreenCard';
 import { PictureInPictureProvider } from '../context/PictureInPicture/PictureInPictureProvider';
-import { usePictureInPicture } from '../context/PictureInPicture';
+// import { usePictureInPicture } from '../context/PictureInPicture';
 // import { ScreenRegistry } from './ScreenRegistry';
 
 /**
@@ -31,7 +31,9 @@ export default function Navigation() {
         <Garden />
       </div>
 
+
       <div className="absolute bottom-0 mb-4 w-full flex justify-center">
+
         <PictureInPictureProvider>
           <WateringCan />
         </PictureInPictureProvider>

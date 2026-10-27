@@ -1,16 +1,15 @@
-import type { PlantStageAsset } from "../types";
+import type { Plant, PlantColorSlots } from './types';
 
-export interface ChicoryColors {
+export interface ChicoryColors extends PlantColorSlots {
   innerPetals: string;
   outerPetals: string;
   stamen: string;
   stem: string;
 }
 
-export const ChicoryStages = {
+export const ChicoryStages: Plant<ChicoryColors> = {
   "1": {
     stage: "1",
-    nextStages: ["2"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: ChicoryColors) => (
@@ -24,7 +23,6 @@ export const ChicoryStages = {
   },
   "2": {
     stage: "2",
-    nextStages: ["3_1", "3_2"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: ChicoryColors) => (
@@ -39,7 +37,6 @@ export const ChicoryStages = {
   },
   "3_1": {
     stage: "3_1",
-    nextStages: ["4_1"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: ChicoryColors) => (
@@ -55,7 +52,6 @@ export const ChicoryStages = {
   },
   "3_2": {
     stage: "3_2",
-    nextStages: ["4_2"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: ChicoryColors) => (
@@ -70,7 +66,6 @@ export const ChicoryStages = {
   },
   "4_1": {
     stage: "4_1",
-    nextStages: [],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: ChicoryColors) => (
@@ -89,7 +84,6 @@ export const ChicoryStages = {
   },
   "4_2": {
     stage: "4_2",
-    nextStages: [],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: ChicoryColors) => (

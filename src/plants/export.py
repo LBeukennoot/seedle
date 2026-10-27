@@ -294,7 +294,6 @@ for plant_dir in ROOT_DIR.iterdir():
         stage_entries.append(
 f'''  "{stage}": {{
     stage: "{stage}",
-    nextStages: {next_stages_json},
     asset: {{
       viewBox: "{stage_data["viewBox"]}",
       render: (colors: {component_name}Colors) => (
@@ -306,9 +305,9 @@ f'''  "{stage}": {{
   }}'''
         )
 
-    output = f'''import type {{ PlantStageAsset }} from "../types";
+    output = f'''import type {{ Plant, PlantColorSlots }} from './types';
 
-export interface {component_name}Colors {{
+export interface {component_name}Colors extends PlantColorSlots {{
 '''
 
     slot_names = sorted(set(slots.values()))
@@ -317,7 +316,7 @@ export interface {component_name}Colors {{
         output += f"  {slot}: string;\n"
 
     output += "}\n\n"
-    output += f'export const {component_name}Stages = {{\n'
+    output += f'export const {component_name}Stages: Plant<{component_name}Colors> = {{\n'
     output += ",\n".join(stage_entries)
     output += "\n};\n"
 
@@ -330,7 +329,7 @@ export interface {component_name}Colors {{
     processed_plants_count += 1
     generated_plants.append(plant_name)
 
-index_imports = []
+index_imports = ['import type { Plant, PlantColorSlots } from "./types"']
 index_reexports = []
 plant_dict_entries = []
 
@@ -343,9 +342,9 @@ for plant in sorted(generated_plants):
 
 index_content = "\n".join(index_imports) + "\n\n"
 index_content += "\n".join(index_reexports) + "\n\n"
-index_content += "export const plants: Record<string, any> = {\n"
+index_content += "export const plants = {\n"
 index_content += "\n".join(plant_dict_entries) + "\n"
-index_content += "};\n"
+index_content += "} satisfies Record<string, Plant<PlantColorSlots>>;\n"
 
 # index_lines = []
 # for plant in sorted(generated_plants):

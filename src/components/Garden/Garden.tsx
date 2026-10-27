@@ -1,8 +1,8 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useDebug } from '../../context/Debug';
 import { usePlantData } from '../../context/PlantData';
 import { COLS, ROWS } from '../../context/PlantData/types';
-import { useUserData } from '../../context/UserData';
+// import { useUserData } from '../../context/UserData';
 import { useURLParams } from '../../utils/URLParams';
 // import { PlantElement } from '../PlantElement';
 import { PlantInGarden } from '../Plant/PlantInGarden';
@@ -12,8 +12,8 @@ const createRow = () => Array.from({ length: COLS }, (_, i) => i - 1 + 1);
 const coordinateArray = Array.from({ length: ROWS }, createRow);
 
 export const Garden = () => {
-  const { userData, editState, removeGrowthPoints } = useUserData();
-  const { plants, plantables, growPlant, editPlant } = usePlantData();
+  // const { userData, editState, removeGrowthPoints } = useUserData();
+  const { plants } = usePlantData();
   const { debugSettings } = useDebug();
   const { getParam, setParam, appendParam } = useURLParams();
 

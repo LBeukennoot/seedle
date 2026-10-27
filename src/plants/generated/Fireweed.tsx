@@ -1,6 +1,6 @@
-import type { PlantStageAsset } from "../types";
+import type { Plant, PlantColorSlots } from './types';
 
-export interface FireweedColors {
+export interface FireweedColors extends PlantColorSlots {
   background: string;
   innerPetals: string;
   outerPetals: string;
@@ -8,10 +8,9 @@ export interface FireweedColors {
   stem: string;
 }
 
-export const FireweedStages = {
+export const FireweedStages: Plant<FireweedColors> = {
   "1": {
     stage: "1",
-    nextStages: ["2_1", "2_2"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: FireweedColors) => (
@@ -25,7 +24,6 @@ export const FireweedStages = {
   },
   "2_1": {
     stage: "2_1",
-    nextStages: ["3_1"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: FireweedColors) => (
@@ -40,7 +38,6 @@ export const FireweedStages = {
   },
   "2_2": {
     stage: "2_2",
-    nextStages: ["3_2"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: FireweedColors) => (
@@ -54,7 +51,6 @@ export const FireweedStages = {
   },
   "3_1": {
     stage: "3_1",
-    nextStages: ["4_1"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: FireweedColors) => (
@@ -69,7 +65,6 @@ export const FireweedStages = {
   },
   "3_2": {
     stage: "3_2",
-    nextStages: ["4_2"],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: FireweedColors) => (
@@ -83,7 +78,6 @@ export const FireweedStages = {
   },
   "4_1": {
     stage: "4_1",
-    nextStages: [],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: FireweedColors) => (
@@ -108,7 +102,6 @@ export const FireweedStages = {
   },
   "4_2": {
     stage: "4_2",
-    nextStages: [],
     asset: {
       viewBox: "0 0 208 208",
       render: (colors: FireweedColors) => (
