@@ -6,11 +6,11 @@ export const PlantInGarden = ({ plant, className, x, y, onClick }: PlantProps) =
   //TODO: add info card on hover
 
   const colors = (plantPalettes as Record<string, Record<string, any>>)[plant.plant]?.[plant.palette];
-  console.log(plant.stage)
 
   return (
     <div
       key={`${x},${y}`}
+      id={`${x},${y}`}
       className={className}
       style={{ transform: plant && plant.mirrored ? 'scaleX(-1)' : '' }}
       onClick={onClick}>
@@ -21,7 +21,8 @@ export const PlantInGarden = ({ plant, className, x, y, onClick }: PlantProps) =
         <Plant
           name={plant.plant}
           stage={plant.stage}
-          className={'absolute w-30 h-30 z-40'}
+          className={'w-full h-full'}
+          // className={'absolute w-30 h-30 z-40'}
           colors={colors}
           // colors={{ petals: 'var(--color-white)', stamen: 'var(--color-yellow)', stem: 'var(--color-green)' }}
         />

@@ -98,6 +98,7 @@ def get_parent(stage: str, all_stages: set[str]) -> str | None:
 total_svgs = 0
 processed_plants_count = 0
 generated_plants = []
+plants_manifest = {}
 
 for plant_dir in ROOT_DIR.iterdir():
 
@@ -315,6 +316,14 @@ for plant_dir in ROOT_DIR.iterdir():
             f"{plant_name}: missing palettes.json"
         )
 
+    # Record available palette names for the manifest
+    # If no palettes were defined, default to 'default'
+    palette_keys = list(palettes_data.keys()) if palettes_data else ["default"]
+    plants_manifest[plant_name] = {
+        "palettes": palette_keys,
+        "stages": sorted(stages.keys(), key=sort_stage)
+    }
+
     # --------------------
     # TSX Export
     # --------------------
@@ -437,6 +446,15 @@ index_content += "} as const;\n"
 
 (OUTPUT_DIR / "index.ts").write_text(
     index_content,
+    encoding="utf-8"
+)
+
+# --------------------
+# Generate plants_manifest.json
+# --------------------
+manifest_path = OUTPUT_DIR / "plants_manifest.json"
+manifest_path.write_text(
+    json.dumps(plants_manifest, indent=2),
     encoding="utf-8"
 )
 

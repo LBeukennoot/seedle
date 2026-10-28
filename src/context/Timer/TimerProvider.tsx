@@ -13,7 +13,7 @@ import { useUserData } from '../UserData';
 // import { PlantSpecies } from '../../components/Plant/types';
 import { useNotifications } from '../Notifications';
 import { plants } from '../../plants/generated';
-import { randomPalette, randomPath, randomPlant } from '../../plants/plantHelpers';
+import { getFirstStageKey, randomPalette, randomPath, randomPlant } from '../../plants/plantHelpers';
 import type { PlantSpecies } from '../../plants/generated/types';
 // import { PLANT_CATALOG } from '../../components/Plant/plantCatalog';
 
@@ -32,7 +32,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const { currentScreen, setPopup } = useNavigation();
   const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession();
   const { createPlant, growAllPlants } = usePlantData();
-  const { sendNotification } = useNotifications()
+  const { sendNotification } = useNotifications();
   // const { debugSettings }: DebugContextType = useDebug()
   // console.log(sessionTime)
 
@@ -148,16 +148,16 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   ]);
 
   const handleEstimatedEndTimeChange = (time: number) => {
-    const endTime = new Date()
-    endTime.setMinutes(endTime.getMinutes() + ((time + 1) / 60))
-    setEstimatedEndTime(endTime)
-  }
+    const endTime = new Date();
+    endTime.setMinutes(endTime.getMinutes() + (time + 1) / 60);
+    setEstimatedEndTime(endTime);
+  };
 
   useEffect(() => {
     let intervalId: number;
 
     if (!isTimerRunning) {
-      handleEstimatedEndTimeChange(time)
+      handleEstimatedEndTimeChange(time);
 
       intervalId = window.setInterval(() => {
         handleEstimatedEndTimeChange(time);
@@ -171,7 +171,6 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
       }
     };
   }, [isTimerRunning, time]);
-
 
   const getDisplayTime = (): string => {
     // const time = getDuration(mode)
@@ -192,39 +191,32 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     clearInterval(intervalRef.current!);
     setIsTimerRunning(false);
 
-    if (mode !== Mode.REST) {
-      // const plantValues = Object.values(plants);
-      // // const plantValues = Object.values(PlantSpecies);
-      // const randomPlant = plantValues[Math.floor(Math.random() * plantValues.length)];
-      // console.log(randomPlant)
+    if (mode === Mode.FOCUS) {
+      growAllPlants();
+    }
 
+    if (mode !== Mode.REST) {
       const plant = randomPlant() as PlantSpecies;
       const palette = randomPalette(plant);
       const path = randomPath(plant);
-
-      createPlant({
-        size: 0.05,
-        name: plant,
-        palette: palette,
-        path: path
-      });
+      const firstStage = getFirstStageKey(plant);
 
       setPopup(
-        <RewardPopup reward={plant} palette={palette} claim={() => setPopup(undefined)} />
-        // <RewardPopup
-        //   reward={randomPlant}
-        //   title={mode === Mode.FOCUS ? 'session complete!' : 'you completed a whole cycle!'}
-        //   claim={() => {
-        //     setPopup(undefined);
-        //   }}
-        // />
+        <RewardPopup
+          reward={plant}
+          palette={palette}
+          claim={() => {
+            setPopup(undefined);
+            createPlant({
+              size: 0.05,
+              plant: plant,
+              palette: palette,
+              path: path,
+              stage: firstStage
+            });
+          }}
+        />
       );
-    }
-
-    if (mode === Mode.FOCUS) {
-      growAllPlants()
-      // const multiplier = 0.4
-      // addGrowthPoints(Math.ceil(sessionTime.focus.time * multiplier));
     }
 
     if (settings.sessions.autoAdvance) {
@@ -233,7 +225,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     }
 
     //TODO add notification provider
-    if (settings.notifications.timerCompleteNotification) sendNotification(`Your ${mode} session is complete!`)
+    if (settings.notifications.timerCompleteNotification) sendNotification(`Your ${mode} session is complete!`);
   };
 
   useEffect(() => {

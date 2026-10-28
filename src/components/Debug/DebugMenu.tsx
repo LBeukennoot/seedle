@@ -2,33 +2,39 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, MenuItem, Select
 import { ArrowDownIcon } from '../Icons';
 import { useURLParams } from '../../utils/URLParams';
 import { usePlantData } from '../../context/PlantData';
-import { useUserData } from '../../context/UserData';
 import { useState } from 'react';
 import { type PlantData } from '../Plant/types';
-import { useFPS } from '../../utils/useFPS';
-import { availablePlants } from '../../plants/plantHelpers';
+// import { useFPS } from '../../utils/useFPS';
+import {
+  availablePlants,
+  getFirstStageKey,
+  getRelativePathStage,
+  randomPalette,
+  randomPath,
+} from '../../plants/plantHelpers';
+import type { PlantSpecies } from '../../plants/generated/types';
 
 export const DebugMenu = () => {
-  const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants } = usePlantData();
+  const { plants, createPlants, editPlant, growAllPlants, removeAllPlants, removePlant, savePlants } = usePlantData();
   // const { userData, setEditState, addGrowthPoints, removeGrowthPoints, addExperience, removeExperience } = useUserData();
   const { getParam } = useURLParams();
   const selectedPlantID = getParam('plant');
-  const fps = useFPS();
+  // const fps = useFPS();
 
-  const [newPlants, setNewPlants] = useState({
+  const [newPlants, setNewPlants] = useState<{ amount: number; name: PlantSpecies }>({
     amount: 1,
-    name: availablePlants[0].key as keyof typeof plants
+    name: availablePlants[0].key as keyof typeof plants as PlantSpecies
   });
 
-  const selectedPlant = plants.find((plant: PlantData) => plant.id === selectedPlantID);
+  const selectedPlant: PlantData = plants.find((plant: PlantData) => plant.id === selectedPlantID);
 
-  const checkNewStageValue = (value: number, min: number, max: number): boolean => {
-    return value >= min && value <= max;
-  };
+  // const checkNewStageValue = (value: number, min: number, max: number): boolean => {
+  //   return value >= min && value <= max;
+  // };
 
   return (
     <div className="absolute bottom-0 left-0 bg-black rounded-lg border border-white p-2 m-2 text-white flex flex-col w-50 z-50">
-      fps: {fps}
+      {/* fps: {fps} */}
       <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           {plants.length} Total Plants
@@ -49,7 +55,7 @@ export const DebugMenu = () => {
               className="bg-white w-full"
               value={newPlants.name || ''}
               onChange={(e) => {
-                const selectedPlant = e.target.value as keyof typeof plants;
+                const selectedPlant = e.target.value as keyof typeof plants as PlantSpecies;
                 setNewPlants({ ...newPlants, name: selectedPlant });
               }}>
               {availablePlants.map((plant) => (
@@ -61,15 +67,25 @@ export const DebugMenu = () => {
             <Button
               className="bg-white! w-full"
               onClick={() => {
-                Array(newPlants.amount)
-                  .fill(undefined)
-                  .map(() => {
-                    createPlant({ plant: newPlants.name, palette: 'default', size: 1 });
-                  });
+                const palette = randomPalette(newPlants.name);
+                const path = randomPath(newPlants.name);
+                const firstStage = getFirstStageKey(newPlants.name);
+
+                createPlants({
+                  plant: newPlants.name,
+                  palette: palette,
+                  path: path,
+                  stage: firstStage,
+                  amount: newPlants.amount
+                } as PlantData & { amount: number });
               }}>
               Add plant
             </Button>
           </div>
+
+          <Button className="bg-white! w-full" onClick={() => growAllPlants()}>
+            Grow all plants
+          </Button>
 
           <Button className="bg-white! w-full" onClick={() => removeAllPlants()}>
             Clear plants
@@ -84,89 +100,62 @@ export const DebugMenu = () => {
           </Button>
         </AccordionDetails>
       </Accordion>
-      {/* <Accordion className="border border-white">
-        <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
-          UserData
-        </AccordionSummary>
-        <AccordionDetails className="bg-black! text-white!">
-          <p>GrowthPoints</p>
-          <div className="w-full flex">
-            <Button
-              className="bg-white!"
-              onClick={() =>
-                removeGrowthPoints(1)
-              }>
-              -
-            </Button>
-            <div className="w-full text-white text-xl text-center">{userData.growthPoints}</div>
-            <Button
-              className="bg-white!"
-              onClick={() =>
-                addGrowthPoints(1)
-              }>
-              +
-            </Button>
-          </div>
-          <p>Experience</p>
-          <div className="w-full flex">
-            <Button
-              className="bg-white!"
-              onClick={() =>
-                removeExperience(1)
-              }>
-              -
-            </Button>
-            <div className="w-full text-white text-xl text-center">{userData.experience}</div>
-            <Button
-              className="bg-white!"
-              onClick={() =>
-                addExperience(1)
-              }>
-              +
-            </Button>
-          </div>
-        </AccordionDetails>
-      </Accordion> */}
       <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
-          {selectedPlant ? `Selected flower: ${selectedPlant.name}` : 'select'}
+          {selectedPlant ? `Selected flower: ${selectedPlant.plant}` : 'select'}
         </AccordionSummary>
         {selectedPlant && (
           <div className="bg-black">
             <div className="w-full flex">
               <Button
                 className="bg-white!"
-                onClick={() =>
-                  checkNewStageValue(selectedPlant.stage - 1, 1, selectedPlant.maxStage) &&
-                  editPlant({ ...selectedPlant, stage: selectedPlant.stage - 1 })
+                onClick={
+                  () => {
+                    const nextStage = getRelativePathStage(selectedPlant.stage, selectedPlant.path, -1);
+
+                    if (nextStage) {
+                      editPlant({
+                        ...selectedPlant,
+                        stage: nextStage
+                      } as PlantData);
+                    }
+                  }
                 }>
                 -
               </Button>
               <div className="w-full text-white text-xl text-center">{selectedPlant.stage}</div>
               <Button
                 className="bg-white!"
-                onClick={() =>
-                  checkNewStageValue(selectedPlant.stage + 1, 1, selectedPlant.maxStage) &&
-                  editPlant({ ...selectedPlant, stage: selectedPlant.stage + 1 })
+                onClick={
+                  () => {
+                    const nextStage = getRelativePathStage(selectedPlant.stage, selectedPlant.path, 1);
+
+                    if (nextStage) {
+                      editPlant({
+                        ...selectedPlant,
+                        stage: nextStage
+                      } as PlantData);
+                    }
+                  }
                 }>
                 +
               </Button>
             </div>
-            {/* <Select
+            <Select
               className="bg-white w-full"
-              value={selectedPlant.name}
-              onChange={(e) => editPlant({ ...selectedPlant, name: e.target.value })}>
-              {Object.values(PlantSpecies).map((value: string) => {
-                return <MenuItem value={value}>{value}</MenuItem>;
-              })}
-            </Select> */}
-            <Button
-              className="bg-white! w-full"
-              onClick={() => {
-                editPlant({ ...selectedPlant, x: undefined, y: undefined });
+              value={selectedPlant.plant}
+              onChange={(e) => {
+                const newSelectedPlant = e.target.value as keyof typeof plants as PlantSpecies;
+                const path = randomPath(newSelectedPlant);
+                const firstStage = getFirstStageKey(newSelectedPlant);
+                editPlant({ ...selectedPlant, plant: newSelectedPlant, stage: firstStage, path } as PlantData);
               }}>
-              Remove plant location
-            </Button>
+              {availablePlants.map((plant) => (
+                <MenuItem key={plant.key} value={plant.key}>
+                  {plant.label}
+                </MenuItem>
+              ))}
+            </Select>
             <Button className="bg-white! w-full" onClick={() => removePlant(selectedPlant.id)}>
               Delete plant
             </Button>

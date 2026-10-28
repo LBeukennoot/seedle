@@ -1,0 +1,65 @@
+{
+  "camomile": {
+    "palettes": [
+      "default"
+    ],
+    "stages": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  "chicory": {
+    "palettes": [
+      "default"
+    ],
+    "stages": [
+      "1",
+      "2",
+      "3_1",
+      "3_2",
+      "4_1",
+      "4_2"
+    ]
+  },
+  "fireweed": {
+    "palettes": [
+      "default"
+    ],
+    "stages": [
+      "1",
+      "2_1",
+      "2_2",
+      "3_1",
+      "3_2",
+      "4_1",
+      "4_2"
+    ]
+  },
+  "lantana": {
+    "palettes": [
+      "default",
+      "pink",
+      "purple",
+      "red"
+    ],
+    "stages": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  },
+  "lavender": {
+    "palettes": [
+      "default"
+    ],
+    "stages": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  }
+}

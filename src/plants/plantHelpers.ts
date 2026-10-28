@@ -81,3 +81,47 @@ export const availablePlants = (Object.keys(plants) as (keyof typeof plants)[]).
     label: plantDef.displayName ?? plantDef.name, // Display text
   };
 });
+
+export function getFirstStageKey<T extends PlantSpecies>(
+  species: T
+): PlantStageKey<T> {
+  const { stages, stagesTree } = plants[species];
+
+  // 1. Check if the canonical root "1" exists in stages
+  if ('1' in stages) {
+    return '1' as PlantStageKey<T>;
+  }
+
+  // 2. Fallback: find the node in stagesTree with in-degree 0 (no other stage leads to it)
+  const allTargets = new Set<string>();
+  for (const nextStages of Object.values(stagesTree)) {
+    for (const target of nextStages as string[]) {
+      allTargets.add(target);
+    }
+  }
+
+  const stageKeys = Object.keys(stages) as PlantStageKey<T>[];
+  const rootKey = stageKeys.find((key) => !allTargets.has(key));
+
+  return rootKey ?? stageKeys[0];
+}
+
+export function getRelativePathStage(
+  currentStage: string,
+  path: [string][],
+  direction: 1 | -1
+): string | null {
+  // Find index where the tuple's first element matches currentStage
+  const currentIndex = path.findIndex(([s]) => s === currentStage);
+
+  if (currentIndex === -1) return null;
+
+  const targetIndex = currentIndex + direction;
+
+  // Boundary check: cannot go past bloom or before root
+  if (targetIndex < 0 || targetIndex >= path.length) {
+    return null;
+  }
+
+  return path[targetIndex][0];
+}

@@ -5,6 +5,7 @@ import { COLS, ROWS, type PlantAction, type PlantDataContextType, type PlantData
 import { PlantDataContext } from './PlantDataContext';
 // import { useUserData } from '../UserData';
 import { type PlantData } from '../../components/Plant/types';
+import { getRelativePathStage } from '../../plants/plantHelpers';
 // import { createRandomGrowthPath, getPlantMaxStage } from '../../components/Plant/plantCatalog';
 
 const localStorage = new LocalStorage();
@@ -27,7 +28,7 @@ const generateGridPositions = (cols: number, rows: number) => {
 const getFreePositions = (plants: PlantData[], cols: number, rows: number) => {
   const all = generateGridPositions(cols, rows);
 
-  return all.filter((pos) => !plants.some((p) => p.x === pos.x && p.y === pos.y));
+  return all.filter((pos) => !plants.some((p) => p.position.x === pos.x && p.position.y === pos.y));
 };
 
 /* -----------------------------
@@ -40,6 +41,38 @@ const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
   switch (action.type) {
     case 'CREATE':
       return [...state, action.plant];
+
+    case 'BATCH_CREATE': {
+      // Extract amount and keep the typed plant template intact
+      const { amount, ...plantTemplate } = action.plant;
+
+      // 1. Calculate free positions from the current reducer state
+      const freePositions = getFreePositions(state, COLS, ROWS);
+
+      // 2. Shuffle available positions (Fisher-Yates / random sort)
+      const shuffled = [...freePositions].sort(() => Math.random() - 0.5);
+
+      // 3. Take only up to the available slots
+      const countToAdd = Math.min(amount, shuffled.length);
+      const newBatch: PlantData[] = [];
+
+      for (let i = 0; i < countToAdd; i++) {
+        newBatch.push({
+          // Spread the template data (plant, palette, path, stage)
+          ...plantTemplate,
+          // Overwrite/assign unique instance data
+          id: crypto.randomUUID(),
+          position: shuffled[i],
+          size: 1,
+          mirrored: Math.random() > 0.5,
+          createdAt: Date.now(),
+          grownAt: null
+        } as PlantData);
+      }
+
+      // Return existing plants plus the newly generated batch
+      return [...state, ...newBatch];
+    }
 
     case 'EDIT':
       return state.map((plant) => {
@@ -61,13 +94,18 @@ const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
 
     case 'TICKALL':
       return state.map((plant) => {
-        if (plant.stage < plant.maxStage) {
-          const nextStage = plant.stage + 1;
+        const nextStage = getRelativePathStage(plant.stage, plant.path, 1);
+        // console.log(`Current: ${plant.stage}, Next: ${nextStage}`)
+
+        if (nextStage) {
+          const finalStage = plant.path[plant.path.length - 1][0];
+          const isFullyGrown = nextStage === finalStage;
+
           return {
             ...plant,
             stage: nextStage,
-            grownAt: nextStage === plant.maxStage ? now : plant.grownAt
-          };
+            grownAt: isFullyGrown ? now : plant.grownAt
+          } as PlantData;
         }
 
         return plant;
@@ -187,11 +225,16 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
        ACTIONS
     ------------------------------ */
 
-  const createPlant = (
-    data: Omit<PlantData, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'maxStage' | 'mirrored'>
-  ) => {
+  const createPlant = (data: Omit<PlantData, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'maxStage' | 'mirrored'>) => {
     const freePositions = getFreePositions(plants, COLS, ROWS);
-    const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)];
+
+    if (freePositions.length === 0) {
+      // Handle full garden / no spaces available
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * freePositions.length);
+    const randomFreePosition = freePositions[randomIndex];
 
     const plant: PlantData = {
       id: crypto.randomUUID(),
@@ -200,7 +243,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
       mirrored: Math.random() < 0.5,
       createdAt: Date.now(),
       plant: data.plant,
-      stage: data.stage ?? '4_2',
+      stage: data.stage ?? '1',
       path: data.path,
       palette: data.palette
     };
@@ -210,6 +253,10 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     dispatch({ type: 'CREATE', plant });
 
     return plant;
+  };
+
+  const createPlants = (plant: PlantData & { amount: number }) => {
+    dispatch({ type: 'BATCH_CREATE', plant });
   };
 
   const growPlant = (plantId: string) => {
@@ -281,6 +328,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     removeAllPlants: () => dispatch({ type: 'REMOVEALL' }),
     editPlant,
     createPlant,
+    createPlants,
     removePlant,
     savePlants,
     growPlant,
