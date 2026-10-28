@@ -24,7 +24,7 @@ export const Garden = () => {
     <div className=" h-full grid grid-cols-10">
       {coordinateArray.map((arr, x) => {
         return arr.map((y) => {
-          const plant: PlantData | undefined = plants.find((p) => p.x === x && p.y === y);
+          const plant: PlantData | undefined = plants.find((p) => p.position.x === x && p.position.y === y);
 
           return (
             <div key={`${x},${y}`}>

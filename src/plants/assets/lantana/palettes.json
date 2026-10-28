@@ -1,0 +1,26 @@
+{
+    "default": {
+        "darkPetals": "var(--color-red02)",
+        "mediumPetals": "var(--color-orange02)",
+        "lightPetals": "var(--color-yellow02)",
+        "stem": "var(--color-green03)"
+    },
+    "pink": {
+        "darkPetals": "var(--color-pink13)",
+        "mediumPetals": "var(--color-pink12)",
+        "lightPetals": "var(--color-pink11)",
+        "stem": "var(--color-green03)"
+    },
+    "purple": {
+        "darkPetals": "var(--color-purple03)",
+        "mediumPetals": "var(--color-purple02)",
+        "lightPetals": "var(--color-purple01)",
+        "stem": "var(--color-green03)"
+    },
+    "red": {
+        "darkPetals": "var(--color-red03)",
+        "mediumPetals": "var(--color-red02)",
+        "lightPetals": "var(--color-red01)",
+        "stem": "var(--color-green03)"
+    }
+}

@@ -1,0 +1,9 @@
+{
+     "default": {
+          "outerPetals": "var(--color-magenta02)",
+          "innerPetals": "var(--color-pink14)",
+          "stamen": "var(--color-white)",
+          "background": "var(--color-pink15)",
+          "stem": "var(--color-green03)"
+     }
+}

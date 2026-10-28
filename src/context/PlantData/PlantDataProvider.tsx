@@ -5,7 +5,7 @@ import { COLS, ROWS, type PlantAction, type PlantDataContextType, type PlantData
 import { PlantDataContext } from './PlantDataContext';
 // import { useUserData } from '../UserData';
 import { type PlantData } from '../../components/Plant/types';
-import { createRandomGrowthPath, getPlantMaxStage } from '../../components/Plant/plantCatalog';
+// import { createRandomGrowthPath, getPlantMaxStage } from '../../components/Plant/plantCatalog';
 
 const localStorage = new LocalStorage();
 
@@ -149,36 +149,36 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     }
 
     // updating old data where x and y are floats (0.05) and updating them with new valid garden positions
-    if (stored && stored.length > 0 && (stored[0] as Record<string, unknown>).x % 1 !== 0) {
-      const cleanedPlants = stored.map((p) => {
-        const { ...rest } = p as Record<string, unknown>;
+    // if (stored && stored.length > 0 && (stored[0] as Record<string, unknown>).x % 1 !== 0) {
+    //   const cleanedPlants = stored.map((p) => {
+    //     const { ...rest } = p as Record<string, unknown>;
 
-        const freePositions = getFreePositions(stored, COLS, ROWS);
-        const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)];
+    //     const freePositions = getFreePositions(stored, COLS, ROWS);
+    //     const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)];
 
-        return {
-          ...rest,
-          x: randomFreePosition.x,
-          y: randomFreePosition.y
-        } as PlantData;
-      });
+    //     return {
+    //       ...rest,
+    //       x: randomFreePosition.x,
+    //       y: randomFreePosition.y
+    //     } as PlantData;
+    //   });
 
-      return cleanedPlants;
-    }
+    //   return cleanedPlants;
+    // }
 
-    if (stored && stored.length > 0 && !stored[0].path) {
-      const cleanedPlants = stored.map((p) => {
-        const { ...rest } = p as Record<string, unknown>;
-        const path = createRandomGrowthPath(p.name)
+    // if (stored && stored.length > 0 && !stored[0].path) {
+    //   const cleanedPlants = stored.map((p) => {
+    //     const { ...rest } = p as Record<string, unknown>;
+    //     const path = createRandomGrowthPath(p.name)
 
-        return {
-          ...rest,
-          path: path
-        } as PlantData
-      })
+    //     return {
+    //       ...rest,
+    //       path: path
+    //     } as PlantData
+    //   })
 
-      return cleanedPlants
-    }
+    //   return cleanedPlants
+    // }
 
     return (stored as PlantData[]) ?? [];
   });
@@ -188,24 +188,21 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     ------------------------------ */
 
   const createPlant = (
-    data: Omit<PlantData, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'stage' | 'maxStage' | 'mirrored'>
+    data: Omit<PlantData, 'id' | 'createdAt' | 'x' | 'y' | 'maxAge' | 'maxStage' | 'mirrored'>
   ) => {
     const freePositions = getFreePositions(plants, COLS, ROWS);
     const randomFreePosition = freePositions[Math.round(Math.random() * freePositions.length - 1)];
-    const path = createRandomGrowthPath(data.name);
 
     const plant: PlantData = {
       id: crypto.randomUUID(),
-      x: randomFreePosition.x, //x,y will be set once the user plants the plant
-      y: randomFreePosition.y,
-      size: data.size,
-      name: data.name,
-      stage: 1,
-      maxStage: getPlantMaxStage(data.name, path),
-      createdAt: Date.now(),
-      maxAge: undefined,
+      position: { x: randomFreePosition.x, y: randomFreePosition.y },
+      size: 0.05,
       mirrored: Math.random() < 0.5,
-      ...(path ? { path } : {})
+      createdAt: Date.now(),
+      plant: data.plant,
+      stage: data.stage ?? '4_2',
+      path: data.path,
+      palette: data.palette
     };
 
     // console.log(randomFreePosition)
@@ -245,7 +242,6 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     // if (editState === 'PLANT') {
     // setPlantables(plants.filter((p) => p.x === undefined || p.y === undefined));
     // }
-
     // if (editState !== 'PLANT') {
     //   setPlantables(undefined);
     // }
@@ -288,7 +284,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     removePlant,
     savePlants,
     growPlant,
-    growAllPlants,
+    growAllPlants
     // plantables,
     // setPlantables
   };

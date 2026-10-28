@@ -7,14 +7,23 @@ import { EnvelopeOpenFront } from './Envelope/EnvelopeOpenFront';
 import { EnvelopeStamp } from './Envelope/EnvelopeStamp';
 import { EnvelopeWiggle } from './Envelope/EnvelopeWiggle';
 import { PlantCard } from './Envelope/PlantCard';
+import { plantPalettes } from '../../../plants/generated';
+import { getLastStageKey } from '../../../plants/plantHelpers';
 
-export const RewardPopup = ({ reward, title = 'session complete!', claim }: RewardPopupProps) => {
+export const RewardPopup = ({ reward, palette, claim }: RewardPopupProps) => {
   const [envelopeOpen, setEnvelopeOpen] = useState(false);
 
   const toggleEvelopeOpen = () => {
     setEnvelopeOpen(!envelopeOpen);
-    setTimeout(() => {claim()}, 2000)
+    setTimeout(() => {
+      claim();
+    }, 2000);
   };
+
+  const lastStage = getLastStageKey(reward);
+
+  const speciesPalettes = (plantPalettes as Record<string, Record<string, any>>)[reward];
+  const selectedColors = speciesPalettes?.[palette as string];
 
   return (
     <div onClick={() => toggleEvelopeOpen()} className="relative w-full h-full flex justify-center items-center">
@@ -27,7 +36,13 @@ export const RewardPopup = ({ reward, title = 'session complete!', claim }: Rewa
             <div className="absolute rotate-7">
               <div className="relative flex justify-center items-center">
                 <PlantCard size={300} className="absolute" />
-                <Plant name={reward} stage={4} className={'absolute w-30 h-30 z-40'} />
+                <Plant
+                  name={reward}
+                  stage={lastStage}
+                  className={'absolute w-30 h-30 z-40'}
+                  colors={selectedColors}
+                  // colors={{ petals: 'var(--color-white)', stamen: 'var(--color-yellow)', stem: 'var(--color-green)' }}
+                />
               </div>
             </div>
             <EnvelopeOpenFront size={455} className="absolute -mb-45" />

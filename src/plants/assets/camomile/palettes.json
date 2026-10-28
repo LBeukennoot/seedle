@@ -1,0 +1,7 @@
+{
+    "default": {
+        "petals": "var(--color-white)",
+        "stamen": "var(--color-yellow02)",
+        "stem": "var(--color-green03)"
+    }
+}

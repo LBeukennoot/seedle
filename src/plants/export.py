@@ -13,6 +13,16 @@ import sys
 #     "#6C9159": "stem"
 # }
 
+# palettes.json structure:
+# {
+#     "classic": {
+#         "outerPetals": "#FFFFFF",
+#         "innerPetals": "#FFFFFF",
+#         "stamen": "#FFD700",
+#         "stem": "#4CAF50"
+#     }
+# }
+
 ROOT_DIR = Path("assets")
 OUTPUT_DIR = Path("generated")
 
@@ -28,18 +38,23 @@ SVG_ATTR_MAP = {
     "stroke-linejoin": "strokeLinejoin",
     "fill-rule": "fillRule",
     "clip-rule": "clipRule",
-    "stroke-miterlimit": "strokeMiterlimit"
+    "stroke-miterlimit": "strokeMiterlimit",
 }
 
 errors = []
 warnings = []
 
 
-def pascal_case(name: str):
+def pascal_case(name: str) -> str:
     return "".join(
         x.capitalize()
         for x in name.split("-")
     )
+
+
+def camel_case(name: str) -> str:
+    pascal = pascal_case(name)
+    return pascal[0].lower() + pascal[1:] if pascal else name
 
 
 def sort_stage(stage: str):
@@ -216,7 +231,7 @@ for plant_dir in ROOT_DIR.iterdir():
 
         stages[stage] = {
             "viewBox": viewbox,
-            "tsx": "\n        ".join(tsx_elements)
+            "tsx": "\n            ".join(tsx_elements)
         }
 
     # --------------------
@@ -280,47 +295,111 @@ for plant_dir in ROOT_DIR.iterdir():
             )
 
     # --------------------
+    # Read palettes.json
+    # --------------------
+
+    palettes_file = plant_dir / "palettes.json"
+    palettes_data = {}
+
+    if palettes_file.exists():
+        try:
+            palettes_data = json.loads(
+                palettes_file.read_text(encoding="utf-8")
+            )
+        except json.JSONDecodeError as ex:
+            errors.append(
+                f"{plant_name}: invalid palettes.json ({ex})"
+            )
+    else:
+        warnings.append(
+            f"{plant_name}: missing palettes.json"
+        )
+
+    # --------------------
     # TSX Export
     # --------------------
 
     component_name = pascal_case(plant_name)
+    var_prefix = camel_case(plant_name)
+    slot_names = sorted(set(slots.values()))
+    
     stage_entries = []
+    tree_entries = []
 
-    for stage in sorted(stages, key=sort_stage):
+    sorted_stages = sorted(stages, key=sort_stage)
+
+    for stage in sorted_stages:
         stage_data = stages[stage]
         next_stages = sorted(graph.get(stage, []), key=sort_stage)
         next_stages_json = json.dumps(next_stages)
 
         stage_entries.append(
-f'''  "{stage}": {{
-    stage: "{stage}",
-    asset: {{
-      viewBox: "{stage_data["viewBox"]}",
-      render: (colors: {component_name}Colors) => (
-        <>
-          {stage_data["tsx"]}
-        </>
-      ),
-    }},
-  }}'''
+f'''    "{stage}": {{
+      asset: {{
+        viewBox: "{stage_data["viewBox"]}",
+        render: (colors: {component_name}Colors) => (
+          <>
+            {stage_data["tsx"]}
+          </>
+        ),
+      }},
+    }}'''
         )
 
-    output = f'''import type {{ Plant, PlantColorSlots }} from './types';
+        tree_entries.append(f'    "{stage}": {next_stages_json}')
+
+    stages_body = ",\n".join(stage_entries)
+    tree_body = ",\n".join(tree_entries)
+
+    # Build TS export for palettes
+    palette_entries = []
+    for palette_key, palette_obj in palettes_data.items():
+        entry_lines = [f'  {palette_key}: {{']
+        for slot in slot_names:
+            if slot in palette_obj:
+                entry_lines.append(f'    {slot}: "{palette_obj[slot]}",')
+            else:
+                errors.append(
+                    f"{plant_name}: palette '{palette_key}' missing required slot '{slot}'"
+                )
+        entry_lines.append("  }")
+        palette_entries.append("\n".join(entry_lines))
+
+    palettes_body = ",\n".join(palette_entries)
+    
+    palette_export = ""
+    if palettes_data:
+        palette_export = f'''export const {var_prefix}Palettes: Record<string, {component_name}Colors> = {{
+{palettes_body},
+}};
+'''
+    else:
+        palette_export = f'''export const {var_prefix}Palettes: Record<string, {component_name}Colors> = {{}};
+'''
+
+    # Assemble file content
+    output = f'''import type {{ PlantColorSlots }} from "./types";
+import {{ definePlant }} from "./types";
 
 export interface {component_name}Colors extends PlantColorSlots {{
 '''
-
-    slot_names = sorted(set(slots.values()))
 
     for slot in slot_names:
         output += f"  {slot}: string;\n"
 
     output += "}\n\n"
-    output += f'export const {component_name}Stages: Plant<{component_name}Colors> = {{\n'
-    output += ",\n".join(stage_entries)
-    output += "\n};\n"
+    output += f'''export const {component_name} = definePlant<{component_name}Colors>()({{
+  name: "{plant_name}",
+  stages: {{
+{stages_body},
+  }},
+  stagesTree: {{
+{tree_body},
+  }},
+}});\n\n'''
+    output += palette_export
 
-    (OUTPUT_DIR / f"{plant_name.capitalize()}.tsx").write_text(
+    (OUTPUT_DIR / f"{component_name}.tsx").write_text(
         output,
         encoding="utf-8"
     )
@@ -329,26 +408,32 @@ export interface {component_name}Colors extends PlantColorSlots {{
     processed_plants_count += 1
     generated_plants.append(plant_name)
 
-index_imports = ['import type { Plant, PlantColorSlots } from "./types"']
+# --------------------
+# Generate index.ts
+# --------------------
+
+index_imports = ['import type { PlantDefinition, PlantColorSlots } from "./types";']
 index_reexports = []
 plant_dict_entries = []
+palette_dict_entries = []
 
 for plant in sorted(generated_plants):
     comp_name = pascal_case(plant)
-    capitalized_plant = plant.capitalize()
-    index_imports.append(f'import {{ {comp_name}Stages }} from "./{capitalized_plant}"')
-    index_reexports.append(f'export * from "./{capitalized_plant}"')
-    plant_dict_entries.append(f'  "{capitalized_plant}": {comp_name}Stages,')
+    var_prefix = camel_case(plant)
+    index_imports.append(f'import {{ {comp_name}, {var_prefix}Palettes }} from "./{comp_name}";')
+    index_reexports.append(f'export * from "./{comp_name}";')
+    plant_dict_entries.append(f'  "{plant}": {comp_name},')
+    palette_dict_entries.append(f'  "{plant}": {var_prefix}Palettes,')
 
 index_content = "\n".join(index_imports) + "\n\n"
 index_content += "\n".join(index_reexports) + "\n\n"
 index_content += "export const plants = {\n"
 index_content += "\n".join(plant_dict_entries) + "\n"
-index_content += "} satisfies Record<string, Plant<PlantColorSlots>>;\n"
+index_content += "} satisfies Record<string, PlantDefinition<any, any>>;\n\n"
 
-# index_lines = []
-# for plant in sorted(generated_plants):
-#     index_lines.append(f'export * from "./{plant.capitalize()}";')
+index_content += "export const plantPalettes = {\n"
+index_content += "\n".join(palette_dict_entries) + "\n"
+index_content += "} as const;\n"
 
 (OUTPUT_DIR / "index.ts").write_text(
     index_content,
@@ -373,4 +458,4 @@ if errors:
 print("\n✓ Export succeeded")
 print(f"✓ {processed_plants_count} plants")
 print(f"✓ {total_svgs} stages")
-print("✓ TSX files generated with stage graph structures")
+print("✓ TSX files generated with stages, stagesTree, and palettes structures")

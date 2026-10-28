@@ -4,8 +4,9 @@ import { useURLParams } from '../../utils/URLParams';
 import { usePlantData } from '../../context/PlantData';
 import { useUserData } from '../../context/UserData';
 import { useState } from 'react';
-import { PlantSpecies, type PlantData } from '../Plant/types';
+import { type PlantData } from '../Plant/types';
 import { useFPS } from '../../utils/useFPS';
+import { availablePlants } from '../../plants/plantHelpers';
 
 export const DebugMenu = () => {
   const { plants, createPlant, editPlant, removeAllPlants, removePlant, savePlants } = usePlantData();
@@ -16,7 +17,7 @@ export const DebugMenu = () => {
 
   const [newPlants, setNewPlants] = useState({
     amount: 1,
-    name: PlantSpecies.CHIRARY
+    name: availablePlants[0].key as keyof typeof plants
   });
 
   const selectedPlant = plants.find((plant: PlantData) => plant.id === selectedPlantID);
@@ -27,7 +28,7 @@ export const DebugMenu = () => {
 
   return (
     <div className="absolute bottom-0 left-0 bg-black rounded-lg border border-white p-2 m-2 text-white flex flex-col w-50 z-50">
-        fps: {fps}
+      fps: {fps}
       <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           {plants.length} Total Plants
@@ -46,11 +47,16 @@ export const DebugMenu = () => {
             />
             <Select
               className="bg-white w-full"
-              value={newPlants.name ? newPlants.name : undefined}
-              onChange={(e) => console.log({ ...newPlants, name: e.target.value })}>
-              {Object.values(PlantSpecies).map((value: string) => {
-                return <MenuItem value={value}>{value}</MenuItem>;
-              })}
+              value={newPlants.name || ''}
+              onChange={(e) => {
+                const selectedPlant = e.target.value as keyof typeof plants;
+                setNewPlants({ ...newPlants, name: selectedPlant });
+              }}>
+              {availablePlants.map((plant) => (
+                <MenuItem key={plant.key} value={plant.key}>
+                  {plant.label}
+                </MenuItem>
+              ))}
             </Select>
             <Button
               className="bg-white! w-full"
@@ -58,7 +64,7 @@ export const DebugMenu = () => {
                 Array(newPlants.amount)
                   .fill(undefined)
                   .map(() => {
-                    createPlant({ name: newPlants.name, size: 1 });
+                    createPlant({ plant: newPlants.name, palette: 'default', size: 1 });
                   });
               }}>
               Add plant
@@ -121,7 +127,6 @@ export const DebugMenu = () => {
           </div>
         </AccordionDetails>
       </Accordion> */}
-
       <Accordion className="border border-white">
         <AccordionSummary className="bg-black! text-white!" expandIcon={<ArrowDownIcon className="stroke-white" />}>
           {selectedPlant ? `Selected flower: ${selectedPlant.name}` : 'select'}
@@ -147,14 +152,14 @@ export const DebugMenu = () => {
                 +
               </Button>
             </div>
-            <Select
+            {/* <Select
               className="bg-white w-full"
               value={selectedPlant.name}
               onChange={(e) => editPlant({ ...selectedPlant, name: e.target.value })}>
               {Object.values(PlantSpecies).map((value: string) => {
                 return <MenuItem value={value}>{value}</MenuItem>;
               })}
-            </Select>
+            </Select> */}
             <Button
               className="bg-white! w-full"
               onClick={() => {

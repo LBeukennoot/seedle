@@ -1,43 +1,36 @@
-// import { useState } from "react";
-// import { useUserData } from "../../context/UserData";
-import type { PlantProps } from "./types";
-import { Plant } from "./Plant";
+import type { PlantProps } from './types';
+import { Plant } from './Plant';
+import { plantPalettes } from '../../plants/generated';
 
 export const PlantInGarden = ({ plant, className, x, y, onClick }: PlantProps) => {
-  // const { editState } = useUserData();
-  // const [isHovering, setIsHovering] = useState(false);
+  //TODO: add info card on hover
 
-  // const nextStage = (plant: PlantData) => {
-  //   const newStage = plant.stage + 1;
-  //   if (newStage <= plant.maxStage) {
-  //     return newStage;
-  //   } else {
-  //     return plant.maxStage;
-  //   }
-  // };
-  //TODO add info card on hover
+  const colors = (plantPalettes as Record<string, Record<string, any>>)[plant.plant]?.[plant.palette];
+  console.log(plant.stage)
 
   return (
     <div
       key={`${x},${y}`}
       className={className}
       style={{ transform: plant && plant.mirrored ? 'scaleX(-1)' : '' }}
-      onClick={onClick}
-      // onMouseEnter={() => {
-      //   setIsHovering(true);
-      // }}
-      // onMouseLeave={() => {
-      //   setIsHovering(false);
-      // }}
+      onClick={onClick}>
+      <div 
+      className="absolute w-20 h-20" 
+      // style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}
       >
-      <div className="absolute w-20 h-20 " style={{ animationDelay: `${(x * 1.5 + y) / 20}s` }}>
         <Plant
-          name={'chicory'}
-          // name={plant.name}
-          // stage={plant.stage}
-          stage={"4_1"}
-          className={'w-full h-full'}
+          name={plant.plant}
+          stage={plant.stage}
+          className={'absolute w-30 h-30 z-40'}
+          colors={colors}
+          // colors={{ petals: 'var(--color-white)', stamen: 'var(--color-yellow)', stem: 'var(--color-green)' }}
         />
+        {/* <Plant
+          name={plant}
+          stage={'4'}
+          className={'w-full h-full'}
+          colors={{ petals: 'var(--color-white)', stamen: 'var(--color-yellow)', stem: 'var(--color-green)' }}
+        /> */}
       </div>
     </div>
   );

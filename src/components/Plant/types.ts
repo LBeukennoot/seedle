@@ -1,29 +1,47 @@
 import type { JSX } from 'react';
-import type { PlantGrowthNode } from './plantCatalog';
+import type { ExtractPlantStages, PlantPaletteKey, PlantSpecies } from '../../plants/generated/types';
+import type { plants } from '../../plants/generated';
 
-export enum PlantSpecies {
-  CHICORY = 'CHICORY',
-  CHIRARY = 'CHIRARY',
-  CHAMOMILE = 'CHAMOMILE',
-  FIREWEED = 'FIREWEED',
-  LAVENDER = 'LAVENDER'
-}
+// export enum PlantSpecies {
+//   CHICORY = 'CHICORY',
+//   CHIRARY = 'CHIRARY',
+//   CHAMOMILE = 'CHAMOMILE',
+//   FIREWEED = 'FIREWEED',
+//   LAVENDER = 'LAVENDER'
+// }
 
-export type PlantData = {
+interface BasePlantData {
   id: string;
-  // gardenId: string;
-  x: number | undefined; // 0–1
-  y: number | undefined; // 0–1 //TODO change this to position: {x,y}
-  size: number; // 0–1
-  name: PlantSpecies;
-  stage: number;
-  maxStage: number;
+
+  // Data for visuals
+  position: {
+    x: number;
+    y: number;
+  };
+  size: number;
+  mirrored: boolean;
+
+  // Data for stats
   createdAt: number;
   grownAt?: number | null;
-  maxAge: number | undefined; //in days
-  mirrored: boolean;
-  path?: PlantGrowthNode[];
-};
+}
+
+// Discriminated union: correlates plant, stage, path, and palette per flower
+export type PlantData = {
+  [K in PlantSpecies]: BasePlantData & {
+    /** The specific plant species identifier */
+    plant: K;
+
+    /** The current active stage key for this specific flower */
+    stage: ExtractPlantStages<(typeof plants)[K]>;
+
+    /** The growth path taken, formatted as an array of single-item stage tuples */
+    path: [ExtractPlantStages<(typeof plants)[K]>][];
+
+    /** Optional/recommended: store the unlocked palette key alongside the plant */
+    palette: PlantPaletteKey<K>;
+  };
+}[PlantSpecies];
 
 export type PlantProps = {
   plant: PlantData;

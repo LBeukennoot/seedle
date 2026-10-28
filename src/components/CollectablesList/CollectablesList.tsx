@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'motion/react';
-import { PlantSpecies } from '../Plant/types';
+// import { PlantSpecies } from '../Plant/types';
 import { EnvelopeOpenIcon } from '../Icons/EnvelopeOpenIcon';
 import { EnvelopeClosedIcon } from '../Icons/EnvelopeClosedIcon';
 import { StarIcon } from '../Icons/StarIcon';
@@ -16,15 +16,15 @@ export const CollectablesList = () => {
   const scrollToIndex = 4;
 
   const collectables = [
-    { id: 1, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-red stroke-red', unlocked: 1 },
-    { id: 2, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-blue stroke-blue', unlocked: 1 },
-    { id: 3, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-pink stroke-dark-pink', unlocked: 1 },
-    { id: 4, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 1 },
-    { id: 5, plant: PlantSpecies.CHAMOMILE, plantLevel: 'fill-yellow stroke-orange', unlocked: 1 },
-    { id: 6, plant: PlantSpecies.LAVENDER, plantLevel: 'fill-light-red stroke-red', unlocked: 0 },
-    { id: 7, plant: PlantSpecies.FIREWEED, plantLevel: 'fill-light-blue stroke-blue', unlocked: 0 },
-    { id: 8, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-pink stroke-dark-pink', unlocked: 0 },
-    { id: 9, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 0 }
+    // { id: 1, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-red stroke-red', unlocked: 1 },
+    // { id: 2, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-blue stroke-blue', unlocked: 1 },
+    // { id: 3, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-pink stroke-dark-pink', unlocked: 1 },
+    // { id: 4, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 1 },
+    // { id: 5, plant: PlantSpecies.CHAMOMILE, plantLevel: 'fill-yellow stroke-orange', unlocked: 1 },
+    // { id: 6, plant: PlantSpecies.LAVENDER, plantLevel: 'fill-light-red stroke-red', unlocked: 0 },
+    // { id: 7, plant: PlantSpecies.FIREWEED, plantLevel: 'fill-light-blue stroke-blue', unlocked: 0 },
+    // { id: 8, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-pink stroke-dark-pink', unlocked: 0 },
+    // { id: 9, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 0 }
   ];
 
   // Calculate top boundary so you can't drag past the bottom of the content

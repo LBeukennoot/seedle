@@ -7,7 +7,7 @@ import { SessionProvider } from './context/Session';
 import { TimerProvider } from './context/Timer';
 import { PlantDataProvider } from './context/PlantData';
 import { UserDataProvider } from './context/UserData/UserDataProvider';
-import { NotificationsProvider } from './context/Notifications/NavigationsProvider';
+import { NotificationsProvider } from './context/Notifications/NotificationsProvider';
 import NoiseCanvas from './components/NoiseCanvas/NoiseCanvas';
 import { TurbulenceFilter } from './components/TurbulenceFilter/TurbulenceFilter';
 
