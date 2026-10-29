@@ -30,7 +30,7 @@ export type UserDataContextType = {
   addPlant: (amount?: number, onUnlock?: (unlocked: CollectableItem[]) => void) => void;
   /** Logs completed focus, rest, or long rest sessions */
   addSession: (type: Mode) => void;
-  syncPlantsCount: (currentPlantCount: number, onUnlock?: (unlocked: CollectableItem[]) => void) => void;
+  saveUserData: () => void;
   /** Manually evaluates thresholds against collectables */
   checkCollectablesMilestones: (
     onUnlock?: (unlocked: CollectableItem[]) => void

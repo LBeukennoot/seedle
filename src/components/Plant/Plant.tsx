@@ -20,17 +20,14 @@ export const Plant = <T extends PlantName>({ name, stage, className, colors = {}
   const plantDef = plants[name];
   if (!plantDef) return <></>;
 
-  // Safely index stages using PlantStageData without 'any'
   const stages = plantDef.stages as Record<string, PlantStageData<PlantColors<T>>>;
   const stageData = stages[stage as string];
 
   if (!stageData) return <></>;
 
-  // console.log(stageData.asset.render(colors as PlantColors<T>));
 
   return (
     <Icon className={className} viewBox={stageData.asset.viewBox}>
-      {/* Cast through PlantColors<T> to satisfy linter and the SVG render signature */}
       {stageData.asset.render(colors as PlantColors<T>)}
     </Icon>
   );

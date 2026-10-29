@@ -10,12 +10,13 @@ import {
   getFirstStageKey,
   getRelativePathStage,
   randomPalette,
-  randomPath,
+  randomPath
 } from '../../plants/plantHelpers';
 import type { PlantSpecies } from '../../plants/generated/types';
+import type { PlantCreationTemplate } from '../../context/PlantData/types';
 
 export const DebugMenu = () => {
-  const { plants, createPlants, editPlant, growAllPlants, removeAllPlants, removePlant, savePlants } = usePlantData();
+  const { plants, createPlant, editPlant, growAllPlants, removeAllPlants, removePlant, savePlants } = usePlantData();
   // const { userData, setEditState, addGrowthPoints, removeGrowthPoints, addExperience, removeExperience } = useUserData();
   const { getParam } = useURLParams();
   const selectedPlantID = getParam('plant');
@@ -71,13 +72,15 @@ export const DebugMenu = () => {
                 const path = randomPath(newPlants.name);
                 const firstStage = getFirstStageKey(newPlants.name);
 
-                createPlants({
-                  plant: newPlants.name,
-                  palette: palette,
-                  path: path,
-                  stage: firstStage,
-                  amount: newPlants.amount
-                } as PlantData & { amount: number });
+                createPlant(
+                  {
+                    plant: newPlants.name,
+                    palette: palette,
+                    path: path,
+                    stage: firstStage
+                  } as PlantCreationTemplate,
+                  newPlants.amount
+                );
               }}>
               Add plant
             </Button>
@@ -109,35 +112,31 @@ export const DebugMenu = () => {
             <div className="w-full flex">
               <Button
                 className="bg-white!"
-                onClick={
-                  () => {
-                    const nextStage = getRelativePathStage(selectedPlant.stage, selectedPlant.path, -1);
+                onClick={() => {
+                  const nextStage = getRelativePathStage(selectedPlant.stage, selectedPlant.path, -1);
 
-                    if (nextStage) {
-                      editPlant({
-                        ...selectedPlant,
-                        stage: nextStage
-                      } as PlantData);
-                    }
+                  if (nextStage) {
+                    editPlant({
+                      ...selectedPlant,
+                      stage: nextStage
+                    } as PlantData);
                   }
-                }>
+                }}>
                 -
               </Button>
               <div className="w-full text-white text-xl text-center">{selectedPlant.stage}</div>
               <Button
                 className="bg-white!"
-                onClick={
-                  () => {
-                    const nextStage = getRelativePathStage(selectedPlant.stage, selectedPlant.path, 1);
+                onClick={() => {
+                  const nextStage = getRelativePathStage(selectedPlant.stage, selectedPlant.path, 1);
 
-                    if (nextStage) {
-                      editPlant({
-                        ...selectedPlant,
-                        stage: nextStage
-                      } as PlantData);
-                    }
+                  if (nextStage) {
+                    editPlant({
+                      ...selectedPlant,
+                      stage: nextStage
+                    } as PlantData);
                   }
-                }>
+                }}>
                 +
               </Button>
             </div>

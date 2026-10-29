@@ -7,6 +7,10 @@ import { StarIcon } from '../Icons/StarIcon';
 import { BentLineIcon } from '../Icons/BentLineIcon';
 import { useUserData } from '../../context/UserData';
 import { INITIAL_COLLECTABLES } from '../../collections/generated/collectables';
+import { Plant } from '../Plant/Plant';
+import { plantPalettes } from '../../plants/generated';
+import type { PlantPaletteKey } from '../../plants/generated/types';
+import { getLastStageKey } from '../../plants/plantHelpers';
 
 export const CollectablesList = () => {
   const containerRef = useRef(null);
@@ -35,7 +39,7 @@ export const CollectablesList = () => {
 
   const lastIndex = INITIAL_COLLECTABLES.length - 1;
 
-  const scrollToIndex = 4;
+  // const scrollToIndex = 4;
 
   // const collectables = [
   // { id: 1, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-red stroke-red', unlocked: 1 },
@@ -109,7 +113,12 @@ export const CollectablesList = () => {
           const isLastUnlockedItem = collectable.id === lastUnlockedId;
           const isLastItem = index === lastIndex;
 
-          // console.log(collectable)
+          const plantPaletteGroup = plantPalettes[collectable.plant as keyof typeof plantPalettes];
+          const palette = plantPaletteGroup
+            ? (plantPaletteGroup as Record<string, any>)[collectable.palette]
+            : undefined;
+
+          const plantLastStage = getLastStageKey(collectable.plant);
 
           // Use array index for alternating left/right layout (id is a string)
           const isEven = index % 2 === 0;
@@ -117,11 +126,18 @@ export const CollectablesList = () => {
           return (
             <div
               key={collectable.id}
-              ref={index === scrollToIndex ? targetItemRef : null}
+              ref={collectable.id === lastUnlockedId ? targetItemRef : null}
               id={`item-${collectable.id}`}
               className="flex flex-col relative z-10">
               <div className={`w-30 h-30 ${isEven ? 'ml-10' : '-ml-10'}`}>
-                {isUnlocked ? <EnvelopeOpenIcon className='fill-light-pink stroke-dark-pink' size={130} /> : <EnvelopeClosedIcon className='fill-light-pink stroke-dark-pink' size={125} />}
+                {isUnlocked ? (
+                  <div className={'bg-linen rounded-full p-5'}>
+                    <Plant name={collectable.plant} stage={plantLastStage} colors={palette} className="w-20 h-20" />
+                  </div>
+                ) : (
+                  // <EnvelopeOpenIcon className='fill-light-pink stroke-dark-pink' size={130} /> :
+                  <EnvelopeClosedIcon className="fill-light-pink stroke-dark-pink" size={125} />
+                )}
               </div>
 
               {/* Stars highlight above the current progress milestone */}

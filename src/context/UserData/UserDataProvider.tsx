@@ -6,10 +6,12 @@ import { initialUserStatistics } from './constants';
 import type { CollectableItem } from '../../collections/generated/types';
 import { INITIAL_COLLECTABLES } from '../../collections/generated/collectables';
 import type { Mode } from '../../features/session/sessionTypes';
+import { useDebug } from '../Debug';
 
 const localStorage = new LocalStorage();
 
 export const UserDataProvider = ({ children }: UserDataProviderProps) => {
+  const { debugSettings } = useDebug();
   const [userStatistics, setUserStatistics] = useState<UserStatistics>((): UserStatistics => {
     const stored = localStorage.getValue('userStatistics');
     if (!stored) return initialUserStatistics;
@@ -26,9 +28,15 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     };
   });
 
-  useEffect(() => {
+  const saveUserData = (): void => {
     localStorage.setValue('userStatistics', userStatistics);
-  }, [userStatistics]);
+  };
+
+  useEffect(() => {
+    if (!debugSettings.debug) {
+      saveUserData();
+    } else console.log("Debug is enabled, so userStatistics won't be saved.");
+  }, [userStatistics, debugSettings]);
 
   /**
    * Evaluates unlock thresholds against current or target total plants
@@ -84,7 +92,6 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
         const { updatedStats, newlyUnlocked } = evaluateUnlocks(statsWithPlanted, nextTotalPlants);
 
         if (newlyUnlocked.length > 0 && onUnlock) {
-          console.log(newlyUnlocked);
           onUnlock(newlyUnlocked);
         }
 
@@ -126,36 +133,36 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     });
   }, []);
 
-  const syncPlantsCount = useCallback((currentPlantCount: number, onUnlock?: (unlocked: CollectableItem[]) => void) => {
-    setUserStatistics((prev) => {
-      // Don't trigger state updates if the count is already in sync
-      if (prev.total.plants === currentPlantCount) return prev;
+  // const syncPlantsCount = useCallback((currentPlantCount: number, onUnlock?: (unlocked: CollectableItem[]) => void) => {
+  //   setUserStatistics((prev) => {
+  //     // Don't trigger state updates if the count is already in sync
+  //     if (prev.total.plants === currentPlantCount) return prev;
 
-      const updatedUnlocked = { ...prev.unlockedCollectables };
-      const newlyUnlocked: CollectableItem[] = [];
-      const now = Date.now();
+  //     const updatedUnlocked = { ...prev.unlockedCollectables };
+  //     const newlyUnlocked: CollectableItem[] = [];
+  //     const now = Date.now();
 
-      for (const item of INITIAL_COLLECTABLES) {
-        if (!updatedUnlocked[item.id] && currentPlantCount >= item.threshold) {
-          updatedUnlocked[item.id] = { unlockedAt: now };
-          newlyUnlocked.push(item);
-        }
-      }
+  //     for (const item of INITIAL_COLLECTABLES) {
+  //       if (!updatedUnlocked[item.id] && currentPlantCount >= item.threshold) {
+  //         updatedUnlocked[item.id] = { unlockedAt: now };
+  //         newlyUnlocked.push(item);
+  //       }
+  //     }
 
-      if (newlyUnlocked.length > 0 && onUnlock) {
-        onUnlock(newlyUnlocked);
-      }
+  //     if (newlyUnlocked.length > 0 && onUnlock) {
+  //       onUnlock(newlyUnlocked);
+  //     }
 
-      return {
-        ...prev,
-        total: {
-          ...prev.total,
-          plants: currentPlantCount
-        },
-        unlockedCollectables: updatedUnlocked
-      };
-    });
-  }, []);
+  //     return {
+  //       ...prev,
+  //       total: {
+  //         ...prev.total,
+  //         plants: currentPlantCount
+  //       },
+  //       unlockedCollectables: updatedUnlocked
+  //     };
+  //   });
+  // }, []);
 
   /**
    * 3. checkCollectablesMilestones: Triggers a retroactive check against current stats
@@ -180,7 +187,7 @@ export const UserDataProvider = ({ children }: UserDataProviderProps) => {
     setUserStatistics,
     addPlant,
     addSession,
-    syncPlantsCount,
+    saveUserData,
     checkCollectablesMilestones
   };
 
