@@ -1,10 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { motion, useMotionValue, useTransform } from 'motion/react';
 // import { PlantSpecies } from '../Plant/types';
 import { EnvelopeOpenIcon } from '../Icons/EnvelopeOpenIcon';
 import { EnvelopeClosedIcon } from '../Icons/EnvelopeClosedIcon';
 import { StarIcon } from '../Icons/StarIcon';
 import { BentLineIcon } from '../Icons/BentLineIcon';
+import { useUserData } from '../../context/UserData';
+import { INITIAL_COLLECTABLES } from '../../collections/generated/collectables';
 
 export const CollectablesList = () => {
   const containerRef = useRef(null);
@@ -13,19 +15,39 @@ export const CollectablesList = () => {
   const y = useMotionValue(0);
   const [dragConstraints, setDragConstraints] = useState({ top: 0, bottom: 0 });
 
+  const { userStatistics } = useUserData();
+
+  // 1. Precompute unlocked statuses and find the last unlocked item ID once
+  const { unlockedMap, lastUnlockedId } = useMemo(() => {
+    const map: Record<string, boolean> = {};
+    let lastId: string | null = null;
+
+    for (const item of INITIAL_COLLECTABLES) {
+      const isUnlocked = Boolean(userStatistics.unlockedCollectables[item.id]);
+      map[item.id] = isUnlocked;
+      if (isUnlocked) {
+        lastId = item.id; // Keeps advancing until the highest unlocked milestone
+      }
+    }
+
+    return { unlockedMap: map, lastUnlockedId: lastId };
+  }, [INITIAL_COLLECTABLES, userStatistics.unlockedCollectables]);
+
+  const lastIndex = INITIAL_COLLECTABLES.length - 1;
+
   const scrollToIndex = 4;
 
-  const collectables = [
-    // { id: 1, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-red stroke-red', unlocked: 1 },
-    // { id: 2, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-blue stroke-blue', unlocked: 1 },
-    // { id: 3, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-pink stroke-dark-pink', unlocked: 1 },
-    // { id: 4, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 1 },
-    // { id: 5, plant: PlantSpecies.CHAMOMILE, plantLevel: 'fill-yellow stroke-orange', unlocked: 1 },
-    // { id: 6, plant: PlantSpecies.LAVENDER, plantLevel: 'fill-light-red stroke-red', unlocked: 0 },
-    // { id: 7, plant: PlantSpecies.FIREWEED, plantLevel: 'fill-light-blue stroke-blue', unlocked: 0 },
-    // { id: 8, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-pink stroke-dark-pink', unlocked: 0 },
-    // { id: 9, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 0 }
-  ];
+  // const collectables = [
+  // { id: 1, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-red stroke-red', unlocked: 1 },
+  // { id: 2, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-blue stroke-blue', unlocked: 1 },
+  // { id: 3, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-pink stroke-dark-pink', unlocked: 1 },
+  // { id: 4, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 1 },
+  // { id: 5, plant: PlantSpecies.CHAMOMILE, plantLevel: 'fill-yellow stroke-orange', unlocked: 1 },
+  // { id: 6, plant: PlantSpecies.LAVENDER, plantLevel: 'fill-light-red stroke-red', unlocked: 0 },
+  // { id: 7, plant: PlantSpecies.FIREWEED, plantLevel: 'fill-light-blue stroke-blue', unlocked: 0 },
+  // { id: 8, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-light-pink stroke-dark-pink', unlocked: 0 },
+  // { id: 9, plant: PlantSpecies.CHIRARY, plantLevel: 'fill-purple stroke-blue', unlocked: 0 }
+  // ];
 
   // Calculate top boundary so you can't drag past the bottom of the content
   useEffect(() => {
@@ -50,8 +72,8 @@ export const CollectablesList = () => {
       const containerHeight = containerRef.current.offsetHeight;
       const targetPosition = -(targetItem.offsetTop - containerHeight / 2 + targetItem.offsetHeight / 2);
 
-      console.log('Target Position:', targetPosition);
-      console.log('Drag Constraints:', dragConstraints);
+      // console.log('Target Position:', targetPosition);
+      // console.log('Drag Constraints:', dragConstraints);
 
       y.set(targetPosition);
     }
@@ -82,7 +104,51 @@ export const CollectablesList = () => {
         whileTap={{ cursor: 'grabbing' }}
         style={{ y: yClamped }}
         className="flex flex-col items-center py-20 gap-10 h-full w-full">
-        {collectables.map((collectable, index) => {
+        {INITIAL_COLLECTABLES.map((collectable, index) => {
+          const isUnlocked = Boolean(unlockedMap[collectable.id]);
+          const isLastUnlockedItem = collectable.id === lastUnlockedId;
+          const isLastItem = index === lastIndex;
+
+          // console.log(collectable)
+
+          // Use array index for alternating left/right layout (id is a string)
+          const isEven = index % 2 === 0;
+
+          return (
+            <div
+              key={collectable.id}
+              ref={index === scrollToIndex ? targetItemRef : null}
+              id={`item-${collectable.id}`}
+              className="flex flex-col relative z-10">
+              <div className={`w-30 h-30 ${isEven ? 'ml-10' : '-ml-10'}`}>
+                {isUnlocked ? <EnvelopeOpenIcon className='fill-light-pink stroke-dark-pink' size={130} /> : <EnvelopeClosedIcon className='fill-light-pink stroke-dark-pink' size={125} />}
+              </div>
+
+              {/* Stars highlight above the current progress milestone */}
+              {isLastUnlockedItem && (
+                <div
+                  className={`w-35 h-35 absolute top-0 left-0 flex flex-col pointer-events-none ${
+                    isEven ? 'ml-10' : '-ml-10'
+                  }`}>
+                  <StarIcon size={40} className="fill-orange" />
+                  <StarIcon size={40} className="fill-dark-pink self-end mt-5" />
+                  <StarIcon size={40} className="fill-light-pink" />
+                </div>
+              )}
+
+              {/* Connecting line to next item (omit on the final item) */}
+              {!isLastItem && (
+                <BentLineIcon
+                  size={130}
+                  className={`-mt-5 -mb-18 -z-10 ${
+                    isUnlocked && !isLastUnlockedItem ? 'stroke-green' : 'stroke-brown'
+                  } ${isEven ? 'ml-4' : '-scale-x-100 -ml-4'}`}
+                />
+              )}
+            </div>
+          );
+        })}
+        {/* {collectables.map((collectable, index) => {
           const unlockedItems = collectables.filter((item) => item.unlocked === 1);
           const isLastUnlockedItem =
             unlockedItems.findIndex((item) => item.id === collectable.id) === unlockedItems.length - 1;
@@ -124,7 +190,7 @@ export const CollectablesList = () => {
               )}
             </div>
           );
-        })}
+        })} */}
       </motion.div>
     </div>
   );

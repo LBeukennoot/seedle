@@ -6,6 +6,7 @@ import { PlantDataContext } from './PlantDataContext';
 // import { useUserData } from '../UserData';
 import { type PlantData } from '../../components/Plant/types';
 import { getRelativePathStage } from '../../plants/plantHelpers';
+import { useUserData } from '../UserData';
 // import { createRandomGrowthPath, getPlantMaxStage } from '../../components/Plant/plantCatalog';
 
 const localStorage = new LocalStorage();
@@ -111,31 +112,31 @@ const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
         return plant;
       });
 
-    case 'TICKONE':
-      return (
-        state
-          //searching plants that have o lower stage than maxStage
-          .filter((p) => {
-            const isOld = p.createdAt < now - p.maxAge * 24 * 60 * 60 * 1000; // 4 days (or maxAge)
+    // case 'TICKONE':
+    //   return (
+    //     state
+    //       //searching plants that have o lower stage than maxStage
+    //       .filter((p) => {
+    //         const isOld = p.createdAt < now - p.maxAge * 24 * 60 * 60 * 1000; // 4 days (or maxAge)
 
-            const isFullyGrown = p.stage === p.maxStage;
+    //         const isFullyGrown = p.stage === p.maxStage;
 
-            return !(isOld && isFullyGrown);
-          })
-          .map((p) => {
-            if (p.id === action.id && p.stage < p.maxStage) {
-              const newStage = p.stage + 1;
+    //         return !(isOld && isFullyGrown);
+    //       })
+    //       .map((p) => {
+    //         if (p.id === action.id && p.stage < p.maxStage) {
+    //           const newStage = p.stage + 1;
 
-              return {
-                ...p,
-                stage: newStage,
-                grownAt: newStage === p.maxStage ? now : p.grownAt
-              };
-            }
+    //           return {
+    //             ...p,
+    //             stage: newStage,
+    //             grownAt: newStage === p.maxStage ? now : p.grownAt
+    //           };
+    //         }
 
-            return p;
-          })
-      );
+    //         return p;
+    //       })
+    //   );
 
     default:
       return state;
@@ -166,6 +167,7 @@ const plantReducer = (state: PlantData[], action: PlantAction): PlantData[] => {
 export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
   // const [nextId, setNextId] = useLocalStorageState<number>("nextId", 0)
   const { debugSettings } = useDebug();
+  const { syncPlantsCount } = useUserData();
   // const { userData, editState, setEditState } = useUserData();
   // const [plantables, setPlantables] = useState<PlantData[] | undefined>(undefined);
 
@@ -221,6 +223,13 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     return (stored as PlantData[]) ?? [];
   });
 
+  useEffect(() => {
+    syncPlantsCount(plants.length, (newlyUnlocked) => {
+      // Show unlock toast/modal
+      console.log(newlyUnlocked)
+    });
+  }, [plants.length, syncPlantsCount]);
+
   /* -----------------------------
        ACTIONS
     ------------------------------ */
@@ -230,13 +239,14 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
 
     if (freePositions.length === 0) {
       // Handle full garden / no spaces available
+      console.log('Garden is full!');
       return;
     }
 
     const randomIndex = Math.floor(Math.random() * freePositions.length);
     const randomFreePosition = freePositions[randomIndex];
 
-    const plant: PlantData = {
+    const plant = {
       id: crypto.randomUUID(),
       position: { x: randomFreePosition.x, y: randomFreePosition.y },
       size: 0.05,
@@ -246,9 +256,11 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
       stage: data.stage ?? '1',
       path: data.path,
       palette: data.palette
-    };
+    } as PlantData;
 
-    // console.log(randomFreePosition)
+    // addPlant(1, (newlyUnlocked) => {
+    //   console.log(newlyUnlocked)
+    // })
 
     dispatch({ type: 'CREATE', plant });
 
@@ -259,9 +271,9 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     dispatch({ type: 'BATCH_CREATE', plant });
   };
 
-  const growPlant = (plantId: string) => {
-    dispatch({ type: 'TICKONE', id: plantId });
-  };
+  // const growPlant = (plantId: string) => {
+  //   dispatch({ type: 'TICKONE', id: plantId });
+  // };
 
   const growAllPlants = () => {
     dispatch({ type: 'TICKALL' });
@@ -331,7 +343,7 @@ export const PlantDataProvider = ({ children }: PlantDataProviderProps) => {
     createPlants,
     removePlant,
     savePlants,
-    growPlant,
+    // growPlant,
     growAllPlants
     // plantables,
     // setPlantables

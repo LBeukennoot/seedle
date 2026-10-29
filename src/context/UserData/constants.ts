@@ -7,5 +7,6 @@ export const initialUserStatistics: UserStatistics = {
     restSessions: 0,
     longRestSessions: 0
   },
+  unlockedCollectables: {},
   monthly: {}
 };

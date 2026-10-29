@@ -1,118 +1,187 @@
-import { useEffect, useState } from 'react';
-import {
-  Experience,
-  Tiers,
-  // type EditState,
-  type UserDataContextType,
-  type UserDataProviderProps,
-  type UserStatistics
-} from './types';
+import { useCallback, useEffect, useState } from 'react';
+import { type UserDataContextType, type UserDataProviderProps, type UserStatistics } from './types';
 import { UserDataContext } from './UserDataContext';
 import LocalStorage from '../../utils/LocalStorage';
 import { initialUserStatistics } from './constants';
+import type { CollectableItem } from '../../collections/generated/types';
+import { INITIAL_COLLECTABLES } from '../../collections/generated/collectables';
+import type { Mode } from '../../features/session/sessionTypes';
 
 const localStorage = new LocalStorage();
 
 export const UserDataProvider = ({ children }: UserDataProviderProps) => {
-  // const [editState, setEditState] = useState<EditState>('OFF');
-  const [userStatistics, setUserStatistics] = useState<UserStatistics>(():UserStatistics => {
+  const [userStatistics, setUserStatistics] = useState<UserStatistics>((): UserStatistics => {
     const stored = localStorage.getValue('userStatistics');
-    return stored ? stored as UserStatistics : initialUserStatistics;
+    if (!stored) return initialUserStatistics;
+
+    const parsed = stored as UserStatistics;
+
+    // Ensure zero-threshold starter flowers remain unlocked even across existing data
+    return {
+      ...parsed,
+      unlockedCollectables: {
+        ...initialUserStatistics.unlockedCollectables,
+        ...parsed.unlockedCollectables
+      }
+    };
   });
 
   useEffect(() => {
     localStorage.setValue('userStatistics', userStatistics);
   }, [userStatistics]);
 
-  // useEffect(() => {
-  //   const stored = localStorage.getValue('userStatistics');
+  /**
+   * Evaluates unlock thresholds against current or target total plants
+   */
+  const evaluateUnlocks = useCallback(
+    (
+      stats: UserStatistics,
+      targetTotalPlants?: number
+    ): {
+      updatedStats: UserStatistics;
+      newlyUnlocked: CollectableItem[];
+    } => {
+      const totalPlants = targetTotalPlants ?? stats.total.plants;
+      const updatedUnlocked = { ...stats.unlockedCollectables };
+      const newlyUnlocked: CollectableItem[] = [];
+      const now = Date.now();
 
-  //   //TODO also save data when its being changed
-  //   if (stored) {
-  //     setUserStatistics(stored as UserStatistics);
-  //   } else {
-  //     localStorage.setValue('userStatistics', userStatistics);
-  //   }
-  // }, []);
+      for (const item of INITIAL_COLLECTABLES) {
+        const isUnlocked = Boolean(updatedUnlocked[item.id]);
 
-  // const add = ({stat, amount}: {stat: Omit<UserStatistics>, amount: number}) => {
-  //   setUserStatistics({ ...userStatistics, totalPlants: userStatistics[stat] + amount });
-  // }
+        if (!isUnlocked && totalPlants >= item.threshold) {
+          updatedUnlocked[item.id] = { unlockedAt: now };
+          newlyUnlocked.push(item);
+        }
+      }
 
-  const addTotalPlants = (amount: number = 1) => {
-    setUserStatistics({ ...userStatistics, totalPlants: userStatistics.totalPlants + amount });
-  };
+      return {
+        updatedStats: {
+          ...stats,
+          unlockedCollectables: updatedUnlocked
+        },
+        newlyUnlocked
+      };
+    },
+    []
+  );
 
-  // const removeGrowthPoints = (amount: number = 1) => {
-  //   if (userData.growthPoints > 0) setUserData({ ...userStatistics, growthPoints: userStatistics.growthPoints - amount });
-  // };
+  /**
+   * 1. addPlant: Increments total.plants and automatically unlocks newly qualified collectables
+   */
+  const addPlant = useCallback(
+    (amount: number = 1, onUnlock?: (unlocked: CollectableItem[]) => void) => {
+      setUserStatistics((prev) => {
+        const nextTotalPlants = prev.total.plants + amount;
+        const statsWithPlanted: UserStatistics = {
+          ...prev,
+          total: {
+            ...prev.total,
+            plants: nextTotalPlants
+          }
+        };
 
-  const addTotalFocusSessions = (amount: number = 1) => {
-    setUserStatistics({ ...userStatistics, totalFocusSessions: userStatistics.totalFocusSessions + amount });
-  };
+        const { updatedStats, newlyUnlocked } = evaluateUnlocks(statsWithPlanted, nextTotalPlants);
 
-  // const removeExperience = (amount: number = 1) => {
-  //   setUserData({ ...userStatistics, experience: userStatistics.experience - amount });
-  // };
-  //TODO save data immediately, even before user actions
+        if (newlyUnlocked.length > 0 && onUnlock) {
+          console.log(newlyUnlocked);
+          onUnlock(newlyUnlocked);
+        }
 
-  // common, rare, unique, blessed, divine
+        return updatedStats;
+      });
+    },
+    [evaluateUnlocks]
+  );
 
-  // useEffect(() => {
-  //   function handleEventListener() {
-  //     console.log('[UserDataProvider] plantClicked received');
+  /**
+   * 2. addSession: Increments focus/rest counts across totals and the current monthly bucket
+   */
+  const addSession = useCallback((type: Mode) => {
+    const monthKey = new Date().toISOString().slice(0, 7); // e.g., "2026-10"
 
-  //     removeGrowthPoints(1);
-  //     // dispatch({ type: 'TICK' });
-  //   }
+    setUserStatistics((prev) => {
+      const currentMonth = prev.monthly[monthKey] ?? {
+        focus: 0,
+        rest: 0,
+        long_rest: 0
+      };
 
-  //   window.addEventListener('plantClicked', handleEventListener);
+      const totalKey = type === 'focus' ? 'focusSessions' : type === 'rest' ? 'restSessions' : 'longRestSessions';
 
-  //   return () => {
-  //     window.removeEventListener('plantClicked', handleEventListener);
-  //   };
-  // }, []);
+      return {
+        ...prev,
+        total: {
+          ...prev.total,
+          [totalKey]: prev.total[totalKey] + 1
+        },
+        monthly: {
+          ...prev.monthly,
+          [monthKey]: {
+            ...currentMonth,
+            [type]: currentMonth[type] + 1
+          }
+        }
+      };
+    });
+  }, []);
 
-  // function getExperienceTier(xp: number) {
-  // const tiers = Object.entries(Tiers).find(([key, value]) => value.experienceThreshold >= xp)
-  // console.log(tiers)
-  // const Tiers = Object.entries(Experience)
-  //   .filter(([key, value]) => typeof value === 'number') as [string, number][];
+  const syncPlantsCount = useCallback((currentPlantCount: number, onUnlock?: (unlocked: CollectableItem[]) => void) => {
+    setUserStatistics((prev) => {
+      // Don't trigger state updates if the count is already in sync
+      if (prev.total.plants === currentPlantCount) return prev;
 
-  // // Sort tiers from highest XP to lowest XP
-  // Tiers.sort((a, b) => b[1] - a[1]);
+      const updatedUnlocked = { ...prev.unlockedCollectables };
+      const newlyUnlocked: CollectableItem[] = [];
+      const now = Date.now();
 
-  // // Find the first tier where the player's XP is >= the threshold
-  // const matchedTier = Tiers.find(([key, value]) => xp >= value);
+      for (const item of INITIAL_COLLECTABLES) {
+        if (!updatedUnlocked[item.id] && currentPlantCount >= item.threshold) {
+          updatedUnlocked[item.id] = { unlockedAt: now };
+          newlyUnlocked.push(item);
+        }
+      }
 
-  // if (matchedTier) {
-  //   // Return the string key (e.g., "RARE")
-  //   return matchedTier[0] as keyof typeof Experience;
-  // }
+      if (newlyUnlocked.length > 0 && onUnlock) {
+        onUnlock(newlyUnlocked);
+      }
 
-  //   return 'COMMON';
-  // }
+      return {
+        ...prev,
+        total: {
+          ...prev.total,
+          plants: currentPlantCount
+        },
+        unlockedCollectables: updatedUnlocked
+      };
+    });
+  }, []);
 
-  //   console.log(getExperienceTier(41));
-  // chirary: common
-  // chamomile: rare
-  // fireweed: divine
-  // lavender: rare
+  /**
+   * 3. checkCollectablesMilestones: Triggers a retroactive check against current stats
+   */
+  const checkCollectablesMilestones = useCallback(
+    (onUnlock?: (unlocked: CollectableItem[]) => void) => {
+      setUserStatistics((prev) => {
+        const { updatedStats, newlyUnlocked } = evaluateUnlocks(prev);
+
+        if (newlyUnlocked.length > 0 && onUnlock) {
+          onUnlock(newlyUnlocked);
+        }
+
+        return updatedStats;
+      });
+    },
+    [evaluateUnlocks]
+  );
 
   const value: UserDataContextType = {
     userStatistics,
-    addTotalPlants,
-    // removeGrowthPoints,
-    addTotalFocusSessions,
-    // removeExperience,
-    // getExperienceTier,
-    // editState,
-    // setEditState
-    // time,
-    // getDisplayTime,
-    // start,
-    // pause,
-    // isTimerRunning
+    setUserStatistics,
+    addPlant,
+    addSession,
+    syncPlantsCount,
+    checkCollectablesMilestones
   };
 
   return <UserDataContext.Provider value={value}>{children}</UserDataContext.Provider>;

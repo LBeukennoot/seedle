@@ -1,6 +1,6 @@
 // AUTO-GENERATED - DO NOT EDIT MANUALLY
-import type { CollectableItem } from './collectables.d';
-import type { PlantSpecies } from './types';
+import type { PlantSpecies } from "../../plants/generated/types";
+import type { CollectableItem } from "./types";
 
 export const INITIAL_COLLECTABLES: CollectableItem[] = [
   {

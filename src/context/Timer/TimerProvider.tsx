@@ -33,6 +33,7 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
   const { toNextSession, sessionsArray, setNextSession, currentSession } = useSession();
   const { createPlant, growAllPlants } = usePlantData();
   const { sendNotification } = useNotifications();
+  const { addSession } = useUserData();
   // const { debugSettings }: DebugContextType = useDebug()
   // console.log(sessionTime)
 
@@ -190,6 +191,8 @@ export const TimerProvider = ({ children }: TimerProviderProps) => {
     endTimeRef.current = null;
     clearInterval(intervalRef.current!);
     setIsTimerRunning(false);
+
+    addSession(mode)
 
     if (mode === Mode.FOCUS) {
       growAllPlants();
