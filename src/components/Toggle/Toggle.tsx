@@ -11,14 +11,14 @@ const SwitchStyled = styled(Switch)(({ theme }) => ({
         padding: 0,
         marginTop: -2.5,
         transitionDuration: '150ms',
-        border: '5px solid var(--color-brown)',
+        border: '5px solid var(--color-red02)',
         '&.Mui-checked': {
             transform: 'translateX(18px)',
             color: '#fff',
-            border: '5px solid var(--color-green)',
+            border: '5px solid var(--color-green03)',
 
             '& + .MuiSwitch-track': {
-                backgroundColor: 'var(--color-green)',
+                backgroundColor: 'var(--color-green03)',
                 opacity: 1,
                 border: 0,
             },
@@ -42,7 +42,7 @@ const SwitchStyled = styled(Switch)(({ theme }) => ({
     },
     '& .MuiSwitch-track': {
         borderRadius: 500,
-        backgroundColor: 'var(--color-brown)',
+        backgroundColor: 'var(--color-red02)',
         opacity: 1,
         transition: theme.transitions.create(['background-color'], {
             duration: 150,

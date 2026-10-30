@@ -1,74 +1,65 @@
-import noiseImage from './noise.jpg';
+import { useEffect, useState } from 'react';
+import type { Settings } from '../../context/Settings/types';
+import LocalStorage from '../../utils/LocalStorage';
 
-export const TurbulenceFilter = () => {
+const localStorage = new LocalStorage();
+
+export default function TurbulenceFilter() {
+  const [enabled, setEnabled] = useState<boolean>((): boolean => {
+    const stored = localStorage.getValue('settings') as Settings;
+    return stored ? (stored.graphics.turbulenceFilter as boolean) : false;
+  });
+
+  useEffect(() => {
+    window.addEventListener('changedTurbulenceFilter', handleEventListener);
+
+    function handleEventListener({ detail }: any) {
+      setEnabled(detail);
+    }
+
+    return function cleanupListener() {
+      window.removeEventListener('changedTurbulenceFilter', handleEventListener);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!enabled) return <></>;
+
   return (
     <svg
       aria-hidden="true"
       style={{
-        position: 'absolute',
+        position: 'fixed',
         width: 0,
         height: 0,
         overflow: 'hidden',
         pointerEvents: 'none'
       }}>
       <defs>
-        <clipPath id="filterClip">
-          <rect x="0" y="0" width="100%" height="100%" />
-        </clipPath>
-
         <filter
           id="edgeTexture"
-          x="-10%"
-          y="-10%"
-          width="120%"
-          height="120%"
-          clipPath="url(#clip)"
+          x="-5%"
+          y="-5%"
+          width="110%"
+          height="110%"
+          filterUnits="objectBoundingBox"
+          primitiveUnits="userSpaceOnUse"
           colorInterpolationFilters="sRGB">
-          <feImage
-            href={noiseImage}
-            width="100" /* Adjust this to control the size of the noise pattern */
-            height="100"
-            result="noiseImage"
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.3"
+            numOctaves="1"
+            seed="1"
+            result="noise"
+            stitchTiles="stitch"
           />
-
-          <feOffset dx="0" dy="0" in="noiseImage" result="offsetNoise" />
-
-          <feTile in="offsetNoise" x="0" y="0" width="100%" height="100%" result="tiledNoise" />
-
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="tiledNoise"
-            scale="4" /* Adjust this to control the intensity of the distortion */
-            xChannelSelector="R"
-            yChannelSelector="G"
-          />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-
-        {/* <filter
-            id="edgeTexture"
-            x="-10%"
-            y="-10%"
-            width="120%"
-            height="120%"
-            clipPath="url(#clip)"
-            colorInterpolationFilters="sRGB"> 
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.3"
-              numOctaves="1"
-              seed="1"
-              result="noise"
-              stitchTiles="noStitch"
-            />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale="8"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter> */}
       </defs>
     </svg>
   );
-};
+}
+
+// Named export so both `import TurbulenceFilter` and `import { TurbulenceFilter }` work
+export { TurbulenceFilter };

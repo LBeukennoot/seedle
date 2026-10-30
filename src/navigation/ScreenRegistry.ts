@@ -21,17 +21,17 @@ export const ScreenRegistry: Record<Screen, {
     [Screen.JOURNEY]: {
         screen: JourneyScreen,
         icon: GardenIcon,
-        background: "bg-yellow"
+        background: "bg-yellow01"
     },
     [Screen.STATISTICS]: {
         screen: StatisticsScreen,
         icon: StatisticsIcon, //TODO
-        background: "bg-purple"
+        background: "bg-purple01"
     },
     [Screen.SETTINGS]: {
         screen: SettingsScreen,
         icon: SettingsIcon,
-        background: "bg-dark-pink"
+        background: "bg-pink11"
     },
     // [Screen.TIMER]: {
     //     screen: TimerScreen,

@@ -14,14 +14,14 @@ export const JourneyScreen = () => {
   return (
     <div className="flex flex-col h-full">
       <GridPaper id={'journey'} offset={-45} className={'z-10'}>
-        <h1 className="text-4xl font-bold text-green">Journey</h1>
-        <h1 className="text-4xl font-normal text-green">
+        <h1 className="text-4xl font-bold">Journey</h1>
+        <h1 className="text-4xl font-normal">
           {totalUnlocked}/{totalItems}
         </h1>
       </GridPaper>
 
       <div
-        className="grow max-h-6/8 -my-10 max-w-5/6 self-center bg-linear-to-b from-[#A4BD6D] to-light-green w-full isolate"
+        className="grow max-h-6/8 -my-10 max-w-5/6 self-center bg-linear-to-b from-green12 to-green02 w-full isolate"
         style={{ clipPath: 'inset(0)' }}>
         {' '}
         {/* clipPath is added because overflow-y-scroll doesnt work on its own. */}
@@ -29,8 +29,8 @@ export const JourneyScreen = () => {
       </div>
 
       <GridPaper id={'next'} offset={0} className={'z-10 flex'}>
-        <h1 className="text-4xl font-bold text-green">Next</h1>
-        <h1 className="text-4xl font-normal text-green">{nextCollectable?.displayName}</h1>
+        <h1 className="text-4xl font-bold">Next</h1>
+        <h1 className="text-4xl font-normal">{nextCollectable?.displayName}</h1>
       </GridPaper>
     </div>
   );

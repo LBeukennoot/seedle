@@ -44,9 +44,25 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
     return stored ? (stored as Settings) : initialSettings;
   });
 
-  useEffect(() => {
+  const saveSettings = () => {
     localStorage.setValue('settings', settings);
-  }, [settings]);
+  };
+
+  useEffect(() => {
+    if (!debugSettings.debug) {
+      saveSettings();
+    } else console.log("Debug is enabled, settings won't be saved.");
+  }, [settings, debugSettings.debug]);
+
+  useEffect(() => {
+    const event = new CustomEvent('changedTurbulenceFilter', { detail: settings.graphics.turbulenceFilter });
+    window.dispatchEvent(event);
+  }, [settings.graphics.turbulenceFilter]);
+
+  useEffect(() => {
+    const event = new CustomEvent('changedNoiseFilter', { detail: settings.graphics.noiseFilter });
+    window.dispatchEvent(event);
+  }, [settings.graphics.noiseFilter]);
 
   /**
    * settings needed:
@@ -74,12 +90,12 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
    */
 
   const handleSetSessionTime = (value: SessionDataMap) => {
-    localStorage.setValue('sessionTimes', value);
+    // localStorage.setValue('sessionTimes', value);
     setSessionTime(value);
   };
 
   const handleSetSettings = (value: Settings) => {
-    localStorage.setValue('settings', value);
+    // localStorage.setValue('settings', value);
     setSettings(value);
   };
 

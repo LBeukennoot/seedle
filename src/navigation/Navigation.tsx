@@ -23,7 +23,7 @@ export default function Navigation() {
   const { debugSettings } = useDebug();
 
   return (
-    <div className="relative min-h-screen bg-linear-to-b from-[#A4BD6D] to-light-green overflow-hidden">
+    <div className="relative min-h-screen bg-linear-to-b from-green12 to-green02 overflow-hidden">
       <div className="absolute w-full h-full flex justify-center align-center bg-[url('/src/navigation/seedlings.svg')] bg-fit bg-center bg-repeat"></div>
       {popup && <Popup> {popup} </Popup>}
 
@@ -41,8 +41,8 @@ export default function Navigation() {
 
       <div
         onClick={() => toggleMenuOpen()}
-        className="absolute top-0 right-0 m-5 p-3.5 bg-linen rounded-full shadow-2xl hover:shadow-lg hover:scale-95 active:shadow-none active:scale-90 cursor-pointer">
-        <GardenIcon className="fill-light-green" size={35} />
+        className="absolute top-0 right-0 m-5 p-3.5 bg-linen01 rounded-full shadow-2xl hover:shadow-lg hover:scale-95 active:shadow-none active:scale-90 cursor-pointer">
+        <GardenIcon className="fill-green02" size={35} />
       </div>
 
       {menuOpen && (

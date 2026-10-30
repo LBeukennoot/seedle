@@ -131,12 +131,12 @@ export const CollectablesList = () => {
               className="flex flex-col relative z-10">
               <div className={`w-30 h-30 ${isEven ? 'ml-10' : '-ml-10'}`}>
                 {isUnlocked ? (
-                  <div className={'bg-linen rounded-full p-5'}>
-                    <Plant name={collectable.plant} stage={plantLastStage} colors={palette} className="w-20 h-20" />
+                  <div className={'bg-linen01 rounded-full p-5'}>
+                    <Plant name={collectable.plant} stage={plantLastStage} colors={palette} className="w-20 h-20 drop-shadow-2xl" />
                   </div>
                 ) : (
                   // <EnvelopeOpenIcon className='fill-light-pink stroke-dark-pink' size={130} /> :
-                  <EnvelopeClosedIcon className="fill-light-pink stroke-dark-pink" size={125} />
+                  <EnvelopeClosedIcon className="fill-pink11 stroke-pink13" size={125} />
                 )}
               </div>
 
@@ -146,9 +146,9 @@ export const CollectablesList = () => {
                   className={`w-35 h-35 absolute top-0 left-0 flex flex-col pointer-events-none ${
                     isEven ? 'ml-10' : '-ml-10'
                   }`}>
-                  <StarIcon size={40} className="fill-orange" />
-                  <StarIcon size={40} className="fill-dark-pink self-end mt-5" />
-                  <StarIcon size={40} className="fill-light-pink" />
+                  <StarIcon size={40} className="fill-orange02" />
+                  <StarIcon size={40} className="fill-pink02 self-end mt-5" />
+                  <StarIcon size={40} className="fill-pink13" />
                 </div>
               )}
 
@@ -157,7 +157,7 @@ export const CollectablesList = () => {
                 <BentLineIcon
                   size={130}
                   className={`-mt-5 -mb-18 -z-10 ${
-                    isUnlocked && !isLastUnlockedItem ? 'stroke-green' : 'stroke-brown'
+                    isUnlocked && !isLastUnlockedItem ? 'stroke-green03' : 'stroke-brown02'
                   } ${isEven ? 'ml-4' : '-scale-x-100 -ml-4'}`}
                 />
               )}

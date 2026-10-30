@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import type { SliderProps } from './types';
 
 const SliderStyled = styled(SliderMUI)(() => ({
-  color: 'var(--color-light-green)',
+  color: 'var(--color-green03)',
   height: '1.5rem',
   padding: 0,
   '& .MuiSlider-thumb': {
@@ -15,7 +15,7 @@ const SliderStyled = styled(SliderMUI)(() => ({
     border: '0.25rem solid currentColor',
     '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible, &::before': {
       boxShadow: 'none'
-    },
+    }
   }
 }));
 
@@ -47,18 +47,15 @@ export const Slider = ({ min, max, safeZone, invert, value, setValue, name, disa
   }, [tempValue]);
 
   const checkValueAllowed = (value: number) => {
-    return value >= 1 && value <= 999;
+    return value >= 0 && value <= 999;
   };
 
   const RailComponent = ({ ownerState: { disabled } }: any) => {
     return (
-      <div
-        className={
-          'w-full h-full rounded-full flex overflow-hidden ' + (disabled ? 'grayscale-100' : '')
-        }>
-        <div className={'h-full ' + (invert ? 'bg-light-red' : 'bg-light-blue')} style={{ width: minSafe + '%' }}></div>
-        <div className={'h-full ' + (invert ? 'bg-light-blue' : 'bg-light-red')} style={{ width: safe + '%' }}></div>
-        <div className={'h-full ' + (invert ? 'bg-light-red' : 'bg-light-blue')} style={{ width: maxSafe + '%' }}></div>
+      <div className={'w-full h-full rounded-full flex overflow-hidden ' + (disabled ? 'grayscale-100' : '')}>
+        <div className={'h-full ' + (invert ? 'bg-red01' : 'bg-green02')} style={{ width: minSafe + '%' }}></div>
+        <div className={'h-full ' + (invert ? 'bg-green02' : 'bg-red01')} style={{ width: safe + '%' }}></div>
+        <div className={'h-full ' + (invert ? 'bg-red01' : 'bg-green02')} style={{ width: maxSafe + '%' }}></div>
       </div>
     );
   };
@@ -69,8 +66,8 @@ export const Slider = ({ min, max, safeZone, invert, value, setValue, name, disa
       <SliderThumb
         {...other}
         className={
-          '!bg-white !h-[2rem] !w-[2rem] border-5 before:!shadow-none hover:!shadow-none ' +
-          (sliderSafe ? 'border-light-green' : ' !border-red') +
+          'bg-white! h-8! w-8! border-5 before:shadow-none! hover:shadow-none!' +
+          (sliderSafe ? 'border-green03' : ' border-red02!') +
           ' ' +
           (other.ownerState.disabled ? 'grayscale-100 cursor-not-allowed' : '')
         }></SliderThumb>
@@ -81,28 +78,13 @@ export const Slider = ({ min, max, safeZone, invert, value, setValue, name, disa
     return (
       <SliderTrack
         {...other}
-        className={'h-full w-full ' + (sliderSafe ? '' : '!bg-red !border-red')}></SliderTrack>
+        className={`h-full w-full border-0! ${sliderSafe ? 'bg-green03' : 'bg-red02!'} ${disabled && 'grayscale-100'}`}></SliderTrack>
     );
   };
 
   return (
     <div className="flex items-center w-full font-lexend">
-      <input
-        id={name}
-        name={name}
-        className={
-          'w-11 overflow-hidden cursor-text text-lg rounded-lg px-1 border-2 border-transparent hover:border-light-blue focus:outline-blue disabled:grayscale-100 disabled:cursor-default disabled:hover:border-transparent ' +
-          (checkValueAllowed(tempValue) ? 'text-blue border-light-blue' : 'text-red !border-red')
-        }
-        type="number"
-        min={min}
-        max={max}
-        value={tempValue}
-        onChange={(e) => handleSliderChange(undefined, e.target.value)}
-        disabled={disabled}
-      />
-
-      <div className="pl-5 pr-8 flex items-center relative w-full">
+      <div className="px-5 flex items-center relative w-full">
         <SliderStyled
           slots={{ rail: RailComponent, thumb: ThumbComponent, track: TrackComponent }}
           value={tempValue}
@@ -114,6 +96,21 @@ export const Slider = ({ min, max, safeZone, invert, value, setValue, name, disa
           step={5}
         />
       </div>
+
+      <input
+        id={name}
+        name={name}
+        className={
+          'w-11 overflow-hidden cursor-text text-lg rounded-lg px-1 border-2 border-transparent hover:border-green01 focus-visible:border-green03 outline-0! disabled:grayscale-100 disabled:cursor-default disabled:hover:border-transparent ' +
+          (checkValueAllowed(tempValue) ? 'text-green03 border-green03' : 'text-red02 border-red02!')
+        }
+        type="number"
+        min={min}
+        max={max}
+        value={tempValue}
+        onChange={(e) => handleSliderChange(undefined, e.target.value)}
+        disabled={disabled}
+      />
     </div>
   );
 };
